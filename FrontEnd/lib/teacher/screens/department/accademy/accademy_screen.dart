@@ -101,6 +101,22 @@ class _Accademy_ScreenTeachState extends State<Accademy_ScreenTeach> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
+                          Text("Assign Rating Task"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {Navigator.pushNamed(context, "/")},
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
                           Text("Study Materials#google drive link"),
                         ],
                       ),
