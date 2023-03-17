@@ -39,7 +39,7 @@ class _student_DashboardState extends State<student_Dashboard> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/studmessage");
+                      Navigator.pushNamed(context, "/studaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -47,7 +47,7 @@ class _student_DashboardState extends State<student_Dashboard> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/studaddnewpost");
+                      Navigator.pushNamed(context, "/studmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],

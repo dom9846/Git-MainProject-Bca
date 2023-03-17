@@ -11,6 +11,7 @@ import 'package:mainproject/admin/screens/department/subjects/subjects_screen.da
 import 'package:mainproject/admin/screens/lecture/lectureadd_screen.dart';
 import 'package:mainproject/admin/screens/settings/chatroom/chat_screen.dart';
 import 'package:mainproject/admin/screens/settings/chatroom/chatroom_screen.dart';
+import 'package:mainproject/admin/screens/settings/devoloperinfo_screen.dart';
 import 'package:mainproject/admin/screens/settings/editprofile_screen.dart';
 import 'package:mainproject/admin/screens/settings/managepost_screen.dart';
 import 'package:mainproject/admin/screens/settings/unamepassedit_screen.dart';
@@ -19,8 +20,22 @@ import 'package:mainproject/screens/login_screen.dart';
 import 'package:mainproject/screens/reg_check.dart';
 import 'package:mainproject/screens/register_screen.dart';
 import 'package:mainproject/screens/splash_screen.dart';
+import 'package:mainproject/student/screens/department/accademy/assignedtask/allassignedtask_screen.dart';
+import 'package:mainproject/student/screens/department/accademy/assignedtask/studtaskview_screen.dart';
+import 'package:mainproject/student/screens/department/accademy/studentaccademy_screen.dart';
+import 'package:mainproject/student/screens/department/accademy/teacherrating/rateteacherstud_screen.dart';
+import 'package:mainproject/student/screens/department/accademy/teacherrating/ratingassignview_screen.dart';
+import 'package:mainproject/student/screens/department/attendance/studattendance_screen.dart';
+import 'package:mainproject/student/screens/department/attendance/studattndancestatus_screen.dart';
+import 'package:mainproject/student/screens/department/internal/studinternal_screen.dart';
+import 'package:mainproject/student/screens/department/internal/studinternalstatus_screen.dart';
 import 'package:mainproject/student/screens/message/student_msg_screen.dart';
+import 'package:mainproject/student/screens/settings/studDevlperInfo_screen.dart';
+import 'package:mainproject/student/screens/settings/studeditprofile_screen.dart';
+import 'package:mainproject/student/screens/settings/studeditunamepass_screen.dart';
+import 'package:mainproject/student/screens/settings/student_settings_screen.dart';
 import 'package:mainproject/student/screens/stud_addpost_screen.dart';
+import 'package:mainproject/student/screens/time_table_student_screen.dart';
 import 'package:mainproject/student/student_dashboard.dart';
 import 'package:mainproject/teacher/screens/department/accademy/accademy_screen.dart';
 import 'package:mainproject/teacher/screens/department/accademy/timetable_screen.dart';
@@ -57,7 +72,7 @@ void main() {
       brightness: Brightness.light,
     ),
     debugShowCheckedModeBanner: false,
-    home: const teach_Home(),
+    home: const SplashScreen(),
     routes: {
       '/register': (context) => const MyRegister(),
       '/reg_check': (context) => const Reg_Check(),
@@ -84,6 +99,7 @@ void main() {
       '/admnsettchatroom': (context) => const Chat_Room_admn(),
       '/admnsettchatbox': (context) => const Chat_Screen_admn(),
       '/admnsettunamepassedit': (context) => const Unamepass_Edit(),
+      '/admnsettdevinfo': (context) => const Devoloper_Info(),
       '/teachdashboard': (context) => const teach_Home(),
       '/teachmessage': (context) => const Teach_Message(),
       '/teachaddnewpost': (context) => const TeachAddNew_Post(),
@@ -108,6 +124,20 @@ void main() {
       '/studdashboard': (context) => const student_Dashboard(),
       '/studmessage': (context) => const Student_Message(),
       '/studaddnewpost': (context) => const Studaddnew_Post(),
+      '/studdepattndance': (context) => const AttendanceHistory_Student(),
+      '/studdepattndancestatus': (context) => const Studattendance_Status(),
+      '/studdepinternal': (context) => const StudentInternal_Screen(),
+      '/studdepinternalstatus': (context) => const StudentInternal_status(),
+      '/studdepaccdemy': (context) => const StudentAccademy_Screen(),
+      '/studdepaccdemytaskall': (context) => const AllAssigned_TaskStud(),
+      '/studdepaccdemytaskview': (context) => const TaskView_semesterwise(),
+      '/studdepaccdemyassignrate': (context) => const AssignedRate_Task(),
+      '/studdepaccdemyrateform': (context) => const StudentRateTeach_Form(),
+      '/studtimetablescreen': (context) => const StudentTimeTable_Screen(),
+      '/studsettings': (context) => const StudentSettings_Screen(),
+      '/studsetteditprof': (context) => const StudentEdit_Profile(),
+      '/studsetteditunamepass': (context) => const StudentEdit_UnamePass(),
+      '/studsettdevinfo': (context) => const StudentDevoloper_Info(),
     },
   ));
 }

@@ -39,7 +39,7 @@ class _Student_MessageState extends State<Student_Message> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/");
+                      Navigator.pushNamed(context, "/studaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -47,7 +47,7 @@ class _Student_MessageState extends State<Student_Message> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/");
+                      Navigator.pushNamed(context, "/studmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],

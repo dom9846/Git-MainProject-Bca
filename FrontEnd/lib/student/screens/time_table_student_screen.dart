@@ -1,17 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:mainproject/teacher/assets/drawer.dart';
+import 'package:mainproject/student/assets/drawer.dart';
 
-class Subjectwisestudent_raing extends StatefulWidget {
-  const Subjectwisestudent_raing({super.key});
+class StudentTimeTable_Screen extends StatefulWidget {
+  const StudentTimeTable_Screen({super.key});
 
   @override
-  State<Subjectwisestudent_raing> createState() =>
-      _Subjectwisestudent_raingState();
+  State<StudentTimeTable_Screen> createState() =>
+      _StudentTimeTable_ScreenState();
 }
 
-class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
+class _StudentTimeTable_ScreenState extends State<StudentTimeTable_Screen> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,7 +40,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/teachaddnewpost");
+                      Navigator.pushNamed(context, "/studaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -48,7 +48,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/teachmessage");
+                      Navigator.pushNamed(context, "/studmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
@@ -64,7 +64,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                   height: 30,
                 ),
                 Text(
-                  'Select Subjects',
+                  'Time Table',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -76,45 +76,28 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 SizedBox(
                   height: 30,
                 ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudsrating")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Subject Name 1"),
-                        ],
+                Container(
+                  height: 150,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
                       ),
-                    ),
+                    ],
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
                   ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudsrating")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Subject Name 2"),
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: Center(child: Text("Time Table File")),
                 ),
               ],
             )),
           ),
         ]),
-        drawer: teach_Drawer(),
+        drawer: studDrawer(),
       ),
     );
   }

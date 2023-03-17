@@ -43,7 +43,7 @@ class _Studaddnew_PostState extends State<Studaddnew_Post> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnaddpost");
+                      Navigator.pushNamed(context, "/studaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -51,9 +51,8 @@ class _Studaddnew_PostState extends State<Studaddnew_Post> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnmessage");
+                      Navigator.pushNamed(context, "/studmessage");
                     },
-                    // ignore: prefer_const_constructors
                     icon: Icon(Icons.message_sharp)))
           ],
         ),

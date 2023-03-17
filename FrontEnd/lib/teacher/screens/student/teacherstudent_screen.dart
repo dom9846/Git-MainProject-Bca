@@ -93,9 +93,6 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
                 Card(
                   child: InkWell(
                     onTap: () => {

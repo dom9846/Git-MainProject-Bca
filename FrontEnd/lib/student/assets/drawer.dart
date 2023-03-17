@@ -57,25 +57,40 @@ class _studDrawerState extends State<studDrawer> {
           title: Text("Dashboard"),
           onTap: () => {Navigator.pushNamed(context, "/studdashboard")},
         ),
-        ListTile(
-          leading: Icon(Icons.book),
-          title: Text("Department"),
-          onTap: () => {Navigator.pushNamed(context, "/studdepartment")},
-        ),
-        ListTile(
-          leading: Icon(Icons.person),
-          title: Text("Rate Lectures"),
-          onTap: () => {Navigator.pushNamed(context, "/studrate")},
-        ),
-        ListTile(
+        ExpansionTile(
           leading: Icon(Icons.person_4_outlined),
-          title: Text("Activities"),
-          onTap: () => {Navigator.pushNamed(context, "/studactivities")},
+          title: Text('Department'),
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Attendance'),
+              onTap: () => {Navigator.pushNamed(context, "/studdepattndance")},
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Internal'),
+              onTap: () => {Navigator.pushNamed(context, "/studdepinternal")},
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Accademy'),
+              onTap: () => {Navigator.pushNamed(context, "/studdepaccdemy")},
+            ),
+          ],
+        ),
+        ListTile(
+          leading: Icon(Icons.timer_10_rounded),
+          title: Text("Time Table"),
+          onTap: () => {Navigator.pushNamed(context, "/studtimetablescreen")},
         ),
         ListTile(
           leading: Icon(Icons.settings),
           title: Text("Settings"),
-          onTap: () => {Navigator.pushNamed(context, "/studsett")},
+          onTap: () => {Navigator.pushNamed(context, "/studsettings")},
         ),
         ListTile(
           leading: Icon(Icons.exit_to_app),

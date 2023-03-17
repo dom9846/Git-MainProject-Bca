@@ -8,14 +8,14 @@ var studentSchema = new mongoose.Schema({
         type: String,
         maxlength: 52
     },
-    age: {
-        type: Number,
-    },
     email: {
         type: String,
     },
     mobile: {
         type: Number
+    },
+    age: {
+        type: Number,
     },
     parent: {
         type: String,

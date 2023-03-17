@@ -1,17 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:mainproject/teacher/assets/drawer.dart';
+import 'package:mainproject/student/assets/drawer.dart';
 
-class Subjectwisestudent_raing extends StatefulWidget {
-  const Subjectwisestudent_raing({super.key});
+class StudentInternal_status extends StatefulWidget {
+  const StudentInternal_status({super.key});
 
   @override
-  State<Subjectwisestudent_raing> createState() =>
-      _Subjectwisestudent_raingState();
+  State<StudentInternal_status> createState() => _StudentInternal_statusState();
 }
 
-class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
+class _StudentInternal_statusState extends State<StudentInternal_status> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,7 +39,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/teachaddnewpost");
+                      Navigator.pushNamed(context, "/studaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -48,7 +47,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/teachmessage");
+                      Navigator.pushNamed(context, "/studmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
@@ -64,7 +63,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                   height: 30,
                 ),
                 Text(
-                  'Select Subjects',
+                  'Internal For Subjects',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -77,44 +76,42 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                   height: 30,
                 ),
                 Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudsrating")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Subject Name 1"),
-                        ],
+                  elevation: 5,
+                  margin: EdgeInsets.all(10),
+                  child: ExpansionTile(
+                    title: Text(
+                      'Subject Name',
+                      // ignore: prefer_const_constructors
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudsrating")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Subject Name 2"),
-                        ],
-                      ),
-                    ),
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: <Widget>[
+                      Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Column(
+                            // ignore: prefer_const_literals_to_create_immutables
+                            children: [
+                              Text("Lecture-name"),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text("Internal Mark"),
+                              SizedBox(
+                                height: 8,
+                              ),
+                            ],
+                          )),
+                    ],
                   ),
                 ),
               ],
             )),
           ),
         ]),
-        drawer: teach_Drawer(),
+        drawer: studDrawer(),
       ),
     );
   }

@@ -1,16 +1,16 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, duplicate_ignore
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:mainproject/admin/assets/drawer.dart';
+import 'package:mainproject/student/assets/drawer.dart';
 
-class Devoloper_Info extends StatefulWidget {
-  const Devoloper_Info({super.key});
+class StudentDevoloper_Info extends StatefulWidget {
+  const StudentDevoloper_Info({super.key});
 
   @override
-  State<Devoloper_Info> createState() => _Devoloper_InfoState();
+  State<StudentDevoloper_Info> createState() => _StudentDevoloper_InfoState();
 }
 
-class _Devoloper_InfoState extends State<Devoloper_Info> {
+class _StudentDevoloper_InfoState extends State<StudentDevoloper_Info> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +39,7 @@ class _Devoloper_InfoState extends State<Devoloper_Info> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnaddpost");
+                      Navigator.pushNamed(context, "/studaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -47,9 +47,8 @@ class _Devoloper_InfoState extends State<Devoloper_Info> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnmessage");
+                      Navigator.pushNamed(context, "/studmessage");
                     },
-                    // ignore: prefer_const_constructors
                     icon: Icon(Icons.message_sharp)))
           ],
         ),
@@ -98,7 +97,7 @@ class _Devoloper_InfoState extends State<Devoloper_Info> {
             ),
           ],
         ),
-        drawer: cldrawer(),
+        drawer: studDrawer(),
       ),
     );
   }

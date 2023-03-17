@@ -1,16 +1,16 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, avoid_unnecessary_containers, duplicate_ignore
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:mainproject/student/assets/drawer.dart';
 
-import '../../assets/drawer.dart';
-
-class Settings_screen extends StatefulWidget {
-  const Settings_screen({super.key});
+class AllAssigned_TaskStud extends StatefulWidget {
+  const AllAssigned_TaskStud({super.key});
 
   @override
-  State<Settings_screen> createState() => _Settings_screenState();
+  State<AllAssigned_TaskStud> createState() => _AllAssigned_TaskStudState();
 }
 
-class _Settings_screenState extends State<Settings_screen> {
+class _AllAssigned_TaskStudState extends State<AllAssigned_TaskStud> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +26,7 @@ class _Settings_screenState extends State<Settings_screen> {
           centerTitle: true,
           // ignore: prefer_const_constructors
           title: Text(
-            "INNOVIS",
+            "Select Semester",
             // ignore: prefer_const_constructors
             style: TextStyle(
                 color: Colors.white,
@@ -39,7 +39,7 @@ class _Settings_screenState extends State<Settings_screen> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnaddpost");
+                      Navigator.pushNamed(context, "/studaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -47,7 +47,7 @@ class _Settings_screenState extends State<Settings_screen> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnmessage");
+                      Navigator.pushNamed(context, "/studmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
@@ -62,7 +62,7 @@ class _Settings_screenState extends State<Settings_screen> {
                   height: 30,
                 ),
                 Text(
-                  'Settings',
+                  'Select The Semester',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -76,59 +76,8 @@ class _Settings_screenState extends State<Settings_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsetteditprofile")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Edit Profile"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsettpostmanage")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Manage Post"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsettchatroom")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Chat Rooms"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
                     onTap: () => {
-                      Navigator.pushNamed(context, "/admnsettunamepassedit")
+                      Navigator.pushNamed(context, "/studdepaccdemytaskview")
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -137,7 +86,7 @@ class _Settings_screenState extends State<Settings_screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("User Name & Password"),
+                          Text("Semester 1"),
                         ],
                       ),
                     ),
@@ -145,8 +94,9 @@ class _Settings_screenState extends State<Settings_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsettdevinfo")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/studdepaccdemytaskview")
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -154,7 +104,79 @@ class _Settings_screenState extends State<Settings_screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Devoloper Information"),
+                          Text("Semester 2"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/studdepaccdemytaskview")
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 3"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/studdepaccdemytaskview")
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 4"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/studdepaccdemytaskview")
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 5"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/studdepaccdemytaskview")
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 6"),
                         ],
                       ),
                     ),
@@ -164,7 +186,7 @@ class _Settings_screenState extends State<Settings_screen> {
             )),
           ),
         ]),
-        drawer: cldrawer(),
+        drawer: studDrawer(),
       ),
     );
   }

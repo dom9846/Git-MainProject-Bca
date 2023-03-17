@@ -1,17 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:mainproject/teacher/assets/drawer.dart';
+import 'package:mainproject/student/assets/drawer.dart';
 
-class Subjectwisestudent_raing extends StatefulWidget {
-  const Subjectwisestudent_raing({super.key});
+class StudentSettings_Screen extends StatefulWidget {
+  const StudentSettings_Screen({super.key});
 
   @override
-  State<Subjectwisestudent_raing> createState() =>
-      _Subjectwisestudent_raingState();
+  State<StudentSettings_Screen> createState() => _StudentSettings_ScreenState();
 }
 
-class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
+class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,7 +39,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/teachaddnewpost");
+                      Navigator.pushNamed(context, "/studaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -48,7 +47,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/teachmessage");
+                      Navigator.pushNamed(context, "/studmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
@@ -58,13 +57,12 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
             margin: EdgeInsets.all(10),
             child: Center(
                 child: Column(
-              // ignore: prefer_const_literals_to_create_immutables
               children: [
                 SizedBox(
                   height: 30,
                 ),
                 Text(
-                  'Select Subjects',
+                  'Settings',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -79,7 +77,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 Card(
                   child: InkWell(
                     onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudsrating")},
+                        {Navigator.pushNamed(context, "/studsetteditprof")},
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -87,7 +85,25 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Subject Name 1"),
+                          Text("Edit Profile"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/studsetteditunamepass")
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("User Name & Password"),
                         ],
                       ),
                     ),
@@ -96,7 +112,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 Card(
                   child: InkWell(
                     onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudsrating")},
+                        {Navigator.pushNamed(context, "/studsettdevinfo")},
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -104,7 +120,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Subject Name 2"),
+                          Text("Devoloper Information"),
                         ],
                       ),
                     ),
@@ -114,7 +130,7 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
             )),
           ),
         ]),
-        drawer: teach_Drawer(),
+        drawer: studDrawer(),
       ),
     );
   }

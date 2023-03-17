@@ -93,9 +93,6 @@ class _SubjectWise_StudentState extends State<SubjectWise_StudentInternal> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
                 Card(
                   child: InkWell(
                     onTap: () =>

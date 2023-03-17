@@ -66,7 +66,7 @@ class _TeachDevoloper_InfoState extends State<TeachDevoloper_Info> {
             SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.15),
+                    top: MediaQuery.of(context).size.height * 0.22),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
