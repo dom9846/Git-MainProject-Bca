@@ -3,17 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 
-class MarkAttendance_Teacher extends StatefulWidget {
-  const MarkAttendance_Teacher({super.key});
+class AssignNew_Work extends StatefulWidget {
+  const AssignNew_Work({super.key});
 
   @override
-  State<MarkAttendance_Teacher> createState() => _MarkAttendance_TeacherState();
+  State<AssignNew_Work> createState() => _AssignNew_WorkState();
 }
 
 final _formkey = GlobalKey<FormState>();
-String semester = "", date = "", period = "";
+String worktype = "", duedate = "", objective = "";
 
-class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
+class _AssignNew_WorkState extends State<AssignNew_Work> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,7 +60,7 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
             Container(
               padding: EdgeInsets.only(left: 55, top: 60),
               child: Text(
-                'Mark Attendance',
+                'Assign New Work',
                 style: TextStyle(color: Colors.white, fontSize: 33),
               ),
             ),
@@ -106,9 +106,9 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                                       color: Color.fromARGB(255, 22, 47, 230),
                                     ),
                                   ),
-                                  labelText: "Semester",
+                                  labelText: "Work Type",
                                   labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter The Semester",
+                                  hintText: "Select Type Of work",
                                   hintStyle: TextStyle(
                                       color: Color.fromARGB(255, 14, 14, 14)),
                                   border: OutlineInputBorder(
@@ -119,7 +119,7 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                                   return "This Field Cannot Be Empty";
                                 } else {
                                   setState(() {
-                                    semester = value;
+                                    worktype = value;
                                   });
                                 }
                                 return null;
@@ -144,9 +144,9 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                                       color: Color.fromARGB(255, 22, 47, 230),
                                     ),
                                   ),
-                                  labelText: "Date",
+                                  labelText: "Due Date",
                                   labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter The Date",
+                                  hintText: "Enter The Last Date",
                                   hintStyle: TextStyle(
                                       color: Color.fromARGB(255, 7, 7, 7)),
                                   border: OutlineInputBorder(
@@ -157,7 +157,7 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                                   return "This Field Cannot Be Empty";
                                 } else {
                                   setState(() {
-                                    date = value;
+                                    duedate = value;
                                   });
                                 }
                                 return null;
@@ -183,9 +183,9 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                                       color: Color.fromARGB(255, 22, 47, 230),
                                     ),
                                   ),
-                                  labelText: "Period",
+                                  labelText: "Objective",
                                   labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter The Period",
+                                  hintText: "Describe The Work",
                                   hintStyle: TextStyle(
                                       color: Color.fromARGB(255, 12, 12, 12)),
                                   border: OutlineInputBorder(
@@ -196,24 +196,11 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                                   return "This Field Cannot Be Empty";
                                 } else {
                                   setState(() {
-                                    period = value;
+                                    objective = value;
                                   });
                                 }
                                 return null;
                               },
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Card(
-                              child: ListTile(
-                                title: Text('Student Name'),
-                                subtitle: Text('Roll No'),
-                                trailing: Checkbox(
-                                  value: true,
-                                  onChanged: (value) {},
-                                ),
-                              ),
                             ),
                             SizedBox(
                               height: 40,
@@ -223,12 +210,12 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                                     fixedSize: Size(80, 40)),
                                 onPressed: () {
                                   if (_formkey.currentState!.validate()) {
-                                    print(semester);
-                                    print(date);
-                                    print(period);
+                                    print(worktype);
+                                    print(duedate);
+                                    print(objective);
                                   }
                                 },
-                                child: Text("Submit"))
+                                child: Text("Assign"))
                           ],
                         ),
                       ),

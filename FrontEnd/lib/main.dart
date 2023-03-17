@@ -22,9 +22,20 @@ import 'package:mainproject/screens/splash_screen.dart';
 import 'package:mainproject/student/screens/message/student_msg_screen.dart';
 import 'package:mainproject/student/screens/stud_addpost_screen.dart';
 import 'package:mainproject/student/student_dashboard.dart';
+import 'package:mainproject/teacher/screens/department/accademy/accademy_screen.dart';
+import 'package:mainproject/teacher/screens/department/accademy/timetable_screen.dart';
 import 'package:mainproject/teacher/screens/department/attendance/teachattendance_screen.dart';
 import 'package:mainproject/teacher/screens/department/attendance/teachmarkattdnce_screen.dart';
+import 'package:mainproject/teacher/screens/department/subject/assignnewwork_screen.dart';
+import 'package:mainproject/teacher/screens/department/subject/existingwork_screen.dart';
+import 'package:mainproject/teacher/screens/department/subject/subjectworks_screen.dart';
+import 'package:mainproject/teacher/screens/department/subject/teachsubjectlist_screen.dart';
 import 'package:mainproject/teacher/screens/message/teachermsg_screen.dart';
+import 'package:mainproject/teacher/screens/student/internal/internal_screen.dart';
+import 'package:mainproject/teacher/screens/student/internal/subjectwisestudentinternal_screen.dart';
+import 'package:mainproject/teacher/screens/student/rating/rating_screen.dart';
+import 'package:mainproject/teacher/screens/student/rating/subwisestudentrating_screen.dart';
+import 'package:mainproject/teacher/screens/student/teacherstudent_screen.dart';
 import 'package:mainproject/teacher/screens/teachaddpostnew_screen.dart';
 
 import 'admin/admn_dashboard.dart';
@@ -42,7 +53,7 @@ void main() {
       brightness: Brightness.light,
     ),
     debugShowCheckedModeBanner: false,
-    home: const SplashScreen(),
+    home: const teach_Home(),
     routes: {
       '/register': (context) => const MyRegister(),
       '/reg_check': (context) => const Reg_Check(),
@@ -74,6 +85,18 @@ void main() {
       '/teachaddnewpost': (context) => const TeachAddNew_Post(),
       '/teachdepattdnce': (context) => const Attendance_yearScreen(),
       '/teachdepattdncemark': (context) => const MarkAttendance_Teacher(),
+      '/teachdepsublist': (context) => const TeachSubject_List(),
+      '/teachdepsubworks': (context) => const SubjectWork_Screen(),
+      '/teachdepexistwork': (context) => const ExistingSubjectWork_Screen(),
+      '/teachdepnewwork': (context) => const AssignNew_Work(),
+      '/teachdepaccademy': (context) => const Accademy_ScreenTeach(),
+      '/teachdeptimetable': (context) => const TimeTable_Teach(),
+      '/teachstudscreen': (context) => const TeachStud_screen(),
+      '/teachstudsubwiseinternal': (context) =>
+          const SubjectWise_StudentInternal(),
+      '/teachstudsinternal': (context) => const Teach_InternalStudent(),
+      '/teachstudsubwiserating': (context) => const Subjectwisestudent_raing(),
+      '/teachstudsrating': (context) => const Studentrating_Teach(),
       '/studdashboard': (context) => const student_Dashboard(),
       '/studmessage': (context) => const Student_Message(),
       '/studaddnewpost': (context) => const Studaddnew_Post(),

@@ -120,7 +120,7 @@ class _MyLoginState extends State<MyLogin> {
                                           } else if (username == "Teacher" ||
                                               password == "Teacher") {
                                             Navigator.pushNamed(
-                                                context, "/techdashboard");
+                                                context, "/teachdashboard");
                                           } else if (username == "Student" ||
                                               password == "Student") {
                                             Navigator.pushNamed(
