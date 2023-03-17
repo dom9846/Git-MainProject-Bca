@@ -31,6 +31,10 @@ import 'package:mainproject/teacher/screens/department/subject/existingwork_scre
 import 'package:mainproject/teacher/screens/department/subject/subjectworks_screen.dart';
 import 'package:mainproject/teacher/screens/department/subject/teachsubjectlist_screen.dart';
 import 'package:mainproject/teacher/screens/message/teachermsg_screen.dart';
+import 'package:mainproject/teacher/screens/settings/teachdevolperinfo_screen.dart';
+import 'package:mainproject/teacher/screens/settings/teacheditprofile_screen.dart';
+import 'package:mainproject/teacher/screens/settings/teachsettings_screen.dart';
+import 'package:mainproject/teacher/screens/settings/teachunamepassedit_screen.dart';
 import 'package:mainproject/teacher/screens/student/internal/internal_screen.dart';
 import 'package:mainproject/teacher/screens/student/internal/subjectwisestudentinternal_screen.dart';
 import 'package:mainproject/teacher/screens/student/rating/rating_screen.dart';
@@ -97,6 +101,10 @@ void main() {
       '/teachstudsinternal': (context) => const Teach_InternalStudent(),
       '/teachstudsubwiserating': (context) => const Subjectwisestudent_raing(),
       '/teachstudsrating': (context) => const Studentrating_Teach(),
+      '/teachsettings': (context) => const Teach_settings(),
+      '/teachsetteditprof': (context) => const TeachEdit_Profile(),
+      '/teachsetteditunamepass': (context) => const TeachUnamePass_Edit(),
+      '/teachsettdevinfo': (context) => const TeachDevoloper_Info(),
       '/studdashboard': (context) => const student_Dashboard(),
       '/studmessage': (context) => const Student_Message(),
       '/studaddnewpost': (context) => const Studaddnew_Post(),

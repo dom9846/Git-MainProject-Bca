@@ -1,19 +1,19 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, duplicate_ignore, camel_case_types
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:mainproject/admin/assets/drawer.dart';
+import 'package:mainproject/teacher/assets/drawer.dart';
 
-class Unamepass_Edit extends StatefulWidget {
-  const Unamepass_Edit({super.key});
+class TeachUnamePass_Edit extends StatefulWidget {
+  const TeachUnamePass_Edit({super.key});
 
   @override
-  State<Unamepass_Edit> createState() => _Unamepass_EditState();
+  State<TeachUnamePass_Edit> createState() => _TeachUnamePass_EditState();
 }
 
 final _formkey = GlobalKey<FormState>();
 String username = "", password = "";
 
-class _Unamepass_EditState extends State<Unamepass_Edit> {
+class _TeachUnamePass_EditState extends State<TeachUnamePass_Edit> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +42,7 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnaddpost");
+                      Navigator.pushNamed(context, "/teachaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -50,7 +50,7 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnmessage");
+                      Navigator.pushNamed(context, "/teachmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
@@ -190,7 +190,7 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
             ),
           ],
         ),
-        drawer: cldrawer(),
+        drawer: teach_Drawer(),
       ),
     );
   }

@@ -90,7 +90,7 @@ class _teach_DrawerState extends State<teach_Drawer> {
         ListTile(
           leading: Icon(Icons.settings),
           title: Text("Settings"),
-          onTap: () => {Navigator.pushNamed(context, "/admnsett")},
+          onTap: () => {Navigator.pushNamed(context, "/teachsettings")},
         ),
         ListTile(
           leading: Icon(Icons.exit_to_app),

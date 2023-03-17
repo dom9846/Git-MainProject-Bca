@@ -1,19 +1,20 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, duplicate_ignore, camel_case_types
+// ignore_for_file: camel_case_types, prefer_const_constructors, avoid_print, duplicate_ignore
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/admin/assets/drawer.dart';
+import 'package:mainproject/teacher/assets/drawer.dart';
 
-class Unamepass_Edit extends StatefulWidget {
-  const Unamepass_Edit({super.key});
+class TeachEdit_Profile extends StatefulWidget {
+  const TeachEdit_Profile({super.key});
 
   @override
-  State<Unamepass_Edit> createState() => _Unamepass_EditState();
+  State<TeachEdit_Profile> createState() => _TeachEdit_ProfileState();
 }
 
 final _formkey = GlobalKey<FormState>();
-String username = "", password = "";
+String email = "", mobile = "", age = "", qualification = "";
 
-class _Unamepass_EditState extends State<Unamepass_Edit> {
+class _TeachEdit_ProfileState extends State<TeachEdit_Profile> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +43,7 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnaddpost");
+                      Navigator.pushNamed(context, "/teachaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -50,7 +51,7 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnmessage");
+                      Navigator.pushNamed(context, "/teachmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
@@ -60,7 +61,7 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
             Container(
               padding: EdgeInsets.only(left: 55, top: 60),
               child: Text(
-                'UserName & Password',
+                'Edit Profile',
                 style: TextStyle(color: Colors.white, fontSize: 33),
               ),
             ),
@@ -92,7 +93,7 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                         child: Column(
                           children: [
                             TextFormField(
-                              keyboardType: TextInputType.name,
+                              keyboardType: TextInputType.emailAddress,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -107,9 +108,9 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                                       color: Color.fromARGB(255, 22, 47, 230),
                                     ),
                                   ),
-                                  labelText: "Username",
+                                  labelText: "Email",
                                   labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter New Username",
+                                  hintText: "Enter Your Email Id",
                                   hintStyle: TextStyle(
                                       color: Color.fromARGB(255, 14, 14, 14)),
                                   border: OutlineInputBorder(
@@ -120,7 +121,7 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                                   return "This Field Cannot Be Empty";
                                 } else {
                                   setState(() {
-                                    username = value;
+                                    email = value;
                                   });
                                 }
                                 return null;
@@ -145,9 +146,9 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                                       color: Color.fromARGB(255, 22, 47, 230),
                                     ),
                                   ),
-                                  labelText: "Password",
+                                  labelText: "Mobile Number",
                                   labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter new Password",
+                                  hintText: "Enter The Mobile Number",
                                   hintStyle: TextStyle(
                                       color: Color.fromARGB(255, 7, 7, 7)),
                                   border: OutlineInputBorder(
@@ -160,7 +161,88 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                                   return "Enter a valid mobile number";
                                 } else {
                                   setState(() {
-                                    password = value;
+                                    mobile = value;
+                                  });
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            TextFormField(
+                              style: TextStyle(color: Colors.black),
+                              keyboardType: TextInputType.number,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Color.fromARGB(255, 22, 47, 230),
+                                    ),
+                                  ),
+                                  labelText: "Age",
+                                  labelStyle: TextStyle(color: Colors.black),
+                                  hintText: "Enter The Age",
+                                  hintStyle: TextStyle(
+                                      color: Color.fromARGB(255, 12, 12, 12)),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  )),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "This Field Cannot Be Empty";
+                                } else if (value.length != 2) {
+                                  return "Enter a valid age";
+                                } else {
+                                  setState(() {
+                                    age = value;
+                                  });
+                                }
+                                return null;
+                              },
+                            ),
+                            // ignore: prefer_const_constructors
+                            SizedBox(
+                              height: 40,
+                            ),
+                            TextFormField(
+                              style: TextStyle(color: Colors.black),
+                              keyboardType: TextInputType.name,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Color.fromARGB(255, 22, 47, 230),
+                                    ),
+                                  ),
+                                  labelText: "Qualification",
+                                  labelStyle: TextStyle(color: Colors.black),
+                                  hintText: "Enter Your Qualification",
+                                  hintStyle: TextStyle(
+                                      color: Color.fromARGB(255, 12, 12, 12)),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  )),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "This Field Cannot Be Empty";
+                                } else {
+                                  setState(() {
+                                    qualification = value;
                                   });
                                 }
                                 return null;
@@ -175,8 +257,10 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
                                     fixedSize: Size(80, 40)),
                                 onPressed: () {
                                   if (_formkey.currentState!.validate()) {
-                                    print(username);
-                                    print(password);
+                                    print(email);
+                                    print(mobile);
+                                    print(age);
+                                    print(qualification);
                                   }
                                 },
                                 child: Text("Edit"))
@@ -190,7 +274,7 @@ class _Unamepass_EditState extends State<Unamepass_Edit> {
             ),
           ],
         ),
-        drawer: cldrawer(),
+        drawer: teach_Drawer(),
       ),
     );
   }

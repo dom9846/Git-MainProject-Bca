@@ -10,10 +10,10 @@ var teacherSchema = new mongoose.Schema({
     email: {
         type: String,
     },
-    age: {
+    mobile: {
         type: String,
     },
-    mobile: {
+    age: {
         type: String,
     },
     qualification:{
