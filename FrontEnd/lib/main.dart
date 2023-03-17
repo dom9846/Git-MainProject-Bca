@@ -19,14 +19,13 @@ import 'package:mainproject/screens/login_screen.dart';
 import 'package:mainproject/screens/reg_check.dart';
 import 'package:mainproject/screens/register_screen.dart';
 import 'package:mainproject/screens/splash_screen.dart';
-import 'package:mainproject/student/screens/messenger.dart';
-import 'package:mainproject/student/screens/stud_activities.dart';
-import 'package:mainproject/student/screens/stud_department.dart';
-import 'package:mainproject/student/screens/stud_rate.dart';
-import 'package:mainproject/student/screens/stud_settings.dart';
+import 'package:mainproject/student/screens/message/student_msg_screen.dart';
+import 'package:mainproject/student/screens/stud_addpost_screen.dart';
 import 'package:mainproject/student/student_dashboard.dart';
-import 'package:mainproject/teacher/screens/messenger.dart';
-import 'package:mainproject/teacher/screens/teach_settings.dart';
+import 'package:mainproject/teacher/screens/department/attendance/teachattendance_screen.dart';
+import 'package:mainproject/teacher/screens/department/attendance/teachmarkattdnce_screen.dart';
+import 'package:mainproject/teacher/screens/message/teachermsg_screen.dart';
+import 'package:mainproject/teacher/screens/teachaddpostnew_screen.dart';
 
 import 'admin/admn_dashboard.dart';
 import 'admin/screens/department/attendance/attendance_screen.dart';
@@ -34,9 +33,6 @@ import 'admin/screens/department/dep_screen.dart';
 import 'admin/screens/lecture/lecture_screen.dart';
 import 'admin/screens/settings/settings_screen.dart';
 import 'admin/screens/students/student_screen.dart';
-import 'teacher/screens/teach_attendance.dart';
-import 'teacher/screens/teach_rate.dart';
-import 'teacher/screens/teach_utensils.dart';
 import 'teacher/teacher_dashboard.dart';
 
 void main() {
@@ -73,18 +69,14 @@ void main() {
       '/admnsettchatroom': (context) => const Chat_Room_admn(),
       '/admnsettchatbox': (context) => const Chat_Screen_admn(),
       '/admnsettunamepassedit': (context) => const Unamepass_Edit(),
-      '/techdashboard': (context) => const teach_Home(),
-      '/teachattend': (context) => const teach_attendance(),
-      '/teachrate': (context) => const teach_Rate(),
-      '/teachutens': (context) => const teach_Utensils(),
-      '/teachsett': (context) => const teach_sett(),
-      '/teachmessage': (context) => const teach_message(),
+      '/teachdashboard': (context) => const teach_Home(),
+      '/teachmessage': (context) => const Teach_Message(),
+      '/teachaddnewpost': (context) => const TeachAddNew_Post(),
+      '/teachdepattdnce': (context) => const Attendance_yearScreen(),
+      '/teachdepattdncemark': (context) => const MarkAttendance_Teacher(),
       '/studdashboard': (context) => const student_Dashboard(),
-      '/studdepartment': (context) => const stud_Department(),
-      '/studrate': (context) => const stud_Rate(),
-      '/studactivities': (context) => const stud_activities(),
-      '/studsett': (context) => const stud_Settings(),
-      '/studmessage': (context) => const stud_Message(),
+      '/studmessage': (context) => const Student_Message(),
+      '/studaddnewpost': (context) => const Studaddnew_Post(),
     },
   ));
 }

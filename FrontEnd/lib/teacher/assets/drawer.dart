@@ -55,27 +55,87 @@ class _teach_DrawerState extends State<teach_Drawer> {
         ListTile(
           leading: Icon(Icons.dashboard_customize_outlined),
           title: Text("Dashboard"),
-          onTap: () => {Navigator.pushNamed(context, "/techdashboard")},
+          onTap: () => {Navigator.pushNamed(context, "/teachdashboard")},
         ),
-        ListTile(
-          leading: Icon(Icons.book),
-          title: Text("Attendance"),
-          onTap: () => {Navigator.pushNamed(context, "/teachattend")},
-        ),
-        ListTile(
-          leading: Icon(Icons.person),
-          title: Text("Rate Student"),
-          onTap: () => {Navigator.pushNamed(context, "/teachrate")},
-        ),
-        ListTile(
+        ExpansionTile(
           leading: Icon(Icons.person_4_outlined),
-          title: Text("Utensils"),
-          onTap: () => {Navigator.pushNamed(context, "/teachutens")},
+          title: Text('Department'),
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Attendance'),
+              onTap: () => {Navigator.pushNamed(context, "/teachdepattdnce")},
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Subjects'),
+              onTap: () => {Navigator.pushNamed(context, "/admndepsubject")},
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Accademy'),
+              onTap: () => {Navigator.pushNamed(context, "/admndepaccademics")},
+            ),
+          ],
+        ),
+        ExpansionTile(
+          leading: Icon(Icons.person_4_outlined),
+          title: Text('Lectures'),
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Lecture Details'),
+              onTap: () => {Navigator.pushNamed(context, "/admnlec")},
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Add Lecture'),
+              onTap: () => {Navigator.pushNamed(context, "/admnlectureadd")},
+            ),
+          ],
+        ),
+        ExpansionTile(
+          leading: Icon(Icons.person_4_outlined),
+          title: Text('Students'),
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('First Year'),
+              onTap: () => {Navigator.pushNamed(context, "/admnstud")},
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Second Year'),
+              onTap: () => {Navigator.pushNamed(context, "/admnstud")},
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Third Year'),
+              onTap: () => {Navigator.pushNamed(context, "/admnstud")},
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 30),
+              leading: Icon(Icons.person_4),
+              title: Text('Add Student'),
+              onTap: () => {Navigator.pushNamed(context, "/admnstudentadd")},
+            ),
+          ],
         ),
         ListTile(
           leading: Icon(Icons.settings),
           title: Text("Settings"),
-          onTap: () => {Navigator.pushNamed(context, "/teachsett")},
+          onTap: () => {Navigator.pushNamed(context, "/admnsett")},
         ),
         ListTile(
           leading: Icon(Icons.exit_to_app),

@@ -26,7 +26,7 @@ class _teach_HomeState extends State<teach_Home> {
           centerTitle: true,
           // ignore: prefer_const_constructors
           title: Text(
-            "INNOVIS",
+            "Time Line",
             // ignore: prefer_const_constructors
             style: TextStyle(
                 color: Colors.white,
@@ -39,15 +39,390 @@ class _teach_HomeState extends State<teach_Home> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
+                      Navigator.pushNamed(context, "/teachaddnewpost");
+                    },
+                    // ignore: prefer_const_constructors
+                    icon: Icon(Icons.add_card_sharp))),
+            Container(
+                margin: EdgeInsets.only(right: 10),
+                child: IconButton(
+                    onPressed: () {
                       Navigator.pushNamed(context, "/teachmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
         ),
-        body: Container(
-          child: Center(
-            child: Text("Teacher Dashboard"),
-          ),
+        body: ListView(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+                margin: EdgeInsets.all(10),
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage('https://picsum.photos/200'),
+                                  radius: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    Text('John Doe',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 5),
+                                    Text('10 mins ago',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.grey)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.more_horiz),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat velit ut leo sollicitudin, vel viverra augue porttitor. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage('https://picsum.photos/200'),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                )),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+                margin: EdgeInsets.all(10),
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage('https://picsum.photos/200'),
+                                  radius: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    Text('John Doe',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 5),
+                                    Text('10 mins ago',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.grey)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.more_horiz),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat velit ut leo sollicitudin, vel viverra augue porttitor. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage('https://picsum.photos/200'),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                )),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+                margin: EdgeInsets.all(10),
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage('https://picsum.photos/200'),
+                                  radius: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    Text('John Doe',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 5),
+                                    Text('10 mins ago',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.grey)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.more_horiz),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat velit ut leo sollicitudin, vel viverra augue porttitor. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage('https://picsum.photos/200'),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                )),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+                margin: EdgeInsets.all(10),
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage('https://picsum.photos/200'),
+                                  radius: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    Text('John Doe',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 5),
+                                    Text('10 mins ago',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.grey)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.more_horiz),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat velit ut leo sollicitudin, vel viverra augue porttitor. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage('https://picsum.photos/200'),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                )),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+                margin: EdgeInsets.all(10),
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage('https://picsum.photos/200'),
+                                  radius: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    Text('John Doe',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 5),
+                                    Text('10 mins ago',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.grey)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.more_horiz),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat velit ut leo sollicitudin, vel viverra augue porttitor. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage('https://picsum.photos/200'),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                )),
+            SizedBox(
+              height: 20,
+            ),
+          ],
         ),
         drawer: teach_Drawer(),
       ),
