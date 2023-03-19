@@ -11,9 +11,6 @@ var subjectSchema = new mongoose.Schema({
     },
     semester: {
         type:String
-    },
-    year: {
-        type:String
     }
 })
 module.exports = mongoose.model("Subject", subjectSchema);

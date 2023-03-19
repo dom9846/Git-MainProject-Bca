@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, non_constant_identifier_names, duplicate_ignore, avoid_print
 
 import 'package:flutter/material.dart';
-
+// import 'package:dropdown_button2/src/dropdown_button2.dart';
 import '../../assets/drawer.dart';
 
 class StudentAdd extends StatefulWidget {
@@ -13,6 +13,8 @@ class StudentAdd extends StatefulWidget {
 
 final _formkey = GlobalKey<FormState>();
 String identity = "", firstname = "", secondname = "", user_type = "";
+// final List<String> items = ['Student', 'Teacher'];
+// String? usertype;
 
 class _StudentAddState extends State<StudentAdd> {
   @override
@@ -203,6 +205,98 @@ class _StudentAddState extends State<StudentAdd> {
                                 return null;
                               },
                             ),
+                            // DropdownButtonHideUnderline(
+                            //   child: DropdownButton2(
+                            //     isExpanded: true,
+                            //     hint: Row(
+                            //       children: const [
+                            //         Icon(
+                            //           Icons.list,
+                            //           size: 16,
+                            //           color: Colors.black,
+                            //         ),
+                            //         SizedBox(
+                            //           width: 4,
+                            //         ),
+                            //         Expanded(
+                            //           child: Text(
+                            //             'User_Type',
+                            //             style: TextStyle(
+                            //               fontSize: 14,
+                            //               fontWeight: FontWeight.bold,
+                            //               color: Colors.black,
+                            //             ),
+                            //             overflow: TextOverflow.ellipsis,
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     items: items
+                            //         .map((item) => DropdownMenuItem<String>(
+                            //               value: item,
+                            //               child: Text(
+                            //                 item,
+                            //                 style: const TextStyle(
+                            //                   fontSize: 14,
+                            //                   fontWeight: FontWeight.bold,
+                            //                   color: Colors.black,
+                            //                 ),
+                            //                 overflow: TextOverflow.ellipsis,
+                            //               ),
+                            //             ))
+                            //         .toList(),
+                            //     value: usertype,
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         usertype = value as String;
+                            //       });
+                            //     },
+                            //     buttonStyleData: ButtonStyleData(
+                            //       height: 50,
+                            //       width: 160,
+                            //       padding: const EdgeInsets.only(
+                            //           left: 14, right: 14),
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(14),
+                            //         border: Border.all(
+                            //           color: Colors.black26,
+                            //         ),
+                            //         color: Colors.white,
+                            //       ),
+                            //       elevation: 2,
+                            //     ),
+                            //     iconStyleData: const IconStyleData(
+                            //       icon: Icon(
+                            //         Icons.arrow_forward_ios_outlined,
+                            //       ),
+                            //       iconSize: 14,
+                            //       iconEnabledColor: Colors.white,
+                            //       iconDisabledColor: Colors.grey,
+                            //     ),
+                            //     dropdownStyleData: DropdownStyleData(
+                            //       maxHeight: 200,
+                            //       width: 200,
+                            //       padding: null,
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(14),
+                            //         color: Colors.white,
+                            //       ),
+                            //       elevation: 8,
+                            //       offset: const Offset(-20, 0),
+                            //       scrollbarTheme: ScrollbarThemeData(
+                            //         radius: const Radius.circular(40),
+                            //         thickness:
+                            //             MaterialStateProperty.all<double>(6),
+                            //         thumbVisibility:
+                            //             MaterialStateProperty.all<bool>(true),
+                            //       ),
+                            //     ),
+                            //     menuItemStyleData: const MenuItemStyleData(
+                            //       height: 40,
+                            //       padding: EdgeInsets.only(left: 14, right: 14),
+                            //     ),
+                            //   ),
+                            // ),
                             SizedBox(
                               height: 40,
                             ),
@@ -214,6 +308,7 @@ class _StudentAddState extends State<StudentAdd> {
                                     print(identity);
                                     print(firstname);
                                     print(secondname);
+                                    // print(usertype);
                                   }
                                 },
                                 child: Text("Add"))

@@ -4,12 +4,6 @@ var subjectAssignSchema = new mongoose.Schema({
     subid: {
         type: ObjectId,
     },
-    year: {
-        type: String
-    },
-    semester: {
-        type: String
-    },
     subteacher: {
         type: ObjectId
     }

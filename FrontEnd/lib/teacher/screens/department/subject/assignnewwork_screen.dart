@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
+import 'package:dropdown_button2/src/dropdown_button2.dart';
 
 class AssignNew_Work extends StatefulWidget {
   const AssignNew_Work({super.key});
@@ -11,7 +12,8 @@ class AssignNew_Work extends StatefulWidget {
 }
 
 final _formkey = GlobalKey<FormState>();
-String worktype = "", duedate = "", objective = "";
+String? worktype, duedate = "", objective = "";
+final List<String> items1 = ['Assignment', 'Exam', 'Seminar'];
 
 class _AssignNew_WorkState extends State<AssignNew_Work> {
   @override
@@ -91,39 +93,96 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
                         key: _formkey,
                         child: Column(
                           children: [
-                            TextFormField(
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                                isExpanded: true,
+                                hint: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.list,
+                                      size: 16,
                                       color: Colors.black,
                                     ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 22, 47, 230),
+                                    SizedBox(
+                                      width: 4,
                                     ),
-                                  ),
-                                  labelText: "Work Type",
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Select Type Of work",
-                                  hintStyle: TextStyle(
-                                      color: Color.fromARGB(255, 14, 14, 14)),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "This Field Cannot Be Empty";
-                                } else {
+                                    Expanded(
+                                      child: Text(
+                                        'Subject Type',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                items: items1
+                                    .map((item) => DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ))
+                                    .toList(),
+                                value: worktype,
+                                onChanged: (value) {
                                   setState(() {
-                                    worktype = value;
+                                    worktype = value as String;
                                   });
-                                }
-                                return null;
-                              },
+                                },
+                                buttonStyleData: ButtonStyleData(
+                                  height: 60,
+                                  width: 300,
+                                  padding: const EdgeInsets.only(
+                                      left: 14, right: 14),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: Colors.black26,
+                                    ),
+                                    color: Colors.white,
+                                  ),
+                                  elevation: 2,
+                                ),
+                                iconStyleData: const IconStyleData(
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios_outlined,
+                                  ),
+                                  iconSize: 14,
+                                  iconEnabledColor: Colors.white,
+                                  iconDisabledColor: Colors.grey,
+                                ),
+                                dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  width: 200,
+                                  padding: null,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    color: Colors.white,
+                                  ),
+                                  elevation: 8,
+                                  offset: const Offset(-20, 0),
+                                  scrollbarTheme: ScrollbarThemeData(
+                                    radius: const Radius.circular(40),
+                                    thickness:
+                                        MaterialStateProperty.all<double>(6),
+                                    thumbVisibility:
+                                        MaterialStateProperty.all<bool>(true),
+                                  ),
+                                ),
+                                menuItemStyleData: const MenuItemStyleData(
+                                  height: 40,
+                                  padding: EdgeInsets.only(left: 14, right: 14),
+                                ),
+                              ),
                             ),
                             SizedBox(
                               height: 30,
@@ -167,9 +226,9 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
                               height: 30,
                             ),
                             TextFormField(
+                              maxLines: 5,
                               style: TextStyle(color: Colors.black),
                               keyboardType: TextInputType.name,
-                              obscureText: true,
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),

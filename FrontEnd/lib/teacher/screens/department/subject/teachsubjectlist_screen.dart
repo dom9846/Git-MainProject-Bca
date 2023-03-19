@@ -80,7 +80,7 @@ class _TeachSubject_ListState extends State<TeachSubject_List> {
                     onTap: () =>
                         {Navigator.pushNamed(context, "/teachdepsubworks")},
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(15.0),
                       child: Row(
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
@@ -92,15 +92,15 @@ class _TeachSubject_ListState extends State<TeachSubject_List> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                // SizedBox(
+                //   height: 30,
+                // ),
                 Card(
                   child: InkWell(
                     onTap: () =>
                         {Navigator.pushNamed(context, "/teachdepsubworks")},
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(15.0),
                       child: Row(
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [

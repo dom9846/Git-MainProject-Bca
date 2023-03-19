@@ -56,7 +56,6 @@ import 'package:mainproject/teacher/screens/student/rating/rating_screen.dart';
 import 'package:mainproject/teacher/screens/student/rating/subwisestudentrating_screen.dart';
 import 'package:mainproject/teacher/screens/student/teacherstudent_screen.dart';
 import 'package:mainproject/teacher/screens/teachaddpostnew_screen.dart';
-
 import 'admin/admn_dashboard.dart';
 import 'admin/screens/department/attendance/attendance_screen.dart';
 import 'admin/screens/department/dep_screen.dart';

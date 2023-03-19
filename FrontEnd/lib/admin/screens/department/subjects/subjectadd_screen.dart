@@ -1,8 +1,8 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, avoid_print, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-
 import '../../../assets/drawer.dart';
+import 'package:dropdown_button2/src/dropdown_button2.dart';
 
 class Subject_Add extends StatefulWidget {
   const Subject_Add({super.key});
@@ -12,7 +12,9 @@ class Subject_Add extends StatefulWidget {
 }
 
 final _formkey = GlobalKey<FormState>();
-String subjectname = "", subjecttype = "", year = "", semester = "";
+String? subjectname, subtype, year, semester;
+final List<String> items1 = ['Core', 'External'];
+final List<String> items2 = ['1', '2', '3', '4', '5', '6'];
 
 class _Subject_AddState extends State<Subject_Add> {
   @override
@@ -130,116 +132,285 @@ class _Subject_AddState extends State<Subject_Add> {
                             SizedBox(
                               height: 30,
                             ),
-                            TextFormField(
-                              keyboardType: TextInputType.name,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                                isExpanded: true,
+                                hint: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.list,
+                                      size: 16,
                                       color: Colors.black,
                                     ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 22, 47, 230),
+                                    SizedBox(
+                                      width: 4,
                                     ),
-                                  ),
-                                  labelText: "Subject Type",
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter The Subject Type",
-                                  hintStyle: TextStyle(
-                                      color: Color.fromARGB(255, 14, 14, 14)),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "This Field Cannot Be Empty";
-                                } else {
+                                    Expanded(
+                                      child: Text(
+                                        'Subject Type',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                items: items1
+                                    .map((item) => DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ))
+                                    .toList(),
+                                value: subtype,
+                                onChanged: (value) {
                                   setState(() {
-                                    subjecttype = value;
+                                    subtype = value as String;
                                   });
-                                }
-                                return null;
-                              },
+                                },
+                                buttonStyleData: ButtonStyleData(
+                                  height: 60,
+                                  width: 300,
+                                  padding: const EdgeInsets.only(
+                                      left: 14, right: 14),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: Colors.black26,
+                                    ),
+                                    color: Colors.white,
+                                  ),
+                                  elevation: 2,
+                                ),
+                                iconStyleData: const IconStyleData(
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios_outlined,
+                                  ),
+                                  iconSize: 14,
+                                  iconEnabledColor: Colors.white,
+                                  iconDisabledColor: Colors.grey,
+                                ),
+                                dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  width: 200,
+                                  padding: null,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    color: Colors.white,
+                                  ),
+                                  elevation: 8,
+                                  offset: const Offset(-20, 0),
+                                  scrollbarTheme: ScrollbarThemeData(
+                                    radius: const Radius.circular(40),
+                                    thickness:
+                                        MaterialStateProperty.all<double>(6),
+                                    thumbVisibility:
+                                        MaterialStateProperty.all<bool>(true),
+                                  ),
+                                ),
+                                menuItemStyleData: const MenuItemStyleData(
+                                  height: 40,
+                                  padding: EdgeInsets.only(left: 14, right: 14),
+                                ),
+                              ),
                             ),
                             SizedBox(
                               height: 30,
                             ),
-                            TextFormField(
-                              keyboardType: TextInputType.name,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
+                            // ),
+                            // DropdownButtonHideUnderline(
+                            //   child: DropdownButton2(
+                            //     isExpanded: true,
+                            //     hint: Row(
+                            //       children: const [
+                            //         Icon(
+                            //           Icons.list,
+                            //           size: 16,
+                            //           color: Colors.black,
+                            //         ),
+                            //         SizedBox(
+                            //           width: 4,
+                            //         ),
+                            //         Expanded(
+                            //           child: Text(
+                            //             'Year',
+                            //             style: TextStyle(
+                            //               fontSize: 14,
+                            //               color: Colors.black,
+                            //             ),
+                            //             overflow: TextOverflow.ellipsis,
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     items: items2
+                            //         .map((item) => DropdownMenuItem<String>(
+                            //               value: item,
+                            //               child: Text(
+                            //                 item,
+                            //                 style: const TextStyle(
+                            //                   fontSize: 14,
+                            //                   fontWeight: FontWeight.bold,
+                            //                   color: Colors.black,
+                            //                 ),
+                            //                 overflow: TextOverflow.ellipsis,
+                            //               ),
+                            //             ))
+                            //         .toList(),
+                            //     value: year,
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         year = value as String;
+                            //       });
+                            //     },
+                            //     buttonStyleData: ButtonStyleData(
+                            //       height: 60,
+                            //       width: 300,
+                            //       padding: const EdgeInsets.only(
+                            //           left: 14, right: 14),
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(14),
+                            //         border: Border.all(
+                            //           color: Colors.black26,
+                            //         ),
+                            //         color: Colors.white,
+                            //       ),
+                            //       elevation: 2,
+                            //     ),
+                            //     iconStyleData: const IconStyleData(
+                            //       icon: Icon(
+                            //         Icons.arrow_forward_ios_outlined,
+                            //       ),
+                            //       iconSize: 14,
+                            //       iconEnabledColor: Colors.white,
+                            //       iconDisabledColor: Colors.grey,
+                            //     ),
+                            //     dropdownStyleData: DropdownStyleData(
+                            //       maxHeight: 200,
+                            //       width: 200,
+                            //       padding: null,
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(14),
+                            //         color: Colors.white,
+                            //       ),
+                            //       elevation: 8,
+                            //       offset: const Offset(-20, 0),
+                            //       scrollbarTheme: ScrollbarThemeData(
+                            //         radius: const Radius.circular(40),
+                            //         thickness:
+                            //             MaterialStateProperty.all<double>(6),
+                            //         thumbVisibility:
+                            //             MaterialStateProperty.all<bool>(true),
+                            //       ),
+                            //     ),
+                            //     menuItemStyleData: const MenuItemStyleData(
+                            //       height: 40,
+                            //       padding: EdgeInsets.only(left: 14, right: 14),
+                            //     ),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 30,
+                            // ),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                                isExpanded: true,
+                                hint: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.list,
+                                      size: 16,
                                       color: Colors.black,
                                     ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 22, 47, 230),
+                                    SizedBox(
+                                      width: 4,
                                     ),
-                                  ),
-                                  labelText: "Year",
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter The Year",
-                                  hintStyle: TextStyle(
-                                      color: Color.fromARGB(255, 14, 14, 14)),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "This Field Cannot Be Empty";
-                                } else {
+                                    Expanded(
+                                      child: Text(
+                                        'Semester',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                items: items2
+                                    .map((item) => DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ))
+                                    .toList(),
+                                value: semester,
+                                onChanged: (value) {
                                   setState(() {
-                                    year = value;
+                                    semester = value as String;
                                   });
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            TextFormField(
-                              keyboardType: TextInputType.name,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
+                                },
+                                buttonStyleData: ButtonStyleData(
+                                  height: 60,
+                                  width: 300,
+                                  padding: const EdgeInsets.only(
+                                      left: 14, right: 14),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: Colors.black26,
                                     ),
+                                    color: Colors.white,
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 22, 47, 230),
-                                    ),
+                                  elevation: 2,
+                                ),
+                                iconStyleData: const IconStyleData(
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios_outlined,
                                   ),
-                                  labelText: "Semester",
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter The Semester",
-                                  hintStyle: TextStyle(
-                                      color: Color.fromARGB(255, 14, 14, 14)),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "This Field Cannot Be Empty";
-                                } else {
-                                  setState(() {
-                                    semester = value;
-                                  });
-                                }
-                                return null;
-                              },
+                                  iconSize: 14,
+                                  iconEnabledColor: Colors.white,
+                                  iconDisabledColor: Colors.grey,
+                                ),
+                                dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  width: 200,
+                                  padding: null,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    color: Colors.white,
+                                  ),
+                                  elevation: 8,
+                                  offset: const Offset(-20, 0),
+                                  scrollbarTheme: ScrollbarThemeData(
+                                    radius: const Radius.circular(40),
+                                    thickness:
+                                        MaterialStateProperty.all<double>(6),
+                                    thumbVisibility:
+                                        MaterialStateProperty.all<bool>(true),
+                                  ),
+                                ),
+                                menuItemStyleData: const MenuItemStyleData(
+                                  height: 40,
+                                  padding: EdgeInsets.only(left: 14, right: 14),
+                                ),
+                              ),
                             ),
                             SizedBox(
                               height: 40,
@@ -250,7 +421,7 @@ class _Subject_AddState extends State<Subject_Add> {
                                 onPressed: () {
                                   if (_formkey.currentState!.validate()) {
                                     print(subjectname);
-                                    print(subjecttype);
+                                    print(subtype);
                                     print(year);
                                     print(semester);
                                   }

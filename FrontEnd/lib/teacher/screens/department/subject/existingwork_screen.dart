@@ -114,6 +114,44 @@ class _ExistingSubjectWork_ScreenState
                     ],
                   ),
                 ),
+                Card(
+                  elevation: 5,
+                  margin: EdgeInsets.all(10),
+                  child: ExpansionTile(
+                    leading: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage('https://picsum.photos/200'),
+                      radius: 30,
+                    ),
+                    title: Text(
+                      'Work Type',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Due Date',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: <Widget>[
+                      Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Column(
+                            // ignore: prefer_const_literals_to_create_immutables
+                            children: [
+                              Card(
+                                child: ListTile(
+                                    title: Text('Student Name'),
+                                    subtitle: Text('Roll No'),
+                                    trailing: Icon(Icons.file_open)),
+                              ),
+                            ],
+                          )),
+                    ],
+                  ),
+                ),
               ],
             )),
           ),

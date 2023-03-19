@@ -92,6 +92,7 @@ class _StudentRateTeach_FormState extends State<StudentRateTeach_Form> {
                         child: Column(
                           children: [
                             TextFormField(
+                              keyboardType: TextInputType.number,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -129,7 +130,7 @@ class _StudentRateTeach_FormState extends State<StudentRateTeach_Form> {
                               height: 30,
                             ),
                             TextFormField(
-                              keyboardType: TextInputType.name,
+                              keyboardType: TextInputType.number,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -167,8 +168,8 @@ class _StudentRateTeach_FormState extends State<StudentRateTeach_Form> {
                               height: 30,
                             ),
                             TextFormField(
+                              keyboardType: TextInputType.number,
                               style: TextStyle(color: Colors.black),
-                              keyboardType: TextInputType.name,
                               obscureText: true,
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(

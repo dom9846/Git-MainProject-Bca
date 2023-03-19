@@ -34,19 +34,18 @@ exports.registerUser = (req, res) => {
     });
 };
 
-// exports.RegisterCheck = (req, res) => {
-//     console.log(req.body)
-//     User.findOne({ identity: req.body.identity }, (err, user) => {
-//         if (err) {
-//             return res.status(400).json({ 'msg': err });
-//         }
-//         if (user) {
-//             // return res.status(201).json(user);
-//         }
-//         return res.status(400).json({ 'msg': 'User not exists' });
-//     });
-// };
-
+exports.LoginCheck = (req, res) => {
+    console.log(req.body)
+    User.findOne({ identity: req.body.identity }, (err, user) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (user) {
+            return res.status(201).json(user);
+        }
+        return res.status(400).json({ 'msg': 'User not exists' });
+    });
+};
 
 exports.loginUser = (req, res) => {
     console.log(req.body)
