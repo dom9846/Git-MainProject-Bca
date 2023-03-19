@@ -1,8 +1,10 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, avoid_print, duplicate_ignore
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:mainproject/admin/assets/drawer.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TeachEdit_Profile extends StatefulWidget {
   const TeachEdit_Profile({super.key});
@@ -11,10 +13,20 @@ class TeachEdit_Profile extends StatefulWidget {
   State<TeachEdit_Profile> createState() => _TeachEdit_ProfileState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String email = "", mobile = "", age = "", qualification = "";
-
 class _TeachEdit_ProfileState extends State<TeachEdit_Profile> {
+  final _formkey = GlobalKey<FormState>();
+  String email = "", mobile = "", age = "", qualification = "";
+// ignore: unused_element
+  File? _imageFile;
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -92,6 +104,57 @@ class _TeachEdit_ProfileState extends State<TeachEdit_Profile> {
                         key: _formkey,
                         child: Column(
                           children: [
+                            Container(
+                              height: 150,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: _imageFile == null
+                                    ? Text('No image selected.')
+                                    : Image.file(_imageFile!,
+                                        fit: BoxFit.contain),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SafeArea(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            leading: Icon(Icons.camera_alt),
+                                            title: Text('Take a photo'),
+                                            onTap: () {
+                                              _pickImage(ImageSource.camera);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          ListTile(
+                                            leading: Icon(Icons.image),
+                                            title: Text('Choose from gallery'),
+                                            onTap: () {
+                                              _pickImage(ImageSource.gallery);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Container(child: Icon(Icons.camera)),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             TextFormField(
                               keyboardType: TextInputType.emailAddress,
                               style: TextStyle(color: Colors.black),

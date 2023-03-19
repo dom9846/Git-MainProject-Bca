@@ -72,7 +72,7 @@ void main() {
       brightness: Brightness.light,
     ),
     debugShowCheckedModeBanner: false,
-    home: const SplashScreen(),
+    home: const student_Dashboard(),
     routes: {
       '/register': (context) => const MyRegister(),
       '/reg_check': (context) => const Reg_Check(),

@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, camel_case_types
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, camel_case_types, unused_import, implementation_imports
 
 import 'package:flutter/material.dart';
 
 import '../../assets/drawer.dart';
+import 'package:dropdown_button2/src/dropdown_button2.dart';
 
 class Stud_screen extends StatefulWidget {
   const Stud_screen({super.key});
@@ -10,6 +11,13 @@ class Stud_screen extends StatefulWidget {
   @override
   State<Stud_screen> createState() => _Stud_screenState();
 }
+
+final List<String> items = [
+  'Year 1',
+  'Year 2',
+  'Year 3',
+];
+String? selectedYear;
 
 class _Stud_screenState extends State<Stud_screen> {
   @override
@@ -71,6 +79,104 @@ class _Stud_screenState extends State<Stud_screen> {
                     fontStyle: FontStyle.italic,
                     color: Color.fromARGB(255, 228, 230, 233),
                   ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        hint: Row(
+                          children: const [
+                            Icon(
+                              Icons.list,
+                              size: 16,
+                              color: Colors.black,
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Expanded(
+                              child: Text(
+                                'Select Item',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        items: items
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedYear,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedYear = value as String;
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          width: 160,
+                          padding: const EdgeInsets.only(left: 14, right: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: Colors.black26,
+                            ),
+                            color: Colors.white,
+                          ),
+                          elevation: 2,
+                        ),
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            Icons.arrow_forward_ios_outlined,
+                          ),
+                          iconSize: 14,
+                          iconEnabledColor: Colors.white,
+                          iconDisabledColor: Colors.grey,
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 200,
+                          width: 200,
+                          padding: null,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: Colors.white,
+                          ),
+                          elevation: 8,
+                          offset: const Offset(-20, 0),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(40),
+                            thickness: MaterialStateProperty.all<double>(6),
+                            thumbVisibility:
+                                MaterialStateProperty.all<bool>(true),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                          padding: EdgeInsets.only(left: 14, right: 14),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 30,

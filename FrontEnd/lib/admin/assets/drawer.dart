@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class cldrawer extends StatefulWidget {
   const cldrawer({super.key});
@@ -109,19 +110,7 @@ class _cldrawerState extends State<cldrawer> {
             ListTile(
               contentPadding: EdgeInsets.only(left: 30),
               leading: Icon(Icons.person_4),
-              title: Text('First Year'),
-              onTap: () => {Navigator.pushNamed(context, "/admnstud")},
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 30),
-              leading: Icon(Icons.person_4),
-              title: Text('Second Year'),
-              onTap: () => {Navigator.pushNamed(context, "/admnstud")},
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 30),
-              leading: Icon(Icons.person_4),
-              title: Text('Third Year'),
+              title: Text('Student List'),
               onTap: () => {Navigator.pushNamed(context, "/admnstud")},
             ),
             ListTile(

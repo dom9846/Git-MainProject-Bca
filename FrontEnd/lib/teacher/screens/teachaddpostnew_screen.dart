@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 
@@ -15,6 +17,16 @@ final _formkey = GlobalKey<FormState>();
 String content = "";
 
 class _TeachAddNew_PostState extends State<TeachAddNew_Post> {
+  File? _imageFile;
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,25 +86,71 @@ class _TeachAddNew_PostState extends State<TeachAddNew_Post> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                        height: 250,
-                        width: 350,
-                        padding: EdgeInsets.only(
-                            top: 50, bottom: 50, left: 20, right: 20),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
+                      height: 250,
+                      width: 350,
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      child: Center(
+                        child: _imageFile == null
+                            ? Text('No image selected.')
+                            : Image.file(_imageFile!, fit: BoxFit.contain),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextButton.icon(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SafeArea(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: Icon(Icons.camera_alt),
+                                      title: Text('Take a photo'),
+                                      onTap: () {
+                                        _pickImage(ImageSource.camera);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: Icon(Icons.image),
+                                      title: Text('Choose from gallery'),
+                                      onTap: () {
+                                        _pickImage(ImageSource.gallery);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(
+                          Icons.arrow_upward,
+                          color: Colors.black,
                         ),
-                        margin: EdgeInsets.only(left: 35, right: 35),
-                        child: Center(child: Text("image"))),
+                        label: Text(
+                          "Upload",
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        )),
                     SizedBox(
                       height: 20,
                     ),
@@ -101,20 +159,6 @@ class _TeachAddNew_PostState extends State<TeachAddNew_Post> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            ElevatedButton(
-                                onPressed: () async {
-                                  final result =
-                                      await FilePicker.platform.pickFiles();
-                                  if (result == null) {
-                                    return;
-                                  }
-                                  final file = result.files.first;
-                                  // openFile(file);
-                                },
-                                child: Text("Upload Media")),
-                            // SizedBox(
-                            //   height: 20,
-                            // ),
                             Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,

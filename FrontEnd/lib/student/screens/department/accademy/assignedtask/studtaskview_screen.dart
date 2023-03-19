@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors
-
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mainproject/student/assets/drawer.dart';
 
@@ -11,6 +12,8 @@ class TaskView_semesterwise extends StatefulWidget {
 }
 
 class _TaskView_semesterwiseState extends State<TaskView_semesterwise> {
+  File? _selectedFile;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -113,8 +116,29 @@ class _TaskView_semesterwiseState extends State<TaskView_semesterwise> {
                               SizedBox(
                                 height: 8,
                               ),
+                              Container(
+                                width: 150,
+                                height: 150,
+                                child: Center(child: Text("data")),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
                               TextButton(
-                                  onPressed: () {}, child: Text("Upload")),
+                                  onPressed: () async {
+                                    final result =
+                                        await FilePicker.platform.pickFiles(
+                                      type: FileType.custom,
+                                      allowedExtensions: ['pdf'],
+                                    );
+                                    if (result != null) {
+                                      setState(() {
+                                        _selectedFile =
+                                            File(result.files.single.path!);
+                                      });
+                                    }
+                                  },
+                                  child: Text("Upload")),
                               SizedBox(
                                 height: 8,
                               ),

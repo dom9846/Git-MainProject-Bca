@@ -1,7 +1,10 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, avoid_print, duplicate_ignore
+// ignore_for_file: camel_case_types, prefer_const_constructors, avoid_print, duplicate_ignore, unused_element, unused_field
+
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/admin/assets/drawer.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Edit_Profile extends StatefulWidget {
   const Edit_Profile({super.key});
@@ -10,10 +13,20 @@ class Edit_Profile extends StatefulWidget {
   State<Edit_Profile> createState() => _Edit_ProfileState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String email = "", mobile = "", age = "", qualification = "";
-
 class _Edit_ProfileState extends State<Edit_Profile> {
+  final _formkey = GlobalKey<FormState>();
+  String email = "", mobile = "", age = "", qualification = "";
+// ignore: unused_element
+  File? _imageFile;
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -66,6 +79,7 @@ class _Edit_ProfileState extends State<Edit_Profile> {
             ),
             SingleChildScrollView(
               child: Container(
+                margin: EdgeInsets.only(bottom: 30),
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.18),
                 child: Column(
@@ -90,7 +104,59 @@ class _Edit_ProfileState extends State<Edit_Profile> {
                       child: Form(
                         key: _formkey,
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Container(
+                              height: 150,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: _imageFile == null
+                                    ? Text('No image selected.')
+                                    : Image.file(_imageFile!,
+                                        fit: BoxFit.contain),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SafeArea(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            leading: Icon(Icons.camera_alt),
+                                            title: Text('Take a photo'),
+                                            onTap: () {
+                                              _pickImage(ImageSource.camera);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          ListTile(
+                                            leading: Icon(Icons.image),
+                                            title: Text('Choose from gallery'),
+                                            onTap: () {
+                                              _pickImage(ImageSource.gallery);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Container(child: Icon(Icons.camera)),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             TextFormField(
                               keyboardType: TextInputType.emailAddress,
                               style: TextStyle(color: Colors.black),

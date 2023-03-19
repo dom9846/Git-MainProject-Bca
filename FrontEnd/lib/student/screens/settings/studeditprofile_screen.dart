@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mainproject/student/assets/drawer.dart';
+import 'package:image_picker/image_picker.dart';
 
 class StudentEdit_Profile extends StatefulWidget {
   const StudentEdit_Profile({super.key});
@@ -10,16 +13,26 @@ class StudentEdit_Profile extends StatefulWidget {
   State<StudentEdit_Profile> createState() => _StudentEdit_ProfileState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String email = "",
-    mobile = "",
-    age = "",
-    parent = "",
-    parentcontact = "",
-    year = "",
-    semester = "";
-
 class _StudentEdit_ProfileState extends State<StudentEdit_Profile> {
+  final _formkey = GlobalKey<FormState>();
+  String email = "",
+      mobile = "",
+      age = "",
+      parent = "",
+      parentcontact = "",
+      year = "",
+      semester = "";
+// ignore: unused_element
+  File? _imageFile;
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -75,8 +88,58 @@ class _StudentEdit_ProfileState extends State<StudentEdit_Profile> {
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.18),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Container(
+                      height: 150,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: _imageFile == null
+                            ? Text('No image selected.')
+                            : Image.file(_imageFile!, fit: BoxFit.contain),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SafeArea(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: Icon(Icons.camera_alt),
+                                    title: Text('Take a photo'),
+                                    onTap: () {
+                                      _pickImage(ImageSource.camera);
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: Icon(Icons.image),
+                                    title: Text('Choose from gallery'),
+                                    onTap: () {
+                                      _pickImage(ImageSource.gallery);
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(child: Icon(Icons.camera)),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       padding: EdgeInsets.only(
                           top: 50, bottom: 50, left: 20, right: 20),
