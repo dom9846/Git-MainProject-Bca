@@ -6,9 +6,6 @@ var subjectSchema = new mongoose.Schema({
     subjecttype: {
         type:String
     },
-    year: {
-        type:String
-    },
     semester: {
         type:String
     }
