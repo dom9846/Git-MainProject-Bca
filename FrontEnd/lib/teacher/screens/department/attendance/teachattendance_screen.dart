@@ -85,7 +85,7 @@ class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("First Year"),
+                          Text("Semester 1"),
                         ],
                       ),
                     ),
@@ -102,7 +102,7 @@ class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Second Year"),
+                          Text("Semester 2"),
                         ],
                       ),
                     ),
@@ -119,7 +119,58 @@ class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Third Year"),
+                          Text("Semester 3"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () =>
+                        {Navigator.pushNamed(context, "/teachdepattdncemark")},
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 4"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () =>
+                        {Navigator.pushNamed(context, "/teachdepattdncemark")},
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 5"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () =>
+                        {Navigator.pushNamed(context, "/teachdepattdncemark")},
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 6"),
                         ],
                       ),
                     ),

@@ -108,7 +108,7 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        'Subject Type',
+                                        'Work Type',
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.black,

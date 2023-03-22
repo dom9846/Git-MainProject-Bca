@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 var marksSchema = new mongoose.Schema({
     subjid: {
-        type: String
+        type: ObjectId
     },
     teachid: {
         type: ObjectId

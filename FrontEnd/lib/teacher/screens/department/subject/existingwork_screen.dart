@@ -39,19 +39,10 @@ class _ExistingSubjectWork_ScreenState
           actions: [
             Container(
                 margin: EdgeInsets.only(right: 10),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/teachaddnewpost");
-                    },
-                    // ignore: prefer_const_constructors
-                    icon: Icon(Icons.add_card_sharp))),
-            Container(
-                margin: EdgeInsets.only(right: 10),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/teachmessage");
-                    },
-                    icon: Icon(Icons.message_sharp)))
+                child: TextButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.clear_all),
+                    label: Text("Clear all")))
           ],
         ),
         body: ListView(children: [

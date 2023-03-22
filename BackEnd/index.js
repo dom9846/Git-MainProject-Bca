@@ -15,6 +15,11 @@ var adminRoutes = require('./routes/loginregisterupdate/admin');
 var internalmarkRoutes = require('./routes/internalmarks/internal');
 var subjectAddRoutes = require('./routes/subject/subject');
 var subjectAssignRoutes = require('./routes/subject/subjectassign');
+var timeTableRoutes = require('./routes/timetable/timetable');
+var attendanceRoutes = require('./routes/attendance/attendance');
+var subjectWorkRoutes = require('./routes/subject/subjectwork');
+var rateteacherRoutes = require('./routes/rating/rateteacher');
+var ratestudentRoutes = require('./routes/rating/ratestudent');
 
 //DB Connection
 mongoose.set('strictQuery', true);
@@ -38,6 +43,11 @@ app.use('/api', adminRoutes);
 app.use('/api', internalmarkRoutes);
 app.use('/api', subjectAddRoutes);
 app.use('/api', subjectAssignRoutes);
+app.use('/api', timeTableRoutes);
+app.use('/api', attendanceRoutes);
+app.use('/api', subjectWorkRoutes);
+app.use('/api', rateteacherRoutes);
+app.use('/api', ratestudentRoutes);
 
 app.get('/', (req, res) => {
  res.send('Hello World!')
