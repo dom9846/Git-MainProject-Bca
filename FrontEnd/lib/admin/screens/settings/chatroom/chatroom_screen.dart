@@ -62,7 +62,7 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
                   height: 30,
                 ),
                 Text(
-                  'Select The Year',
+                  'Select Chat',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -71,6 +71,19 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
                     color: Color.fromARGB(255, 228, 230, 233),
                   ),
                 ),
+                SizedBox(
+                  height: 30,
+                ),
+                TextButton(
+                    onPressed: () {
+                      {
+                        Navigator.pushNamed(context, "/admnsettaddchatroom");
+                      }
+                    },
+                    child: Text(
+                      "Add New Chat",
+                      style: TextStyle(color: Colors.blue),
+                    )),
                 SizedBox(
                   height: 30,
                 ),
@@ -86,41 +99,12 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
                           Text("First Year"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsettchatbox")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Second Year"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsettchatbox")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          // ignore: prefer_const_constructors
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Third Year"),
+                          SizedBox(
+                            width: 200,
+                          ),
+                          IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.delete_outlined))
                         ],
                       ),
                     ),

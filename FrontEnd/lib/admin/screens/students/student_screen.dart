@@ -101,7 +101,7 @@ class _Stud_screenState extends State<Stud_screen> {
                             ),
                             Expanded(
                               child: Text(
-                                'Select Item',
+                                'Select Year',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -201,6 +201,11 @@ class _Stud_screenState extends State<Stud_screen> {
                       'Roll No',
                       style: TextStyle(fontSize: 16),
                     ),
+                    trailing: IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/admnchatbox");
+                        },
+                        icon: Icon(Icons.message)),
                     // ignore: prefer_const_literals_to_create_immutables
                     children: <Widget>[
                       Padding(

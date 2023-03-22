@@ -9,7 +9,8 @@ import 'package:mainproject/admin/screens/department/subjects/subjectadd_screen.
 import 'package:mainproject/admin/screens/department/subjects/subjectassign_screen.dart';
 import 'package:mainproject/admin/screens/department/subjects/subjects_screen.dart';
 import 'package:mainproject/admin/screens/lecture/lectureadd_screen.dart';
-import 'package:mainproject/admin/screens/settings/chatroom/chat_screen.dart';
+import 'package:mainproject/admin/screens/settings/chatroom/addnewchat_screen.dart';
+import 'package:mainproject/admin/screens/message/chat_screen.dart';
 import 'package:mainproject/admin/screens/settings/chatroom/chatroom_screen.dart';
 import 'package:mainproject/admin/screens/settings/devoloperinfo_screen.dart';
 import 'package:mainproject/admin/screens/settings/editprofile_screen.dart';
@@ -29,6 +30,8 @@ import 'package:mainproject/student/screens/department/attendance/studattendance
 import 'package:mainproject/student/screens/department/attendance/studattndancestatus_screen.dart';
 import 'package:mainproject/student/screens/department/internal/studinternal_screen.dart';
 import 'package:mainproject/student/screens/department/internal/studinternalstatus_screen.dart';
+import 'package:mainproject/student/screens/message/chat_stud.dart';
+import 'package:mainproject/student/screens/message/chatscreen_stud.dart';
 import 'package:mainproject/student/screens/message/student_msg_screen.dart';
 import 'package:mainproject/student/screens/settings/studDevlperInfo_screen.dart';
 import 'package:mainproject/student/screens/settings/studeditprofile_screen.dart';
@@ -45,6 +48,7 @@ import 'package:mainproject/teacher/screens/department/subject/assignnewwork_scr
 import 'package:mainproject/teacher/screens/department/subject/existingwork_screen.dart';
 import 'package:mainproject/teacher/screens/department/subject/subjectworks_screen.dart';
 import 'package:mainproject/teacher/screens/department/subject/teachsubjectlist_screen.dart';
+import 'package:mainproject/teacher/screens/message/chatscreen_teach.dart';
 import 'package:mainproject/teacher/screens/message/teachermsg_screen.dart';
 import 'package:mainproject/teacher/screens/settings/teachdevolperinfo_screen.dart';
 import 'package:mainproject/teacher/screens/settings/teacheditprofile_screen.dart';
@@ -52,6 +56,8 @@ import 'package:mainproject/teacher/screens/settings/teachsettings_screen.dart';
 import 'package:mainproject/teacher/screens/settings/teachunamepassedit_screen.dart';
 import 'package:mainproject/teacher/screens/student/internal/internal_screen.dart';
 import 'package:mainproject/teacher/screens/student/internal/subjectwisestudentinternal_screen.dart';
+import 'package:mainproject/teacher/screens/student/message_stud/studentmsg_screen.dart';
+import 'package:mainproject/teacher/screens/student/message_stud/students_screen.dart';
 import 'package:mainproject/teacher/screens/student/rating/rating_screen.dart';
 import 'package:mainproject/teacher/screens/student/rating/subwisestudentrating_screen.dart';
 import 'package:mainproject/teacher/screens/student/teacherstudent_screen.dart';
@@ -96,11 +102,13 @@ void main() {
       '/admnsetteditprofile': (context) => const Edit_Profile(),
       '/admnsettpostmanage': (context) => const Manage_Post(),
       '/admnsettchatroom': (context) => const Chat_Room_admn(),
-      '/admnsettchatbox': (context) => const Chat_Screen_admn(),
+      '/admnsettaddchatroom': (context) => const addNew_chat(),
+      '/admnchatbox': (context) => const Chat_Screen_admn(),
       '/admnsettunamepassedit': (context) => const Unamepass_Edit(),
       '/admnsettdevinfo': (context) => const Devoloper_Info(),
       '/teachdashboard': (context) => const teach_Home(),
       '/teachmessage': (context) => const Teach_Message(),
+      '/teachchat': (context) => const chat_Teach(),
       '/teachaddnewpost': (context) => const TeachAddNew_Post(),
       '/teachdepattdnce': (context) => const Attendance_yearScreen(),
       '/teachdepattdncemark': (context) => const MarkAttendance_Teacher(),
@@ -116,12 +124,15 @@ void main() {
       '/teachstudsinternal': (context) => const Teach_InternalStudent(),
       '/teachstudsubwiserating': (context) => const Subjectwisestudent_raing(),
       '/teachstudsrating': (context) => const Studentrating_Teach(),
+      '/teachstudmsgyearlist': (context) => const TeachStudentYearMsg_Screen(),
+      '/teachstudmsglistofstud': (context) => const Teachstudlistyear_message(),
       '/teachsettings': (context) => const Teach_settings(),
       '/teachsetteditprof': (context) => const TeachEdit_Profile(),
       '/teachsetteditunamepass': (context) => const TeachUnamePass_Edit(),
       '/teachsettdevinfo': (context) => const TeachDevoloper_Info(),
       '/studdashboard': (context) => const student_Dashboard(),
       '/studmessage': (context) => const Student_Message(),
+      '/studchats': (context) => const ChatScreen_Stud(),
       '/studaddnewpost': (context) => const Studaddnew_Post(),
       '/studdepattndance': (context) => const AttendanceHistory_Student(),
       '/studdepattndancestatus': (context) => const Studattendance_Status(),

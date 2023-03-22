@@ -3,14 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 
-class TeachStud_screen extends StatefulWidget {
-  const TeachStud_screen({super.key});
+class Teachstudlistyear_message extends StatefulWidget {
+  const Teachstudlistyear_message({super.key});
 
   @override
-  State<TeachStud_screen> createState() => _TeachStud_screenState();
+  State<Teachstudlistyear_message> createState() =>
+      _Teachstudlistyear_messageState();
 }
 
-class _TeachStud_screenState extends State<TeachStud_screen> {
+class _Teachstudlistyear_messageState extends State<Teachstudlistyear_message> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,7 +64,8 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                   height: 30,
                 ),
                 Text(
-                  'Students',
+                  'List Of Students',
+                  // ignore: prefer_const_constructors
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -76,56 +78,31 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                   height: 30,
                 ),
                 Card(
-                  child: InkWell(
-                    onTap: () => {
-                      Navigator.pushNamed(context, "/teachstudsubwiseinternal")
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Internal"),
-                        ],
+                  elevation: 5,
+                  margin: EdgeInsets.all(10),
+                  child: ExpansionTile(
+                    leading: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage('https://picsum.photos/200'),
+                      radius: 30,
+                    ),
+                    title: Text(
+                      'Student Name',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () => {
-                      Navigator.pushNamed(context, "/teachstudsubwiserating")
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Rating"),
-                        ],
-                      ),
+                    subtitle: Text(
+                      'Roll No',
+                      style: TextStyle(fontSize: 16),
                     ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudmsgyearlist")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Message"),
-                        ],
-                      ),
-                    ),
+                    trailing: IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/teachchat");
+                        },
+                        icon: Icon(Icons.message)),
+                    // ignore: prefer_const_literals_to_create_immutables
                   ),
                 ),
               ],

@@ -95,112 +95,11 @@ class _lec_screenState extends State<lec_screen> {
                       'Rating',
                       style: TextStyle(fontSize: 16),
                     ),
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            children: [
-                              Text("age"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("Qualification"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("email"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("Mobile"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    "Delete",
-                                    style: TextStyle(color: Colors.red),
-                                  ))
-                            ],
-                          )),
-                    ],
-                  ),
-                ),
-                Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(10),
-                  child: ExpansionTile(
-                    leading: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage('https://picsum.photos/200'),
-                      radius: 30,
-                    ),
-                    title: Text(
-                      'Lecture Name',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Rating',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            children: [
-                              Text("age"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("Qualification"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("email"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("Mobile"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    "Delete",
-                                    style: TextStyle(color: Colors.red),
-                                  ))
-                            ],
-                          )),
-                    ],
-                  ),
-                ),
-                Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(10),
-                  child: ExpansionTile(
-                    leading: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage('https://picsum.photos/200'),
-                      radius: 30,
-                    ),
-                    title: Text(
-                      'Lecture Name',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Rating',
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    trailing: IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/admnchatbox");
+                        },
+                        icon: Icon(Icons.message)),
                     // ignore: prefer_const_literals_to_create_immutables
                     children: <Widget>[
                       Padding(

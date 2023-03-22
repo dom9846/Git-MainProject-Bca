@@ -76,7 +76,7 @@ class _Student_MessageState extends State<Student_Message> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/")},
+                    onTap: () => {Navigator.pushNamed(context, "/studchats")},
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -92,7 +92,7 @@ class _Student_MessageState extends State<Student_Message> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/")},
+                    onTap: () => {Navigator.pushNamed(context, "/studchats")},
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -108,7 +108,7 @@ class _Student_MessageState extends State<Student_Message> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/")},
+                    onTap: () => {Navigator.pushNamed(context, "/studchats")},
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(

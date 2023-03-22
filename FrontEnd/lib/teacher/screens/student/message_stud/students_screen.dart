@@ -1,16 +1,17 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: camel_case_types, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 
-class TeachStud_screen extends StatefulWidget {
-  const TeachStud_screen({super.key});
+class TeachStudentYearMsg_Screen extends StatefulWidget {
+  const TeachStudentYearMsg_Screen({super.key});
 
   @override
-  State<TeachStud_screen> createState() => _TeachStud_screenState();
+  State<TeachStudentYearMsg_Screen> createState() =>
+      _TeachStudentYear_ScreenState();
 }
 
-class _TeachStud_screenState extends State<TeachStud_screen> {
+class _TeachStudentYear_ScreenState extends State<TeachStudentYearMsg_Screen> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,7 +64,7 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                   height: 30,
                 ),
                 Text(
-                  'Students',
+                  'Select Year',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -78,7 +79,7 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                 Card(
                   child: InkWell(
                     onTap: () => {
-                      Navigator.pushNamed(context, "/teachstudsubwiseinternal")
+                      Navigator.pushNamed(context, "/teachstudmsglistofstud")
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -87,7 +88,7 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Internal"),
+                          Text("First Year"),
                         ],
                       ),
                     ),
@@ -96,7 +97,7 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                 Card(
                   child: InkWell(
                     onTap: () => {
-                      Navigator.pushNamed(context, "/teachstudsubwiserating")
+                      Navigator.pushNamed(context, "/teachstudmsglistofstud")
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -105,7 +106,7 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Rating"),
+                          Text("Second Year"),
                         ],
                       ),
                     ),
@@ -113,8 +114,9 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudmsgyearlist")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachstudmsglistofstud")
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -122,7 +124,7 @@ class _TeachStud_screenState extends State<TeachStud_screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Message"),
+                          Text("Third Year"),
                         ],
                       ),
                     ),

@@ -63,7 +63,7 @@ class _Admin_messageState extends State<Admin_message> {
                   height: 30,
                 ),
                 Text(
-                  'Select The Year',
+                  'Select The Chat',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -77,8 +77,7 @@ class _Admin_messageState extends State<Admin_message> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsettchatbox")},
+                    onTap: () => {Navigator.pushNamed(context, "/admnchatbox")},
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -86,42 +85,7 @@ class _Admin_messageState extends State<Admin_message> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("First Year"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsettchatbox")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Second Year"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsettchatbox")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          // ignore: prefer_const_constructors
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Third Year"),
+                          Text("Chat Name"),
                         ],
                       ),
                     ),

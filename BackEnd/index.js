@@ -20,6 +20,9 @@ var attendanceRoutes = require('./routes/attendance/attendance');
 var subjectWorkRoutes = require('./routes/subject/subjectwork');
 var rateteacherRoutes = require('./routes/rating/rateteacher');
 var ratestudentRoutes = require('./routes/rating/ratestudent');
+var newpostRoutes = require('./routes/newpost/newpost');
+var chatroomRoutes = require('./routes/message/chatroom');
+var chatRoutes = require('./routes/message/chat');
 
 //DB Connection
 mongoose.set('strictQuery', true);
@@ -48,6 +51,9 @@ app.use('/api', attendanceRoutes);
 app.use('/api', subjectWorkRoutes);
 app.use('/api', rateteacherRoutes);
 app.use('/api', ratestudentRoutes);
+app.use('/api', newpostRoutes);
+app.use('/api', chatroomRoutes);
+app.use('/api', chatRoutes);
 
 app.get('/', (req, res) => {
  res.send('Hello World!')
