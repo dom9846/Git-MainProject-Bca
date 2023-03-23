@@ -1,20 +1,91 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:mainproject/admin/admn_dashboard.dart';
+import 'package:dio/dio.dart';
 import 'package:mainproject/screens/reg_check.dart';
-import 'package:mainproject/screens/register_screen.dart';
+import 'package:mainproject/services/register_service.dart';
+import 'package:mainproject/student/student_dashboard.dart';
+import 'dart:convert';
+
+import 'package:mainproject/teacher/teacher_dashboard.dart';
 
 class MyLogin extends StatefulWidget {
-  const MyLogin({Key? key}) : super(key: key);
-
+  const MyLogin({
+    Key? key,
+  }) : super(key: key);
   @override
   _MyLoginState createState() => _MyLoginState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String username = "", password = "";
-
 class _MyLoginState extends State<MyLogin> {
+  final _formkey = GlobalKey<FormState>();
+  String username = "", password = "";
+  Registercheckservice regchecker = Registercheckservice();
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> loginaccount() async {
+    if (_formkey.currentState!.validate()) {
+      var user = jsonEncode({
+        "username": username,
+        "password": password,
+      });
+      try {
+        final Response? res = await regchecker.login(user);
+        // showError("Successfully Login", "Cannot Be Done");
+        var user_type = res?.data["user_type"];
+        if (user_type == "Admin") {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => admnHome(),
+            ),
+          );
+        } else if (user_type == "Teacher") {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => teach_Home(),
+            ),
+          );
+        } else if (user_type == "Student") {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => student_Dashboard(),
+            ),
+          );
+        }
+      } on DioError catch (err) {
+        if (err.response != null) {
+          // print(err.response!.data);
+          showError("User Allready Exist", "Cannot Be Done");
+        } else {
+          // Something happened in setting up or sending the request that triggered an Error
+          showError("Invalid Username and Password", "Oops");
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -111,25 +182,7 @@ class _MyLoginState extends State<MyLogin> {
                                   backgroundColor: Color(0xff4c505b),
                                   child: IconButton(
                                       color: Colors.white,
-                                      onPressed: () {
-                                        if (_formkey.currentState!.validate()) {
-                                          if (username == "Admin" ||
-                                              password == "Admin") {
-                                            Navigator.pushNamed(
-                                                context, "/admndashboard");
-                                          } else if (username == "Teacher" ||
-                                              password == "Teacher") {
-                                            Navigator.pushNamed(
-                                                context, "/teachdashboard");
-                                          } else if (username == "Student" ||
-                                              password == "Student") {
-                                            Navigator.pushNamed(
-                                                context, "/studdashboard");
-                                          } else {
-                                            print("not valid");
-                                          }
-                                        }
-                                      },
+                                      onPressed: loginaccount,
                                       icon: Icon(
                                         Icons.arrow_forward,
                                       )),
@@ -144,12 +197,11 @@ class _MyLoginState extends State<MyLogin> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    // Navigator.pushNamed(context, "/register");
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Reg_Check()));
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Reg_Check(),
+                                      ),
+                                    );
                                   },
                                   // ignore: sort_child_properties_last
                                   child: Text(

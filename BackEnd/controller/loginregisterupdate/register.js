@@ -10,12 +10,12 @@ exports.registerUser = (req, res) => {
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            return res.status(400).json({ 'msg': 'The user already exists' });
+            return res.status(404).json({ 'msg': 'The user already exists' });
         }
         let newUser = User(req.body);
         newUser.save((err, user) => {
             if (err) {
-                return res.status(400).json({ 'msg': err });
+                return res.status(402).json({ 'msg': err });
             }
             else if(user){
                 if (req.body.user_type == "Student") {
@@ -41,9 +41,9 @@ exports.LoginCheck = (req, res) => {
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            return res.status(201).json(user);
+                return res.status(201).json(user);
         }
-        return res.status(400).json({ 'msg': 'User not exists' });
+        return res.status(404).json({ 'msg': 'User not exists' });
     });
 };
 
@@ -55,11 +55,11 @@ exports.loginUser = (req, res) => {
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            // return res.status(201).json(user);
-            const token = jwt.sign({ _id:user._id }, process.env.SECRET);
-            //put token in cookie
-            res.cookie("token",token, { expire: new Date() + 9999 } );
-            return res.status(201).json({token,user});
+            return res.status(201).json(user);
+            // const token = jwt.sign({ _id:user._id }, process.env.SECRET);
+            // //put token in cookie
+            // res.cookie("token",token, { expire: new Date() + 9999 } );
+            // return res.status(201).json({token,user});
         }
         return res.status(400).json({ 'msg': 'User not exists' });
     });

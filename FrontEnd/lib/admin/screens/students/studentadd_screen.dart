@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, non_constant_identifier_names, duplicate_ignore, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:mainproject/services/register_service.dart';
 // import 'package:dropdown_button2/src/dropdown_button2.dart';
 import '../../assets/drawer.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
 
 class StudentAdd extends StatefulWidget {
   const StudentAdd({super.key});
@@ -11,12 +14,57 @@ class StudentAdd extends StatefulWidget {
   State<StudentAdd> createState() => _StudentAddState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String identity = "", firstname = "", secondname = "", user_type = "";
-// final List<String> items = ['Student', 'Teacher'];
-// String? usertype;
-
 class _StudentAddState extends State<StudentAdd> {
+  Registercheckservice regchecker = Registercheckservice();
+  final _formkey = GlobalKey<FormState>();
+  String identity = "", firstname = "", secondname = "", user_type = "Student";
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> addingstudent() async {
+    if (_formkey.currentState!.validate()) {
+      var user = jsonEncode({
+        "identity": identity,
+        "firstname": firstname,
+        "secondname": secondname,
+        "user_type": user_type,
+      });
+      try {
+        final Response? res = await regchecker.addstudent(user);
+        // if (res!.statusCode == 401) {}
+        showError("Successfully Added New Student", "Student");
+      } on DioError catch (err) {
+        if (err.response != null) {
+          // print(err.response!.data);
+          showError("User Allready Exist", "Cannot Be Done");
+        } else {
+          // Something happened in setting up or sending the request that triggered an Error
+          showError("Error occured,please try againlater", "Oops");
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -95,6 +143,7 @@ class _StudentAddState extends State<StudentAdd> {
                         child: Column(
                           children: [
                             TextFormField(
+                              keyboardType: TextInputType.number,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -172,7 +221,6 @@ class _StudentAddState extends State<StudentAdd> {
                             TextFormField(
                               style: TextStyle(color: Colors.black),
                               keyboardType: TextInputType.name,
-                              obscureText: true,
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -205,112 +253,13 @@ class _StudentAddState extends State<StudentAdd> {
                                 return null;
                               },
                             ),
-                            // DropdownButtonHideUnderline(
-                            //   child: DropdownButton2(
-                            //     isExpanded: true,
-                            //     hint: Row(
-                            //       children: const [
-                            //         Icon(
-                            //           Icons.list,
-                            //           size: 16,
-                            //           color: Colors.black,
-                            //         ),
-                            //         SizedBox(
-                            //           width: 4,
-                            //         ),
-                            //         Expanded(
-                            //           child: Text(
-                            //             'User_Type',
-                            //             style: TextStyle(
-                            //               fontSize: 14,
-                            //               fontWeight: FontWeight.bold,
-                            //               color: Colors.black,
-                            //             ),
-                            //             overflow: TextOverflow.ellipsis,
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //     items: items
-                            //         .map((item) => DropdownMenuItem<String>(
-                            //               value: item,
-                            //               child: Text(
-                            //                 item,
-                            //                 style: const TextStyle(
-                            //                   fontSize: 14,
-                            //                   fontWeight: FontWeight.bold,
-                            //                   color: Colors.black,
-                            //                 ),
-                            //                 overflow: TextOverflow.ellipsis,
-                            //               ),
-                            //             ))
-                            //         .toList(),
-                            //     value: usertype,
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         usertype = value as String;
-                            //       });
-                            //     },
-                            //     buttonStyleData: ButtonStyleData(
-                            //       height: 50,
-                            //       width: 160,
-                            //       padding: const EdgeInsets.only(
-                            //           left: 14, right: 14),
-                            //       decoration: BoxDecoration(
-                            //         borderRadius: BorderRadius.circular(14),
-                            //         border: Border.all(
-                            //           color: Colors.black26,
-                            //         ),
-                            //         color: Colors.white,
-                            //       ),
-                            //       elevation: 2,
-                            //     ),
-                            //     iconStyleData: const IconStyleData(
-                            //       icon: Icon(
-                            //         Icons.arrow_forward_ios_outlined,
-                            //       ),
-                            //       iconSize: 14,
-                            //       iconEnabledColor: Colors.white,
-                            //       iconDisabledColor: Colors.grey,
-                            //     ),
-                            //     dropdownStyleData: DropdownStyleData(
-                            //       maxHeight: 200,
-                            //       width: 200,
-                            //       padding: null,
-                            //       decoration: BoxDecoration(
-                            //         borderRadius: BorderRadius.circular(14),
-                            //         color: Colors.white,
-                            //       ),
-                            //       elevation: 8,
-                            //       offset: const Offset(-20, 0),
-                            //       scrollbarTheme: ScrollbarThemeData(
-                            //         radius: const Radius.circular(40),
-                            //         thickness:
-                            //             MaterialStateProperty.all<double>(6),
-                            //         thumbVisibility:
-                            //             MaterialStateProperty.all<bool>(true),
-                            //       ),
-                            //     ),
-                            //     menuItemStyleData: const MenuItemStyleData(
-                            //       height: 40,
-                            //       padding: EdgeInsets.only(left: 14, right: 14),
-                            //     ),
-                            //   ),
-                            // ),
                             SizedBox(
                               height: 40,
                             ),
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(80, 40)),
-                                onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    print(identity);
-                                    print(firstname);
-                                    print(secondname);
-                                    // print(usertype);
-                                  }
-                                },
+                                onPressed: addingstudent,
                                 child: Text("Add"))
                           ],
                         ),

@@ -77,7 +77,7 @@ void main() {
       brightness: Brightness.light,
     ),
     debugShowCheckedModeBanner: false,
-    home: const student_Dashboard(),
+    home: const Reg_Check(),
     routes: {
       '/register': (context) => const MyRegister(),
       '/reg_check': (context) => const Reg_Check(),

@@ -10,32 +10,36 @@ exports.adminregister = (req, res) => {
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            User.updateOne( 
-                { _id: ObjectId(user._id) }, 
-                {
-                  $set: 
+            // if(user.body.username==null){
+                User.updateOne( 
+                    { _id: ObjectId(user._id) }, 
                     {
-                        username:req.body.username,
-                        password:req.body.password
-                    }
-                },(err,u)=>{
-                    if(err){
-        
-                    }
-                    if(u){
-                        req.body.id = ObjectId(user._id);
-                        let newAdminupdate = Admin(req.body);
-                        newAdminupdate.save((err, ns) => {
-                            if (err) {
-                                return res.status(400).json({ 'msg': "error occured" });
-                            }
-                            if(ns){
-                                return res.status(201).json({ 'msg': "Successfully Registerd" });
-                            }
-                        })
-                    }
-                } 
-            )
+                      $set: 
+                        {
+                            username:req.body.username,
+                            password:req.body.password
+                        }
+                    },(err,u)=>{
+                        if(err){
+            
+                        }
+                        if(u){
+                            req.body.id = ObjectId(user._id);
+                            let newAdminupdate = Admin(req.body);
+                            newAdminupdate.save((err, ns) => {
+                                if (err) {
+                                    return res.status(400).json({ 'msg': "error occured" });
+                                }
+                                if(ns){
+                                    return res.status(201).json({ 'msg': "Successfully Registerd" });
+                                }
+                            })
+                        }
+                    } 
+                )
+            // }else{
+            //     return res.status(404).json({ 'msg': "error occured" });
+            // }
         }
     });
 };

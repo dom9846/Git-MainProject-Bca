@@ -1,19 +1,100 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:mainproject/admin/screens/lecture/lectureadd_screen.dart';
 import 'package:mainproject/screens/login_screen.dart';
+import 'package:dio/dio.dart';
+import 'package:mainproject/services/register_service.dart';
 
 class MyRegister extends StatefulWidget {
-  const MyRegister({Key? key}) : super(key: key);
+  const MyRegister(
+      {Key? key,
+      this.idnum = "",
+      this.fname = "",
+      this.sname = "",
+      this.utype = ""})
+      : super(key: key);
+  final String idnum;
+  final String fname;
+  final String sname;
+  final String utype;
 
   @override
   _MyRegisterState createState() => _MyRegisterState();
 }
 
 final _formkey = GlobalKey<FormState>();
-String username = "", email = "", password = "";
+String username = "", password = "";
 
 class _MyRegisterState extends State<MyRegister> {
+  Registercheckservice regchecker = Registercheckservice();
+  String? firstname, identity, secondname, usertype;
+  void initState() {
+    setState(() {
+      identity = widget.idnum;
+      firstname = widget.fname;
+      secondname = widget.sname;
+      usertype = widget.utype;
+    });
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  if (content == "SuccessFully Registered,Please Login") {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyLogin()));
+                  } else
+                    Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> register() async {
+    if (_formkey.currentState!.validate()) {
+      var user = jsonEncode({
+        "identity": identity,
+        "username": username,
+        "password": password,
+      });
+      try {
+        if (usertype == "Admin") {
+          final Response? res = await regchecker.registeradmin(user);
+          showError("SuccessFully Registered,Please Login", "Admin Account");
+        } else if (usertype == "Teacher") {
+          final Response? res = await regchecker.registerteacher(user);
+          showError("SuccessFully Registered,Please Login", "Teacher Account");
+        } else if (usertype == "Student") {
+          final Response? res = await regchecker.registerstudent(user);
+          showError("SuccessFully Registered,Please Login", "Student Account");
+        }
+      } on DioError catch (err) {
+        if (err.response != null) {
+          // print(err.response!.data);
+          showError("Error occured,please try againlater", "Oops");
+        } else {
+          // Something happened in setting up or sending the request that triggered an Error
+          showError("You Are Allready Registered", "Registration Failed");
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,8 +112,37 @@ class _MyRegisterState extends State<MyRegister> {
           children: [
             Container(
               padding: EdgeInsets.only(left: 35, top: 30),
+              child: Row(
+                // ignore: prefer_const_literals_to_create_immutables
+                children: [
+                  Text(
+                    'hello,',
+                    style: TextStyle(color: Colors.white, fontSize: 33),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    firstname.toString(),
+                    style: TextStyle(color: Colors.white, fontSize: 33),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    secondname.toString(),
+                    style: TextStyle(color: Colors.white, fontSize: 33),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 35, top: 65),
               child: Text(
-                'Create\nAccount',
+                'Create Account',
                 style: TextStyle(color: Colors.white, fontSize: 33),
               ),
             ),
@@ -64,8 +174,8 @@ class _MyRegisterState extends State<MyRegister> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  labelText: "Name",
-                                  hintText: "Enter Your Name",
+                                  labelText: "User Name",
+                                  hintText: "Enter Your Username",
                                   hintStyle: TextStyle(color: Colors.white),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -76,42 +186,6 @@ class _MyRegisterState extends State<MyRegister> {
                                 } else {
                                   setState(() {
                                     username = value;
-                                  });
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            TextFormField(
-                              keyboardType: TextInputType.emailAddress,
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  labelText: "Email",
-                                  hintText: "Enter Your Email Address",
-                                  hintStyle: TextStyle(color: Colors.white),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "This Field Cannot Be Empty";
-                                } else {
-                                  setState(() {
-                                    email = value;
                                   });
                                 }
                                 return null;
@@ -172,13 +246,7 @@ class _MyRegisterState extends State<MyRegister> {
                                   backgroundColor: Color(0xff4c505b),
                                   child: IconButton(
                                       color: Colors.white,
-                                      onPressed: () {
-                                        if (_formkey.currentState!.validate()) {
-                                          print(username);
-                                          print(email);
-                                          print(password);
-                                        }
-                                      },
+                                      onPressed: register,
                                       icon: Icon(
                                         Icons.arrow_forward,
                                       )),

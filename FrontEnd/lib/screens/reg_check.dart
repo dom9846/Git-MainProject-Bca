@@ -1,11 +1,15 @@
 // ignore: implementation_imports
 // ignore_for_file: prefer_const_constructors, unused_import, unnecessary_import, implementation_imports, duplicate_ignore, avoid_print
 
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-// ignore: implementation_imports
+import 'package:dio/dio.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-
+import 'package:mainproject/screens/register_screen.dart';
+import 'package:mainproject/services/register_service.dart';
 import 'login_screen.dart';
 
 // ignore: camel_case_types
@@ -16,12 +20,76 @@ class Reg_Check extends StatefulWidget {
   State<Reg_Check> createState() => _Reg_CheckState();
 }
 
-final _formkey = GlobalKey<FormState>();
-// ignore: non_constant_identifier_names
-String Identity = "";
-
 // ignore: camel_case_types
 class _Reg_CheckState extends State<Reg_Check> {
+  final _formkey = GlobalKey<FormState>();
+  String iden = "";
+  Registercheckservice regchecker = Registercheckservice();
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> regcheck() async {
+    if (_formkey.currentState!.validate()) {
+      var id = jsonEncode({
+        "identity": iden,
+      });
+      // print(id);
+      try {
+        final Response? res = await regchecker.registercheck(id);
+        var identity = res?.data["identity"];
+        var userfname = res?.data["firstname"];
+        var usersname = res?.data["secondname"];
+        var usertype = res?.data["user_type"];
+        var username = res?.data["username"];
+        var password = res?.data["password"];
+        if (username != "" && password != "") {
+          showError("You Are Allready Registered", "Cannot Be Done");
+        } else {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MyRegister(
+                  idnum: identity.toString(),
+                  fname: userfname,
+                  sname: usersname,
+                  utype: usertype),
+            ),
+          );
+        }
+        // var user = json.decode(res);
+        // print(res?.data["_id"]);
+        //print("name:${user['firstname']}");
+      } on DioError catch (err) {
+        if (err.response != null) {
+          // print(err.response!.data);
+          showError("User Allready Exist", "Cannot Be Done");
+        } else {
+          // Something happened in setting up or sending the request that triggered an Error
+          showError("Error occured,please try againlater", "Oops");
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,6 +129,7 @@ class _Reg_CheckState extends State<Reg_Check> {
                         child: Column(
                           children: [
                             TextFormField(
+                              keyboardType: TextInputType.number,
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -86,7 +155,7 @@ class _Reg_CheckState extends State<Reg_Check> {
                                   return "This Field Cannot Be Empty";
                                 } else {
                                   setState(() {
-                                    Identity = value;
+                                    iden = value;
                                   });
                                 }
                                 return null;
@@ -110,11 +179,7 @@ class _Reg_CheckState extends State<Reg_Check> {
                                   backgroundColor: Color(0xff4c505b),
                                   child: IconButton(
                                       color: Colors.white,
-                                      onPressed: () {
-                                        if (_formkey.currentState!.validate()) {
-                                          print(Identity);
-                                        }
-                                      },
+                                      onPressed: regcheck,
                                       icon: Icon(
                                         Icons.arrow_forward,
                                       )),

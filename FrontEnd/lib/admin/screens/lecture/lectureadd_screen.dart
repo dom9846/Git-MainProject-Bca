@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:mainproject/services/register_service.dart';
+import 'dart:convert';
 
 import '../../assets/drawer.dart';
 
@@ -11,10 +14,57 @@ class LectureAdd extends StatefulWidget {
   State<LectureAdd> createState() => _LectureAddState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String identity = "", firstname = "", secondname = "", user_type = "";
-
 class _LectureAddState extends State<LectureAdd> {
+  final _formkey = GlobalKey<FormState>();
+  String identity = "", firstname = "", secondname = "", user_type = "Teacher";
+  Registercheckservice regchecker = Registercheckservice();
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> addingteacher() async {
+    if (_formkey.currentState!.validate()) {
+      var user = jsonEncode({
+        "identity": identity,
+        "firstname": firstname,
+        "secondname": secondname,
+        "user_type": user_type,
+      });
+      try {
+        final Response? res = await regchecker.addteacher(user);
+        // if (res!.statusCode == 401) {}
+        showError("Successfully Added New Teacher", "Teacher");
+      } on DioError catch (err) {
+        if (err.response != null) {
+          // print(err.response!.data);
+          showError("User Allready Exist", "Cannot Be Done");
+        } else {
+          // Something happened in setting up or sending the request that triggered an Error
+          showError("Error occured,please try againlater", "Oops");
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -93,6 +143,7 @@ class _LectureAddState extends State<LectureAdd> {
                         child: Column(
                           children: [
                             TextFormField(
+                              keyboardType: TextInputType.number,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -170,7 +221,6 @@ class _LectureAddState extends State<LectureAdd> {
                             TextFormField(
                               style: TextStyle(color: Colors.black),
                               keyboardType: TextInputType.name,
-                              obscureText: true,
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -209,13 +259,7 @@ class _LectureAddState extends State<LectureAdd> {
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(80, 40)),
-                                onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    print(identity);
-                                    print(firstname);
-                                    print(secondname);
-                                  }
-                                },
+                                onPressed: addingteacher,
                                 child: Text("Add"))
                           ],
                         ),
