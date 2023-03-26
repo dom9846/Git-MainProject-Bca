@@ -9,31 +9,42 @@ exports.studentregister = (req, res) => {
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            User.updateOne( 
-                { _id: ObjectId(user._id) }, 
-                {
-                  $set: 
-                    {
-                        username:req.body.username,
-                        password:req.body.password
-                    }
-                },(err,u)=>{
-                    if(err){
-        
-                    }
-                    if(u){
-                        req.body.id = ObjectId(user._id);
-                        let newStudentupdate = Student(req.body);
-                        newStudentupdate.save((err, ns) => {
-                            if (err) {
-                                return res.status(400).json({ 'msg': "error occured" });
+            User.findOne({ username: req.body.username }, (e,u) =>{
+                if(e){
+                    return res.status(401).json({ 'msg': e });
+                }
+                if(u){
+                    return res.status(404).json({ 'msg': 'This username is allready taken!'});
+                }
+                else{
+                    User.updateOne( 
+                        { _id: ObjectId(user._id) }, 
+                        {
+                          $set: 
+                            {
+                                username:req.body.username,
+                                password:req.body.password
                             }
-                            if(ns){
-                                return res.status(201).json({ 'msg': "Successfully Registerd" });
+                        },(err,u)=>{
+                            if(err){
+                
                             }
-                        })
-                    }
-                } 
+                            if(u){
+                                req.body.id = ObjectId(user._id);
+                                let newStudentupdate = Student(req.body);
+                                newStudentupdate.save((err, ns) => {
+                                    if (err) {
+                                        return res.status(400).json({ 'msg': "error occured" });
+                                    }
+                                    if(ns){
+                                        return res.status(201).json({ 'msg': "Successfully Registerd" });
+                                    }
+                                })
+                            }
+                        } 
+                    )
+                }
+            }
             )
         }
     });

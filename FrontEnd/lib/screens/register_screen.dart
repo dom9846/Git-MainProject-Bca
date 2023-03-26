@@ -85,11 +85,9 @@ class _MyRegisterState extends State<MyRegister> {
         }
       } on DioError catch (err) {
         if (err.response != null) {
-          // print(err.response!.data);
-          showError("Error occured,please try againlater", "Oops");
-        } else {
-          // Something happened in setting up or sending the request that triggered an Error
-          showError("You Are Allready Registered", "Registration Failed");
+          if (err.response!.statusCode == 404) {
+            showError("User Name Allready Exist", "Try Another Username!");
+          }
         }
       }
     }

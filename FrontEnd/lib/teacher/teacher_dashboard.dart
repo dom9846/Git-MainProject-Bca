@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class teach_Home extends StatefulWidget {
   const teach_Home({super.key});
@@ -11,6 +13,51 @@ class teach_Home extends StatefulWidget {
 }
 
 class _teach_HomeState extends State<teach_Home> {
+  final storage = new FlutterSecureStorage();
+  String? jwt;
+  String userId = "";
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues.isEmpty) {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        this.getToken();
+      }
+    } catch (e) {}
+  }
+
+  Future<void> getToken() async {
+    String normalizedSource;
+    String userid;
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      jwt = allValues["token"];
+    });
+    normalizedSource = base64Url.normalize(allValues["token"]!.split(".")[1]);
+    userid =
+        json.decode(utf8.decode(base64Url.decode(normalizedSource)))["_id"];
+    print(userid);
+    setState(() {
+      userId = userid;
+    });
+  }
+
+  // logout() async {
+  //   await storage.delete(key: "token");
+  //   Navigator.pushNamed(context, "/login");
+  //   // Navigator.of(context)
+  //   //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+  // }
+
+  void initState() {
+    super.initState();
+    this.checkAuthentication();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

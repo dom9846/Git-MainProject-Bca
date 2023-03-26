@@ -2,7 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/src/dropdown_button2.dart';
+import 'package:mainproject/services/subject_service.dart';
 import '../../../assets/drawer.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
 
 class Subject_Assign extends StatefulWidget {
   const Subject_Assign({super.key});
@@ -11,13 +14,57 @@ class Subject_Assign extends StatefulWidget {
   State<Subject_Assign> createState() => _Subject_AssignState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String? subjectname, teachername, semester;
-final List<String> items1 = ['Subject 1', 'Subject 2'];
-final List<String> items2 = ['Teacher 1', 'Teacher 2'];
-final List<String> items3 = ['1', '2', '3', '4', '5', '6'];
-
 class _Subject_AssignState extends State<Subject_Assign> {
+  final _formkey = GlobalKey<FormState>();
+  String? subjectname, teachername, semester;
+  final List<String> items1 = ['Subject 1', 'Subject 2'];
+  final List<String> items2 = ['Teacher 1', 'Teacher 2'];
+  final List<String> items3 = ['1', '2', '3', '4', '5', '6'];
+  subjectservice subjectassign = subjectservice();
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> assignsub() async {
+    if (_formkey.currentState!.validate()) {
+      var subject = jsonEncode({
+        "subid": subjectname,
+        "subteacher": teachername,
+      });
+      try {
+        final Response? res = await subjectassign.subjectassign(subject);
+        // if (res!.statusCode == 401) {}
+        showError("Successfully Assigned Subject", "Subject Assigned");
+      } on DioError catch (err) {
+        if (err.response != null) {
+          showError("This Subject Is Allready Assigned", "Oops");
+        } else {
+          // Something happened in setting up or sending the request that triggered an Error
+          showError("Something Went Wrong!", "Cannot Be Done");
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -381,13 +428,7 @@ class _Subject_AssignState extends State<Subject_Assign> {
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(80, 40)),
-                                onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    print(semester);
-                                    print(subjectname);
-                                    print(teachername);
-                                  }
-                                },
+                                onPressed: assignsub,
                                 child: Text("Add"))
                           ],
                         ),

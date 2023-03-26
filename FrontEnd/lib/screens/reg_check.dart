@@ -37,10 +37,13 @@ class _Reg_CheckState extends State<Reg_Check> {
               TextButton(
                 child: Text("Ok"),
                 onPressed: () {
-                  // if (title == "Registration Successful") {
-                  //   // Navigator.pushNamed(context, '/login');
-                  // } else
-                  Navigator.of(context).pop();
+                  if (title == "Please Login") {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyLogin()));
+                  } else
+                    Navigator.of(context).pop();
                 },
               )
             ],
@@ -60,31 +63,22 @@ class _Reg_CheckState extends State<Reg_Check> {
         var userfname = res?.data["firstname"];
         var usersname = res?.data["secondname"];
         var usertype = res?.data["user_type"];
-        var username = res?.data["username"];
-        var password = res?.data["password"];
-        if (username != "" && password != "") {
-          showError("You Are Allready Registered", "Cannot Be Done");
-        } else {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => MyRegister(
-                  idnum: identity.toString(),
-                  fname: userfname,
-                  sname: usersname,
-                  utype: usertype),
-            ),
-          );
-        }
-        // var user = json.decode(res);
-        // print(res?.data["_id"]);
-        //print("name:${user['firstname']}");
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MyRegister(
+                idnum: identity.toString(),
+                fname: userfname,
+                sname: usersname,
+                utype: usertype),
+          ),
+        );
       } on DioError catch (err) {
         if (err.response != null) {
-          // print(err.response!.data);
-          showError("User Allready Exist", "Cannot Be Done");
-        } else {
-          // Something happened in setting up or sending the request that triggered an Error
-          showError("Error occured,please try againlater", "Oops");
+          if (err.response!.statusCode == 404) {
+            showError("You Are Allready Registered", "Please Login");
+          } else if (err.response!.statusCode == 401) {
+            showError("No Such User Exist", "Registration Failed");
+          }
         }
       }
     }

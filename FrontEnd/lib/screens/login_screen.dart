@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/admin/admn_dashboard.dart';
@@ -7,7 +7,7 @@ import 'package:mainproject/screens/reg_check.dart';
 import 'package:mainproject/services/register_service.dart';
 import 'package:mainproject/student/student_dashboard.dart';
 import 'dart:convert';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/teacher/teacher_dashboard.dart';
 
 class MyLogin extends StatefulWidget {
@@ -22,6 +22,7 @@ class _MyLoginState extends State<MyLogin> {
   final _formkey = GlobalKey<FormState>();
   String username = "", password = "";
   Registercheckservice regchecker = Registercheckservice();
+  final storage = new FlutterSecureStorage();
 
   showError(String content, String title) {
     showDialog(
@@ -53,34 +54,36 @@ class _MyLoginState extends State<MyLogin> {
       });
       try {
         final Response? res = await regchecker.login(user);
-        // showError("Successfully Login", "Cannot Be Done");
-        var user_type = res?.data["user_type"];
-        if (user_type == "Admin") {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => admnHome(),
-            ),
-          );
-        } else if (user_type == "Teacher") {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => teach_Home(),
-            ),
-          );
-        } else if (user_type == "Student") {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => student_Dashboard(),
-            ),
-          );
+        if (res!.statusCode == 201) {
+          await storage.write(key: "token", value: res.data["token"]);
+          Map<String, String> allValues = await storage.readAll();
+          var user = res.data["user"];
+          var user_type = user["user_type"];
+          if (user_type == "Admin") {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => admnHome(),
+              ),
+            );
+          } else if (user_type == "Teacher") {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => teach_Home(),
+              ),
+            );
+          } else if (user_type == "Student") {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => student_Dashboard(),
+              ),
+            );
+          }
         }
       } on DioError catch (err) {
         if (err.response != null) {
-          // print(err.response!.data);
-          showError("User Allready Exist", "Cannot Be Done");
-        } else {
-          // Something happened in setting up or sending the request that triggered an Error
-          showError("Invalid Username and Password", "Oops");
+          if (err.response!.statusCode == 404) {
+            showError("Invalid username and Password", "Login Failed");
+          }
         }
       }
     }

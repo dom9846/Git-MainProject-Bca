@@ -2,9 +2,13 @@
 
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mainproject/admin/assets/drawer.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mainproject/services/updation_service.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Edit_Profile extends StatefulWidget {
   const Edit_Profile({super.key});
@@ -14,16 +18,97 @@ class Edit_Profile extends StatefulWidget {
 }
 
 class _Edit_ProfileState extends State<Edit_Profile> {
+  final storage = new FlutterSecureStorage();
+  String? jwt, userId;
+  Future<void> getToken() async {
+    String normalizedSource;
+    String userid;
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      jwt = allValues["token"];
+    });
+    normalizedSource = base64Url.normalize(allValues["token"]!.split(".")[1]);
+    userid =
+        json.decode(utf8.decode(base64Url.decode(normalizedSource)))["_id"];
+    print(userid);
+    setState(() {
+      userId = userid;
+    });
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   final _formkey = GlobalKey<FormState>();
-  String email = "", mobile = "", age = "", qualification = "";
+  String email = "", mobile = "", age = "", qualification = "", image = "";
+  Updationservice admnupdate = Updationservice();
 // ignore: unused_element
-  File? _imageFile;
+  XFile? _imageFile;
+
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
+    List<String>? s = pickedFile?.path.toString().split("/");
+    final bytes = await File(pickedFile!.path).readAsBytes();
+    final base64 = base64Encode(bytes);
+
+    var pic =
+        "data:image/" + s![s.length - 1].split(".")[1] + ";base64," + base64;
+    print(pic);
     if (pickedFile != null) {
       setState(() {
-        _imageFile = File(pickedFile.path);
+        image = pic;
+        _imageFile = pickedFile;
       });
+    }
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> update() async {
+    if (_formkey.currentState!.validate()) {
+      var user = jsonEncode({
+        "id": userId,
+        "propic": image,
+        "email": email,
+        "mobile": mobile,
+        "age": age,
+        "qualification": qualification,
+      });
+      print(user);
+      try {
+        final Response? res = await admnupdate.updateadmin(user);
+        // if (res!.statusCode == 401) {}
+        showError("Successfully Updated Your Profile", "Profile Updated");
+      } on DioError catch (err) {
+        if (err.response != null) {
+          showError("Some Error Occured!", "Oops");
+        } else {
+          // Something happened in setting up or sending the request that triggered an Error
+          showError("Something Went Wrong!", "Cannot Be Done");
+        }
+      }
     }
   }
 
@@ -114,7 +199,7 @@ class _Edit_ProfileState extends State<Edit_Profile> {
                               child: Center(
                                 child: _imageFile == null
                                     ? Text('No image selected.')
-                                    : Image.file(_imageFile!,
+                                    : Image.file(File(_imageFile!.path),
                                         fit: BoxFit.contain),
                               ),
                             ),
@@ -238,7 +323,6 @@ class _Edit_ProfileState extends State<Edit_Profile> {
                             TextFormField(
                               style: TextStyle(color: Colors.black),
                               keyboardType: TextInputType.number,
-                              obscureText: true,
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -280,7 +364,6 @@ class _Edit_ProfileState extends State<Edit_Profile> {
                             TextFormField(
                               style: TextStyle(color: Colors.black),
                               keyboardType: TextInputType.name,
-                              obscureText: true,
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -320,14 +403,7 @@ class _Edit_ProfileState extends State<Edit_Profile> {
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(80, 40)),
-                                onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    print(email);
-                                    print(mobile);
-                                    print(age);
-                                    print(qualification);
-                                  }
-                                },
+                                onPressed: update,
                                 child: Text("Edit"))
                           ],
                         ),

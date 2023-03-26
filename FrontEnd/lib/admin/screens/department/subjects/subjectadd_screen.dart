@@ -1,8 +1,13 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, avoid_print, non_constant_identifier_names
+// ignore_for_file: camel_case_types, prefer_const_constructors, avoid_print, non_constant_identifier_names, implementation_imports
+
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:mainproject/services/subject_service.dart';
 import '../../../assets/drawer.dart';
 import 'package:dropdown_button2/src/dropdown_button2.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
 
 class Subject_Add extends StatefulWidget {
   const Subject_Add({super.key});
@@ -12,11 +17,57 @@ class Subject_Add extends StatefulWidget {
 }
 
 final _formkey = GlobalKey<FormState>();
-String? subjectname, subtype, year, semester;
-final List<String> items1 = ['Core', 'External'];
-final List<String> items2 = ['1', '2', '3', '4', '5', '6'];
 
 class _Subject_AddState extends State<Subject_Add> {
+  String? subjectname = "", subtype, semester;
+  final List<String> items1 = ['Core', 'External'];
+  final List<String> items2 = ['1', '2', '3', '4', '5', '6'];
+  subjectservice subjectadd = subjectservice();
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> addsub() async {
+    if (_formkey.currentState!.validate()) {
+      var subject = jsonEncode({
+        "subjectname": subjectname,
+        "subjecttype": subtype,
+        "semester": semester,
+      });
+      try {
+        final Response? res = await subjectadd.subjectadd(subject);
+        // if (res!.statusCode == 401) {}
+        showError("Successfully Added New Subject", "Subject");
+      } on DioError catch (err) {
+        if (err.response != null) {
+          showError("This Subject Is Allready Added", "Oops");
+        } else {
+          // Something happened in setting up or sending the request that triggered an Error
+          showError("Something Went Wrong!", "Cannot Be Done");
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -226,101 +277,6 @@ class _Subject_AddState extends State<Subject_Add> {
                             SizedBox(
                               height: 30,
                             ),
-                            // ),
-                            // DropdownButtonHideUnderline(
-                            //   child: DropdownButton2(
-                            //     isExpanded: true,
-                            //     hint: Row(
-                            //       children: const [
-                            //         Icon(
-                            //           Icons.list,
-                            //           size: 16,
-                            //           color: Colors.black,
-                            //         ),
-                            //         SizedBox(
-                            //           width: 4,
-                            //         ),
-                            //         Expanded(
-                            //           child: Text(
-                            //             'Year',
-                            //             style: TextStyle(
-                            //               fontSize: 14,
-                            //               color: Colors.black,
-                            //             ),
-                            //             overflow: TextOverflow.ellipsis,
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //     items: items2
-                            //         .map((item) => DropdownMenuItem<String>(
-                            //               value: item,
-                            //               child: Text(
-                            //                 item,
-                            //                 style: const TextStyle(
-                            //                   fontSize: 14,
-                            //                   fontWeight: FontWeight.bold,
-                            //                   color: Colors.black,
-                            //                 ),
-                            //                 overflow: TextOverflow.ellipsis,
-                            //               ),
-                            //             ))
-                            //         .toList(),
-                            //     value: year,
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         year = value as String;
-                            //       });
-                            //     },
-                            //     buttonStyleData: ButtonStyleData(
-                            //       height: 60,
-                            //       width: 300,
-                            //       padding: const EdgeInsets.only(
-                            //           left: 14, right: 14),
-                            //       decoration: BoxDecoration(
-                            //         borderRadius: BorderRadius.circular(14),
-                            //         border: Border.all(
-                            //           color: Colors.black26,
-                            //         ),
-                            //         color: Colors.white,
-                            //       ),
-                            //       elevation: 2,
-                            //     ),
-                            //     iconStyleData: const IconStyleData(
-                            //       icon: Icon(
-                            //         Icons.arrow_forward_ios_outlined,
-                            //       ),
-                            //       iconSize: 14,
-                            //       iconEnabledColor: Colors.white,
-                            //       iconDisabledColor: Colors.grey,
-                            //     ),
-                            //     dropdownStyleData: DropdownStyleData(
-                            //       maxHeight: 200,
-                            //       width: 200,
-                            //       padding: null,
-                            //       decoration: BoxDecoration(
-                            //         borderRadius: BorderRadius.circular(14),
-                            //         color: Colors.white,
-                            //       ),
-                            //       elevation: 8,
-                            //       offset: const Offset(-20, 0),
-                            //       scrollbarTheme: ScrollbarThemeData(
-                            //         radius: const Radius.circular(40),
-                            //         thickness:
-                            //             MaterialStateProperty.all<double>(6),
-                            //         thumbVisibility:
-                            //             MaterialStateProperty.all<bool>(true),
-                            //       ),
-                            //     ),
-                            //     menuItemStyleData: const MenuItemStyleData(
-                            //       height: 40,
-                            //       padding: EdgeInsets.only(left: 14, right: 14),
-                            //     ),
-                            //   ),
-                            // ),
-                            // SizedBox(
-                            //   height: 30,
-                            // ),
                             DropdownButtonHideUnderline(
                               child: DropdownButton2(
                                 isExpanded: true,
@@ -416,16 +372,8 @@ class _Subject_AddState extends State<Subject_Add> {
                               height: 40,
                             ),
                             ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    fixedSize: Size(80, 40)),
-                                onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    print(subjectname);
-                                    print(subtype);
-                                    print(year);
-                                    print(semester);
-                                  }
-                                },
+                                style: ElevatedButton.styleFrom(),
+                                onPressed: addsub,
                                 child: Text("Add"))
                           ],
                         ),

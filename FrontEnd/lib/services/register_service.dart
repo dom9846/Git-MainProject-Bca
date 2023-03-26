@@ -18,7 +18,7 @@ class Registercheckservice {
   }
 
   registercheck(String id) async {
-    final response = await dio.post(url + "logincheck", data: id);
+    final response = await dio.post(url + "registercheck", data: id);
     return response;
   }
 

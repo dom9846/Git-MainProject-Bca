@@ -7,35 +7,45 @@ exports.teacherregister = (req, res) => {
 
     User.findOne({ identity: req.body.identity }, (err, user) => {
         if (err) {
-            // console.log("err")
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            User.updateOne( 
-                { _id: ObjectId(user._id) }, 
-                {
-                  $set: 
-                    {
-                        username:req.body.username,
-                        password:req.body.password
-                    }
-                },(err,user)=>{
-                    if(err){
-                        return res.status(404).json({ 'msg': err });
-                    }
-                    if(user){
-                        req.body.id = ObjectId(user._id);
-                        let newTeachUpdate = Teacher(req.body);
-                        newTeachUpdate.save((err, ns) => {
-                            if (err) {
-                                return res.status(400).json({ 'msg': "error occured" });
+            User.findOne({ username: req.body.username }, (e,u) =>{
+                if(e){
+                    return res.status(401).json({ 'msg': e });
+                }
+                if(u){
+                    return res.status(404).json({ 'msg': 'This username is allready taken!'});
+                }
+                else{
+                    User.updateOne( 
+                        { _id: ObjectId(user._id) }, 
+                        {
+                          $set: 
+                            {
+                                username:req.body.username,
+                                password:req.body.password
                             }
-                            if(ns){
-                                return res.status(201).json({ 'msg': "Successfully Registered" });
+                        },(err,u)=>{
+                            if(err){
+                
                             }
-                        })
-                    }
-                } 
+                            if(u){
+                                req.body.id = ObjectId(user._id);
+                                let newTeacherupdate = Teacher(req.body);
+                                newTeacherupdate.save((err, ns) => {
+                                    if (err) {
+                                        return res.status(400).json({ 'msg': "error occured" });
+                                    }
+                                    if(ns){
+                                        return res.status(201).json({ 'msg': "Successfully Registerd" });
+                                    }
+                                })
+                            }
+                        } 
+                    )
+                }
+            }
             )
         }
     });

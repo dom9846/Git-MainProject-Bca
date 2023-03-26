@@ -10,36 +10,42 @@ exports.adminregister = (req, res) => {
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            // if(user.body.username==null){
-                User.updateOne( 
-                    { _id: ObjectId(user._id) }, 
-                    {
-                      $set: 
+            User.findOne({ username: req.body.username }, (e,u) =>{
+                if(e){
+                    return res.status(401).json({ 'msg': e });
+                }
+                if(u){
+                    return res.status(404).json({ 'msg': 'This username is allready taken!'});
+                }
+                else{
+                    User.updateOne( 
+                        { _id: ObjectId(user._id) }, 
                         {
-                            username:req.body.username,
-                            password:req.body.password
-                        }
-                    },(err,u)=>{
-                        if(err){
-            
-                        }
-                        if(u){
-                            req.body.id = ObjectId(user._id);
-                            let newAdminupdate = Admin(req.body);
-                            newAdminupdate.save((err, ns) => {
-                                if (err) {
-                                    return res.status(400).json({ 'msg': "error occured" });
-                                }
-                                if(ns){
-                                    return res.status(201).json({ 'msg': "Successfully Registerd" });
-                                }
-                            })
-                        }
-                    } 
-                )
-            // }else{
-            //     return res.status(404).json({ 'msg': "error occured" });
-            // }
+                          $set: 
+                            {
+                                username:req.body.username,
+                                password:req.body.password
+                            }
+                        },(err,u)=>{
+                            if(err){
+                
+                            }
+                            if(u){
+                                req.body.id = ObjectId(user._id);
+                                let newAdminupdate = Admin(req.body);
+                                newAdminupdate.save((err, ns) => {
+                                    if (err) {
+                                        return res.status(402).json({ 'msg': "error occured" });
+                                    }
+                                    if(ns){
+                                        return res.status(201).json({ 'msg': "Successfully Registerd" });
+                                    }
+                                })
+                            }
+                        } 
+                    )
+                }
+            })
         }
     });
 };

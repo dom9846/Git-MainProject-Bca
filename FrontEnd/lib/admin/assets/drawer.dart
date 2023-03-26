@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
 
 class cldrawer extends StatefulWidget {
   const cldrawer({super.key});
@@ -11,6 +13,12 @@ class cldrawer extends StatefulWidget {
 }
 
 class _cldrawerState extends State<cldrawer> {
+  final storage = new FlutterSecureStorage();
+  logout() async {
+    await storage.delete(key: "token");
+    Navigator.pushNamed(context, "/login");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -127,9 +135,9 @@ class _cldrawerState extends State<cldrawer> {
           onTap: () => {Navigator.pushNamed(context, "/admnsett")},
         ),
         ListTile(
-          leading: Icon(Icons.exit_to_app),
-          title: Text("Log Out"),
-          onTap: () => {Navigator.pushNamed(context, "/login")},
+          leading: Icon(Icons.exit_to_app), title: Text("Log Out"),
+          onTap: logout,
+          // onTap: () => {Navigator.pushNamed(context, "/login")},
         )
       ],
     ));

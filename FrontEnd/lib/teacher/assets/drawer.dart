@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, camel_case_types
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class teach_Drawer extends StatefulWidget {
   const teach_Drawer({super.key});
@@ -10,6 +11,13 @@ class teach_Drawer extends StatefulWidget {
 }
 
 class _teach_DrawerState extends State<teach_Drawer> {
+  final storage = new FlutterSecureStorage();
+  logout() async {
+    await storage.delete(key: "token");
+    print("logut");
+    Navigator.pushNamed(context, "/login");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -95,7 +103,7 @@ class _teach_DrawerState extends State<teach_Drawer> {
         ListTile(
           leading: Icon(Icons.exit_to_app),
           title: Text("Log Out"),
-          onTap: () => {Navigator.pushNamed(context, "/login")},
+          onTap: logout,
         )
       ],
     ));

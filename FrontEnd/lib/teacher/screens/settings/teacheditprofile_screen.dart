@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TeachEdit_Profile extends StatefulWidget {
   const TeachEdit_Profile({super.key});
@@ -14,6 +16,29 @@ class TeachEdit_Profile extends StatefulWidget {
 }
 
 class _TeachEdit_ProfileState extends State<TeachEdit_Profile> {
+  // final storage = new FlutterSecureStorage();
+  // String? jwt, userId;
+  // Future<void> getToken() async {
+  //   String normalizedSource;
+  //   String userid;
+  //   Map<String, String> allValues = await storage.readAll();
+  //   setState(() {
+  //     jwt = allValues["token"];
+  //   });
+  //   normalizedSource = base64Url.normalize(allValues["token"]!.split(".")[1]);
+  //   userid =
+  //       json.decode(utf8.decode(base64Url.decode(normalizedSource)))["_id"];
+  //   print(userid);
+  //   setState(() {
+  //     userId = userid;
+  //   });
+  // }
+
+  // void initState() {
+  //   super.initState();
+  //   this.getToken();
+  // }
+
   final _formkey = GlobalKey<FormState>();
   String email = "", mobile = "", age = "", qualification = "";
 // ignore: unused_element

@@ -34,16 +34,23 @@ exports.registerUser = (req, res) => {
     });
 };
 
-exports.LoginCheck = (req, res) => {
-    console.log(req.body)
+exports.regCheck = (req, res) => {
+    // console.log(req.body)
     User.findOne({ identity: req.body.identity }, (err, user) => {
         if (err) {
             return res.status(400).json({ 'msg': err });
         }
-        if (user) {
-                return res.status(201).json(user);
+        else if (user) {
+                if(user.username == undefined){
+                    return res.status(201).json(user);
+                }
+                else{
+                    return res.status(404).json({ 'msg': 'allready registered' });
+                }
         }
-        return res.status(404).json({ 'msg': 'User not exists' });
+        else{
+            return res.status(401).json({ 'msg': 'User not exists' });
+        }
     });
 };
 
@@ -55,12 +62,12 @@ exports.loginUser = (req, res) => {
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            return res.status(201).json(user);
-            // const token = jwt.sign({ _id:user._id }, process.env.SECRET);
-            // //put token in cookie
-            // res.cookie("token",token, { expire: new Date() + 9999 } );
-            // return res.status(201).json({token,user});
+            // return res.status(201).json(user);
+            const token = jwt.sign({ _id:user._id }, process.env.SECRET);
+            //put token in cookie
+            res.cookie("token",token, { expire: new Date() + 9999 } );
+            return res.status(201).json({token,user});
         }
-        return res.status(400).json({ 'msg': 'User not exists' });
+        return res.status(404).json({ 'msg': 'Invalid username and Password' });
     });
 };
