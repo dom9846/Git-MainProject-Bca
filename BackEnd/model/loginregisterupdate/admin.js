@@ -5,8 +5,7 @@ var adminSchema = new mongoose.Schema({
         type: ObjectId
     },
     propic: {
-        type: String,
-        maxlength: 52,
+        type: String
     },
     email: {
         type: String,

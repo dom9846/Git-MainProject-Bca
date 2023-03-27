@@ -45,6 +45,7 @@ class _admnHomeState extends State<admnHome> {
     setState(() {
       userId = userid;
     });
+    await storage.write(key: "userid", value: userId);
   }
 
   // logout() async {

@@ -44,14 +44,8 @@ class _teach_HomeState extends State<teach_Home> {
     setState(() {
       userId = userid;
     });
+    await storage.write(key: "userid", value: userId);
   }
-
-  // logout() async {
-  //   await storage.delete(key: "token");
-  //   Navigator.pushNamed(context, "/login");
-  //   // Navigator.of(context)
-  //   //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
-  // }
 
   void initState() {
     super.initState();

@@ -1,5 +1,6 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
+// maxBsonObjectSize = 16777216;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -34,7 +35,7 @@ mongoose.connect(process.env.DATABASE, {
     console.log("DB CONNECTED");
 });
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cookieParser());
 app.use(cors());
 

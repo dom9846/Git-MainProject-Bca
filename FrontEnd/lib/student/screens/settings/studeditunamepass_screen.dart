@@ -2,6 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/student/assets/drawer.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mainproject/services/updation_service.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
 
 class StudentEdit_UnamePass extends StatefulWidget {
   const StudentEdit_UnamePass({super.key});
@@ -10,10 +14,64 @@ class StudentEdit_UnamePass extends StatefulWidget {
   State<StudentEdit_UnamePass> createState() => _StudentEdit_UnamePassState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String username = "", password = "";
-
 class _StudentEdit_UnamePassState extends State<StudentEdit_UnamePass> {
+  final storage = new FlutterSecureStorage();
+  final _formkey = GlobalKey<FormState>();
+  String username = "", password = "";
+  Updationservice studupdateunamepass = Updationservice();
+  String? jwt, userId;
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+    });
+    print(userId);
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> update() async {
+    if (_formkey.currentState!.validate()) {
+      var user = jsonEncode(
+          {"identity": userId, "username": username, "password": password});
+      print(user);
+      try {
+        final Response? res = await studupdateunamepass.studentunamepass(user);
+        // if (res!.statusCode == 401) {}
+        showError("Successfully Updated Your Profile", "Profile Updated");
+      } on DioError catch (err) {
+        if (err.response != null) {
+          showError("Some Error Occured,Try Again Later", "Oops");
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -130,7 +188,7 @@ class _StudentEdit_UnamePassState extends State<StudentEdit_UnamePass> {
                               height: 30,
                             ),
                             TextFormField(
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.visiblePassword,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -156,8 +214,6 @@ class _StudentEdit_UnamePassState extends State<StudentEdit_UnamePass> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return "This Field Cannot Be Empty";
-                                } else if (value.length != 10) {
-                                  return "Enter a valid mobile number";
                                 } else {
                                   setState(() {
                                     password = value;
@@ -173,12 +229,7 @@ class _StudentEdit_UnamePassState extends State<StudentEdit_UnamePass> {
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(80, 40)),
-                                onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    print(username);
-                                    print(password);
-                                  }
-                                },
+                                onPressed: update,
                                 child: Text("Edit"))
                           ],
                         ),

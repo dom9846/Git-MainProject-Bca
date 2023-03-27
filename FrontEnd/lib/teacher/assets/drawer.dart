@@ -14,7 +14,7 @@ class _teach_DrawerState extends State<teach_Drawer> {
   final storage = new FlutterSecureStorage();
   logout() async {
     await storage.delete(key: "token");
-    print("logut");
+    print("logout");
     Navigator.pushNamed(context, "/login");
   }
 

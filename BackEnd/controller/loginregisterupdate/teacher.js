@@ -51,6 +51,35 @@ exports.teacherregister = (req, res) => {
     });
     
 };
+exports.teacherupdateunamepass = (req, res) => {
+    console.log(req.body)
+
+    User.findOne({ _id: req.body.identity }, (err, user) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (user) {
+            User.updateOne( 
+                { _id: ObjectId(user._id) }, 
+                {
+                  $set: 
+                    {
+                        username:req.body.username,
+                        password:req.body.password
+                    }
+                },(err,u)=>{
+                    if(err){
+                        return res.status(401).json({ 'msg': err });
+                    }
+                    if(u){
+                        return res.status(201).json({ 'msg': "Successfully Updated" });
+                    }
+                } 
+            )
+        }
+    });
+    
+};
 exports.teacherupdate = (req, res) => {
     console.log(req.body)
 

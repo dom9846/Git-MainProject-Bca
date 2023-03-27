@@ -2,6 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/student/assets/drawer.dart';
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
 
 class student_Dashboard extends StatefulWidget {
   const student_Dashboard({super.key});
@@ -11,6 +15,45 @@ class student_Dashboard extends StatefulWidget {
 }
 
 class _student_DashboardState extends State<student_Dashboard> {
+  final storage = new FlutterSecureStorage();
+  String? jwt;
+  String userId = "";
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues.isEmpty) {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        this.getToken();
+      }
+    } catch (e) {}
+  }
+
+  Future<void> getToken() async {
+    String normalizedSource;
+    String userid;
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      jwt = allValues["token"];
+    });
+    normalizedSource = base64Url.normalize(allValues["token"]!.split(".")[1]);
+    userid =
+        json.decode(utf8.decode(base64Url.decode(normalizedSource)))["_id"];
+    print(userid);
+    setState(() {
+      userId = userid;
+    });
+    await storage.write(key: "userid", value: userId);
+  }
+
+  void initState() {
+    super.initState();
+    this.checkAuthentication();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
