@@ -3,7 +3,7 @@ const {ObjectId}=require('mongodb');
 exports.timetableupdate = (req, res) => {
     // console.log(req.body)
 
-    timetable.findOne({ id: req.body.id }, (err, user) => {
+    timetable.findOne({ identity: req.body.identity }, (err, user) => {
         console.log(user)
         if (err) {
             return res.status(400).json({ 'msg': err });

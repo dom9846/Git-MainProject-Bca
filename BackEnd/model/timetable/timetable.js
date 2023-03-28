@@ -1,7 +1,8 @@
 var mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 var timeTableSchema = new mongoose.Schema({
-    id: {
-        type: String
+    identity: {
+        type: ObjectId
     },
     year1: {
         type: String
