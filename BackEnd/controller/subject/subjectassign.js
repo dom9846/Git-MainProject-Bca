@@ -1,4 +1,5 @@
 var subjectAssign = require('../../model/subject/subjectassign');
+var subjects = require('../../model/subject/subject');
 const {ObjectId}=require('mongodb');
 exports.subassign = (req, res) => {
     console.log("inn")
@@ -26,6 +27,19 @@ exports.subassign = (req, res) => {
                     }
                 } 
             )
+        }
+    });
+};
+
+exports.subretrieve = (req, res) => {
+    console.log(req.body)
+    subjects.find({ semester: req.body.semester }, (err, sub) => {
+        if (err) {
+            // console.log("err")
+            return res.status(400).json({ 'msg': err });
+        }
+        if (sub) {
+            return res.status(201).json(sub);
         }
     });
 };

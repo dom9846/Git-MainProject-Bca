@@ -1,7 +1,12 @@
 // ignore_for_file: prefer_const_constructors, camel_case_types
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:dio/dio.dart';
+
+import 'package:mainproject/services/getuser_service.dart';
 
 class teach_Drawer extends StatefulWidget {
   const teach_Drawer({super.key});
@@ -12,6 +17,53 @@ class teach_Drawer extends StatefulWidget {
 
 class _teach_DrawerState extends State<teach_Drawer> {
   final storage = new FlutterSecureStorage();
+  String? userId = "", firstname = "", secondname = "", usertype = "";
+  String? propic = "", email = "", mobile = "", age = "", qualification = "";
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+    });
+    getadmin();
+  }
+
+  getuserservice getteacherservice = new getuserservice();
+  Future<void> getadmin() async {
+    try {
+      var user = jsonEncode({
+        "id": userId,
+      });
+      final Response? res = await getteacherservice.getteacher(user);
+      if (res!.statusCode == 201) {
+        setState(() {
+          propic = res.data["propic"];
+          email = res.data["email"];
+          mobile = res.data["mobile"].toString();
+          age = res.data["age"].toString();
+          qualification = res.data["qualification"];
+        });
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        // setState(() {
+        //   propic = "Nill";
+        //   email = "Nill";
+        //   mobile = "Nill";
+        //   age = "Nill";
+        //   qualification = "Nill";
+        // });
+      }
+    }
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   logout() async {
     await storage.delete(key: "token");
     print("logout");
@@ -43,19 +95,34 @@ class _teach_DrawerState extends State<teach_Drawer> {
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                          image: AssetImage('images/propic2.jpg'))),
+                          image: AssetImage('images/propic1.jpg'))),
                 ),
-                Text(
-                  "Lecture name",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      firstname!,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      secondname!,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  "Lecture Designation",
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                )
+                qualification == null
+                    ? Text("Nill",
+                        style: TextStyle(color: Colors.white, fontSize: 15))
+                    : Text(
+                        qualification!,
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      )
               ],
             ),
           ),

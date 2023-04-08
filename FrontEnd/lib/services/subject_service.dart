@@ -12,8 +12,14 @@ class subjectservice {
     return response;
   }
 
+  subjectretrieve(String subject) async {
+    print(subject);
+    final response = await dio.post(url + "subjectretrieve", data: subject);
+    return response;
+  }
+
   subjectassign(String subject) async {
-    final response = await dio.post(url + "subjectadd", data: subject);
+    final response = await dio.post(url + "subjectassign", data: subject);
     return response;
   }
 }

@@ -1,9 +1,11 @@
-// ignore_for_file: camel_case_types, duplicate_ignore, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace
+// ignore_for_file: camel_case_types, duplicate_ignore, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, unnecessary_new, use_build_context_synchronously, unnecessary_this
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/admin/assets/drawer.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:dio/dio.dart';
+import 'package:mainproject/services/getuser_service.dart';
 
 class admnHome extends StatefulWidget {
   const admnHome({super.key});
@@ -16,12 +18,13 @@ class admnHome extends StatefulWidget {
 class _admnHomeState extends State<admnHome> {
   final storage = new FlutterSecureStorage();
   String? jwt;
-  String userId = "";
+  String? userId = "", firstname = "", secondname = "", usertype = "";
+  String? propic = "", email = "", mobile = "", age = "", qualification = "";
   bool isLoggedin = true;
   Future<void> checkAuthentication() async {
     try {
       Map<String, String> allValues = await storage.readAll();
-      if (allValues.isEmpty) {
+      if (allValues["token"] == "") {
         // Navigator.of(context)
         //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
         Navigator.pushNamed(context, "/login");
@@ -41,11 +44,42 @@ class _admnHomeState extends State<admnHome> {
     normalizedSource = base64Url.normalize(allValues["token"]!.split(".")[1]);
     userid =
         json.decode(utf8.decode(base64Url.decode(normalizedSource)))["_id"];
-    print(userid);
     setState(() {
       userId = userid;
+      firstname = allValues["fname"];
+      firstname = allValues["sname"];
+      firstname = allValues["utype"];
     });
     await storage.write(key: "userid", value: userId);
+    getadmin();
+  }
+
+  getuserservice getadminservice = new getuserservice();
+  Future<void> getadmin() async {
+    try {
+      var user = jsonEncode({
+        "id": userId,
+      });
+      final Response? res = await getadminservice.getadmin(user);
+      if (res!.statusCode == 201) {
+        setState(() {
+          propic = res.data["propic"];
+          email = res.data["email"];
+          mobile = res.data["mobile"].toString();
+          age = res.data["age"].toString();
+          qualification = res.data["qualification"];
+        });
+      }
+      print(qualification);
+    } on DioError catch (err) {
+      if (err.response != null) {
+        propic = "Nill";
+        email = "Nill";
+        mobile = "Nill";
+        age = "Nill";
+        qualification = "Nill";
+      }
+    }
   }
 
   // logout() async {

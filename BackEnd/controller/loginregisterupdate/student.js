@@ -31,6 +31,8 @@ exports.studentregister = (req, res) => {
                             }
                             if(u){
                                 req.body.id = ObjectId(user._id);
+                                req.body.fname=user.firstname;
+                                req.body.sname=user.secondname;
                                 let newStudentupdate = Student(req.body);
                                 newStudentupdate.save((err, ns) => {
                                     if (err) {
@@ -92,13 +94,13 @@ exports.studentupdate = (req, res) => {
                     {
                         propic:req.body.propic,
                         age:req.body.age,
+                        rollno:req.body.rollno,
                         email:req.body.email,
                         mobile:req.body.mobile,
                         parent:req.body.parent,
                         parentcontact:req.body.parentcontact,
                         year:req.body.year,
-                        semester:req.body.semester,
-
+                        semester:req.body.semester
                     }
                 },(err,u)=>{
                     if(err){
@@ -110,5 +112,18 @@ exports.studentupdate = (req, res) => {
                 } 
             )
         }
+    });
+};
+
+exports.getstudent = (req, res) => {
+    console.log(req.body)
+    Student.findOne({ id: req.body.id}, (err, user) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (user) {
+            return res.status(201).json(user);
+        }
+        return res.status(404).json({ 'msg': 'Error occured' });
     });
 };

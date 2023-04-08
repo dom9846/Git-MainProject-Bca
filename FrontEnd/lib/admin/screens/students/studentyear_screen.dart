@@ -1,23 +1,28 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:mainproject/student/assets/drawer.dart';
+import 'package:mainproject/admin/assets/drawer.dart';
+import 'package:mainproject/admin/screens/students/student_screen.dart';
 
-class StudentSettings_Screen extends StatefulWidget {
-  const StudentSettings_Screen({super.key});
+class Studyear_admin extends StatefulWidget {
+  const Studyear_admin({super.key});
 
   @override
-  State<StudentSettings_Screen> createState() => _StudentSettings_ScreenState();
+  State<Studyear_admin> createState() => _Studyear_adminState();
 }
 
-class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
+class _Studyear_adminState extends State<Studyear_admin> {
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 250,
+      // ignore: prefer_const_constructors
       decoration: BoxDecoration(
+        // ignore: prefer_const_constructors
         image: DecorationImage(
-            image: AssetImage('images/register.png'), fit: BoxFit.cover),
+            // ignore: prefer_const_constructors
+            image: AssetImage('images/register.png'),
+            fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -39,7 +44,7 @@ class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/studaddnewpost");
+                      Navigator.pushNamed(context, "/admnaddpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -47,7 +52,7 @@ class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/studmessage");
+                      Navigator.pushNamed(context, "/admnmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
@@ -61,8 +66,10 @@ class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
                 SizedBox(
                   height: 30,
                 ),
+                // ignore: prefer_const_constructors
                 Text(
-                  'Settings',
+                  'Select The Year',
+                  // ignore: prefer_const_constructors
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -76,8 +83,8 @@ class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/studsetteditprof")},
+                    onTap: () => Navigator.pushNamed(context, '/admnstud',
+                        arguments: '1'),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -85,7 +92,7 @@ class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Edit Profile"),
+                          Text("First Year"),
                         ],
                       ),
                     ),
@@ -93,9 +100,8 @@ class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () => {
-                      Navigator.pushNamed(context, "/studsetteditunamepass")
-                    },
+                    onTap: () => Navigator.pushNamed(context, '/admnstud',
+                        arguments: '2'),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -103,7 +109,7 @@ class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("User Name & Password"),
+                          Text("Second Year"),
                         ],
                       ),
                     ),
@@ -111,8 +117,8 @@ class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/studsettdevinfo")},
+                    onTap: () => Navigator.pushNamed(context, '/admnstud',
+                        arguments: '3'),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -120,17 +126,17 @@ class _StudentSettings_ScreenState extends State<StudentSettings_Screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Devoloper Information"),
+                          Text("Third Year"),
                         ],
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             )),
           ),
         ]),
-        drawer: studDrawer(),
+        drawer: cldrawer(),
       ),
     );
   }

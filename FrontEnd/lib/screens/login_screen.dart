@@ -58,7 +58,12 @@ class _MyLoginState extends State<MyLogin> {
           await storage.write(key: "token", value: res.data["token"]);
           Map<String, String> allValues = await storage.readAll();
           var user = res.data["user"];
+          var firstname = user["firstname"];
+          var secondname = user["secondname"];
           var user_type = user["user_type"];
+          await storage.write(key: "fname", value: firstname);
+          await storage.write(key: "sname", value: secondname);
+          await storage.write(key: "utype", value: user_type);
           if (user_type == "Admin") {
             Navigator.of(context).push(
               MaterialPageRoute(

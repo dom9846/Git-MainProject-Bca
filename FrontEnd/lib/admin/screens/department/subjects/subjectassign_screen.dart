@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, avoid_print, prefer_const_constructors
+// ignore_for_file: camel_case_types, avoid_print, prefer_const_constructors, unnecessary_this
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/src/dropdown_button2.dart';
@@ -17,10 +17,32 @@ class Subject_Assign extends StatefulWidget {
 class _Subject_AssignState extends State<Subject_Assign> {
   final _formkey = GlobalKey<FormState>();
   String? subjectname, teachername, semester;
-  final List<String> items1 = ['Subject 1', 'Subject 2'];
-  final List<String> items2 = ['Teacher 1', 'Teacher 2'];
+  List<String> items1 = [];
+  List<String> items2 = [];
+  // List? items1;
+  // List? items2;
   final List<String> items3 = ['1', '2', '3', '4', '5', '6'];
   subjectservice subjectassign = subjectservice();
+  Future<void> getsubjects() async {
+    print("object");
+    try {
+      var subject = jsonEncode({
+        "semester": 1,
+      });
+      print(subject);
+      final Response? res = await subjectassign.subjectretrieve(subject);
+      List? data = json.deccode(res!.data);
+      print(res);
+      if (res!.statusCode == 201) {
+        setState(() {
+          items1 = res.data;
+        });
+        print(items1);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
 
   showError(String content, String title) {
     showDialog(
@@ -63,6 +85,11 @@ class _Subject_AssignState extends State<Subject_Assign> {
         }
       }
     }
+  }
+
+  void initState() {
+    super.initState();
+    this.getsubjects();
   }
 
   @override
@@ -186,6 +213,7 @@ class _Subject_AssignState extends State<Subject_Assign> {
                                   setState(() {
                                     semester = value as String;
                                   });
+                                  // getsubjects(semester);
                                 },
                                 buttonStyleData: ButtonStyleData(
                                   height: 60,

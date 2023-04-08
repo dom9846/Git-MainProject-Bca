@@ -1,9 +1,12 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors
+// ignore_for_file: camel_case_types, prefer_const_constructors, unnecessary_this, annotate_overrides
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
+import 'package:dio/dio.dart';
+
+import 'package:mainproject/services/getuser_service.dart';
 
 class cldrawer extends StatefulWidget {
   const cldrawer({super.key});
@@ -14,6 +17,62 @@ class cldrawer extends StatefulWidget {
 
 class _cldrawerState extends State<cldrawer> {
   final storage = new FlutterSecureStorage();
+  String? userId = "", firstname = "", secondname = "", usertype = "";
+  String? propic = "",
+      email = "",
+      mobile = "",
+      age = "",
+      qualification = "",
+      designation = "";
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+      if (usertype == "Admin") {
+        designation = "Head Of Department";
+      }
+    });
+    getadmin();
+  }
+
+  getuserservice getadminservice = new getuserservice();
+  Future<void> getadmin() async {
+    try {
+      var user = jsonEncode({
+        "id": userId,
+      });
+      final Response? res = await getadminservice.getadmin(user);
+      if (res!.statusCode == 201) {
+        setState(() {
+          propic = res.data["propic"];
+          email = res.data["email"];
+          mobile = res.data["mobile"].toString();
+          age = res.data["age"].toString();
+          qualification = res.data["qualification"];
+        });
+        // // Read the Base64 string
+        // String base64String = '...'; // Replace with your Base64 string
+        // List imageBytes = base64Decode(base64String);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        // propic = "Nill";
+        // email = "Nill";
+        // mobile = "Nill";
+        // age = "Nill";
+        // qualification = "Nill";
+      }
+    }
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   logout() async {
     await storage.delete(key: "token");
     Navigator.pushNamed(context, "/login");
@@ -46,17 +105,32 @@ class _cldrawerState extends State<cldrawer> {
                       image: DecorationImage(
                           image: AssetImage('images/propic1.jpg'))),
                 ),
-                Text(
-                  "Admin name",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      firstname!,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      secondname!,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  "Head Of the Department",
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                )
+                qualification == null
+                    ? Text("Nill",
+                        style: TextStyle(color: Colors.white, fontSize: 15))
+                    : Text(
+                        qualification!,
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      )
               ],
             ),
           ),
@@ -119,7 +193,7 @@ class _cldrawerState extends State<cldrawer> {
               contentPadding: EdgeInsets.only(left: 30),
               leading: Icon(Icons.person_4),
               title: Text('Student List'),
-              onTap: () => {Navigator.pushNamed(context, "/admnstud")},
+              onTap: () => {Navigator.pushNamed(context, "/admnstudyear")},
             ),
             ListTile(
               contentPadding: EdgeInsets.only(left: 30),

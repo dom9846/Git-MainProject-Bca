@@ -111,3 +111,16 @@ exports.adminupdate = (req, res) => {
         }
     });
 };
+
+exports.getadmin = (req, res) => {
+    console.log(req.body)
+    Admin.findOne({ id: req.body.id}, (err, user) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (user) {
+            return res.status(201).json(user);
+        }
+        return res.status(404).json({ 'msg': 'Error occured' });
+    });
+};

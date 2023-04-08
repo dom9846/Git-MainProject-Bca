@@ -17,6 +17,7 @@ import 'package:mainproject/admin/screens/settings/editprofile_screen.dart';
 import 'package:mainproject/admin/screens/settings/managepost_screen.dart';
 import 'package:mainproject/admin/screens/settings/unamepassedit_screen.dart';
 import 'package:mainproject/admin/screens/students/studentadd_screen.dart';
+import 'package:mainproject/admin/screens/students/studentyear_screen.dart';
 import 'package:mainproject/screens/login_screen.dart';
 import 'package:mainproject/screens/reg_check.dart';
 import 'package:mainproject/screens/register_screen.dart';
@@ -77,7 +78,7 @@ void main() {
       brightness: Brightness.light,
     ),
     debugShowCheckedModeBanner: false,
-    home: const MyLogin(),
+    home: const Subject_Assign(),
     routes: {
       '/register': (context) => const MyRegister(),
       '/reg_check': (context) => const Reg_Check(),
@@ -93,7 +94,8 @@ void main() {
       '/admndepsubadd': (context) => const Subject_Add(),
       '/admndepsubassign': (context) => const Subject_Assign(),
       '/admnlec': (context) => const lec_screen(),
-      '/admnstud': (context) => const Stud_screen(),
+      '/admnstud': (context) => const Stud_screen(null),
+      '/admnstudyear': (context) => const Studyear_admin(),
       '/admnstudentadd': (context) => const StudentAdd(),
       '/admnlectureadd': (context) => const LectureAdd(),
       '/admnmessage': (context) => const Admin_message(),

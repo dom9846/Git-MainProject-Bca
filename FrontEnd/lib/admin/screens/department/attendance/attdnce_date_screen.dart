@@ -12,8 +12,12 @@ class Attdnce_date extends StatefulWidget {
 }
 
 class _Attdnce_dateState extends State<Attdnce_date> {
+  String? year;
   @override
   Widget build(BuildContext context) {
+    final Object? yearofstudent =
+        ModalRoute.of(context as BuildContext)?.settings.arguments;
+    year = yearofstudent.toString();
     return Container(
       height: 250,
       decoration: BoxDecoration(

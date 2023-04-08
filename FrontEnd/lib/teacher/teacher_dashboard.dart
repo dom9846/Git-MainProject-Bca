@@ -1,9 +1,11 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, duplicate_ignore, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
+import 'package:mainproject/services/getuser_service.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:dio/dio.dart';
 
 class teach_Home extends StatefulWidget {
   const teach_Home({super.key});
@@ -15,12 +17,13 @@ class teach_Home extends StatefulWidget {
 class _teach_HomeState extends State<teach_Home> {
   final storage = new FlutterSecureStorage();
   String? jwt;
-  String userId = "";
+  String? userId = "", firstname = "", secondname = "", usertype = "";
+  String? propic = "", email = "", mobile = "", age = "", qualification = "";
   bool isLoggedin = true;
   Future<void> checkAuthentication() async {
     try {
       Map<String, String> allValues = await storage.readAll();
-      if (allValues.isEmpty) {
+      if (allValues["token"] == "") {
         // Navigator.of(context)
         //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
         Navigator.pushNamed(context, "/login");
@@ -40,11 +43,42 @@ class _teach_HomeState extends State<teach_Home> {
     normalizedSource = base64Url.normalize(allValues["token"]!.split(".")[1]);
     userid =
         json.decode(utf8.decode(base64Url.decode(normalizedSource)))["_id"];
-    print(userid);
     setState(() {
       userId = userid;
+      firstname = allValues["fname"];
+      firstname = allValues["sname"];
+      firstname = allValues["utype"];
     });
     await storage.write(key: "userid", value: userId);
+    getadmin();
+  }
+
+  getuserservice getteacherservice = new getuserservice();
+  Future<void> getadmin() async {
+    try {
+      var user = jsonEncode({
+        "id": userId,
+      });
+      final Response? res = await getteacherservice.getteacher(user);
+      if (res!.statusCode == 201) {
+        setState(() {
+          propic = res.data["propic"];
+          email = res.data["email"];
+          mobile = res.data["mobile"].toString();
+          age = res.data["age"].toString();
+          qualification = res.data["qualification"];
+        });
+      }
+      print(qualification);
+    } on DioError catch (err) {
+      if (err.response != null) {
+        propic = "Nill";
+        email = "Nill";
+        mobile = "Nill";
+        age = "Nill";
+        qualification = "Nill";
+      }
+    }
   }
 
   void initState() {

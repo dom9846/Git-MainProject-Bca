@@ -77,8 +77,10 @@ class _MyWidgetState extends State<attendance_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admndepattdncedate")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepattdncedate",
+                          arguments: '1')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -94,8 +96,10 @@ class _MyWidgetState extends State<attendance_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admndepattdncedate")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepattdncedate",
+                          arguments: '2')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -111,8 +115,10 @@ class _MyWidgetState extends State<attendance_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admndepattdncedate")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepattdncedate",
+                          arguments: '3')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(

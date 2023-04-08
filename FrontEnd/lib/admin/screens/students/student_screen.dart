@@ -1,27 +1,69 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, camel_case_types, unused_import, implementation_imports
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, camel_case_types, unused_import, implementation_imports, unnecessary_new, unnecessary_this, annotate_overrides
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mainproject/services/getuser_service.dart';
 
 import '../../assets/drawer.dart';
-import 'package:dropdown_button2/src/dropdown_button2.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Stud_screen extends StatefulWidget {
-  const Stud_screen({super.key});
+  const Stud_screen(String? year1, {super.key});
 
   @override
   State<Stud_screen> createState() => _Stud_screenState();
 }
 
-final List<String> items = [
-  'Year 1',
-  'Year 2',
-  'Year 3',
-];
-String? selectedYear;
-
 class _Stud_screenState extends State<Stud_screen> {
+  String? userId = "", firstname = "", secondname = "", usertype = "";
+  List? students;
+  // int? lecid;
+  final storage = new FlutterSecureStorage();
+
+  String? year;
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+    });
+    getlectures();
+  }
+
+  getuserservice getlecservice = new getuserservice();
+  Future<void> getlectures() async {
+    try {
+      var user = jsonEncode({
+        "year": year,
+      });
+      print(user);
+      final Response? res = await getlecservice.getstudentssall(user);
+      if (res!.statusCode == 201) {
+        setState(() {
+          students = res.data;
+        });
+        print(students);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Object? yearofstudent =
+        ModalRoute.of(context as BuildContext)?.settings.arguments;
+    year = yearofstudent.toString();
+    // print(year);
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -61,127 +103,14 @@ class _Stud_screenState extends State<Stud_screen> {
                     icon: Icon(Icons.message_sharp)))
           ],
         ),
-        body: ListView(children: [
-          Container(
-            margin: EdgeInsets.all(10),
-            child: Center(
-                child: Column(
-              children: [
-                SizedBox(
-                  height: 30,
-                ),
-                Text(
-                  'Our Students',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    color: Color.fromARGB(255, 228, 230, 233),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Row(
-                          children: const [
-                            Icon(
-                              Icons.list,
-                              size: 16,
-                              color: Colors.black,
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Select Year',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        items: items
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedYear,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedYear = value as String;
-                          });
-                        },
-                        buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          width: 160,
-                          padding: const EdgeInsets.only(left: 14, right: 14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                              color: Colors.black26,
-                            ),
-                            color: Colors.white,
-                          ),
-                          elevation: 2,
-                        ),
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                          ),
-                          iconSize: 14,
-                          iconEnabledColor: Colors.white,
-                          iconDisabledColor: Colors.grey,
-                        ),
-                        dropdownStyleData: DropdownStyleData(
-                          maxHeight: 200,
-                          width: 200,
-                          padding: null,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            color: Colors.white,
-                          ),
-                          elevation: 8,
-                          offset: const Offset(-20, 0),
-                          scrollbarTheme: ScrollbarThemeData(
-                            radius: const Radius.circular(40),
-                            thickness: MaterialStateProperty.all<double>(6),
-                            thumbVisibility:
-                                MaterialStateProperty.all<bool>(true),
-                          ),
-                        ),
-                        menuItemStyleData: const MenuItemStyleData(
-                          height: 40,
-                          padding: EdgeInsets.only(left: 14, right: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Card(
+        body: Container(
+          child: ListView.builder(
+              itemCount: students?.length,
+              itemBuilder: (BuildContext context, int index) {
+                final student = students?[index];
+                final stud_det = students?[index]['lec_details'];
+                // String? roll = stud_det[0]['age'];
+                return Card(
                   elevation: 5,
                   margin: EdgeInsets.all(10),
                   child: ExpansionTile(
@@ -190,13 +119,21 @@ class _Stud_screenState extends State<Stud_screen> {
                           NetworkImage('https://picsum.photos/200'),
                       radius: 30,
                     ),
-                    title: Text(
-                      'Student Name',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    title: student == null
+                        ? Text(
+                            "Nill",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Text(
+                            student['firstname'] + " " + student['secondname'],
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                     subtitle: Text(
                       'Roll No',
                       style: TextStyle(fontSize: 16),
@@ -250,11 +187,9 @@ class _Stud_screenState extends State<Stud_screen> {
                           )),
                     ],
                   ),
-                ),
-              ],
-            )),
-          ),
-        ]),
+                );
+              }),
+        ),
         drawer: cldrawer(),
       ),
     );

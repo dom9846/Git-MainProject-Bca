@@ -32,6 +32,8 @@ exports.teacherregister = (req, res) => {
                             }
                             if(u){
                                 req.body.id = ObjectId(user._id);
+                                req.body.fname=user.firstname;
+                                req.body.sname=user.secondname;
                                 let newTeacherupdate = Teacher(req.body);
                                 newTeacherupdate.save((err, ns) => {
                                     if (err) {
@@ -110,5 +112,18 @@ exports.teacherupdate = (req, res) => {
                 } 
             )
         }
+    });
+};
+
+exports.getteacher = (req, res) => {
+    console.log(req.body)
+    Teacher.findOne({ id: req.body.id}, (err, user) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (user) {
+            return res.status(201).json(user);
+        }
+        return res.status(404).json({ 'msg': 'Error occured' });
     });
 };

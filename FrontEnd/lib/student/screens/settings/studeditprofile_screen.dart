@@ -36,12 +36,13 @@ class _StudentEdit_ProfileState extends State<StudentEdit_Profile> {
   }
 
   final _formkey = GlobalKey<FormState>();
-  String email = "",
+  String rollno = "",
+      email = "",
       mobile = "",
       age = "",
       parent = "",
       parentcontact = "",
-      image="";
+      image = "";
   String? year, semester;
   final List<String> items1 = ['1', '2', '3'];
   final List<String> items2 = ['1', '2', '3', '4', '5', '6'];
@@ -93,6 +94,7 @@ class _StudentEdit_ProfileState extends State<StudentEdit_Profile> {
       var user = jsonEncode({
         "id": userId,
         "propic": image,
+        "rollno": rollno,
         "email": email,
         "mobile": mobile,
         "age": age,
@@ -296,6 +298,44 @@ class _StudentEdit_ProfileState extends State<StudentEdit_Profile> {
                             ),
                             SizedBox(
                               height: 10,
+                            ),
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Color.fromARGB(255, 22, 47, 230),
+                                    ),
+                                  ),
+                                  labelText: "Roll No",
+                                  labelStyle: TextStyle(color: Colors.black),
+                                  hintText: "Enter Your Class Roll Number",
+                                  hintStyle: TextStyle(
+                                      color: Color.fromARGB(255, 14, 14, 14)),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  )),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "This Field Cannot Be Empty";
+                                } else {
+                                  setState(() {
+                                    rollno = value;
+                                  });
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(
+                              height: 30,
                             ),
                             TextFormField(
                               keyboardType: TextInputType.emailAddress,

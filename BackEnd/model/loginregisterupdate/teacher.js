@@ -4,6 +4,12 @@ var teacherSchema = new mongoose.Schema({
     id: {
         type: ObjectId
     },
+    fname:{
+        type: String
+    },
+    sname:{
+        type: String
+    },
     propic: {
         type: String,
     },
