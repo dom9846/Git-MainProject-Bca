@@ -1,11 +1,13 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, camel_case_types, duplicate_ignore, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, camel_case_types, duplicate_ignore, prefer_const_literals_to_create_immutables, prefer_interpolation_to_compose_strings, sort_child_properties_last
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/services/getuser_service.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 import '../../assets/drawer.dart';
 
@@ -101,19 +103,38 @@ class _lec_screenState extends State<lec_screen> {
             itemCount: lectures?.length,
             itemBuilder: (BuildContext context, int index) {
               final lecture = lectures?[index];
-              final lecturer = lectures?[index]['lec_details'];
-              String? age = lecturer[0]['age'];
-              // String email = lecturer[1]['email'];
-              // String mobile = lecturer[2]['mobile'];
-              // // String propic = lecturer[0]['propic'];
-              // String? qualification = lecturer[4]['qualification'];
-              // print(lecturer['age']);
+              Uint8List encodeedimg;
+              String? propic = lecture?['lec_details']?[0]?['propic'];
+              if (propic != null) {
+                final decodestring = base64Decode(propic.split(',').last);
+                encodeedimg = decodestring;
+              } else {
+                encodeedimg = Uint8List(0);
+              }
               return Card(
                 elevation: 5,
                 margin: EdgeInsets.all(10),
                 child: ExpansionTile(
                   leading: CircleAvatar(
-                    backgroundImage: NetworkImage('https://picsum.photos/200'),
+                    child: ClipOval(
+                      child: Image.memory(
+                        encodeedimg,
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100,
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return Container(
+                            color: Colors.grey,
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 48.0,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                     radius: 30,
                   ),
                   title: lecture == null
@@ -146,78 +167,52 @@ class _lec_screenState extends State<lec_screen> {
                         padding: EdgeInsets.all(16),
                         child: Column(
                           children: [
-                            lecture == null
-                                ? Text(
-                                    "Nill",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : Text(
-                                    "Age:" + " " + age!,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                            Text(
+                              "Age:" +
+                                  (lecture?["lec_details"]?[0]?["age"] ??
+                                      "Nill"),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             SizedBox(
                               height: 8,
                             ),
-                            // lecture == null
-                            //     ? Text(
-                            //         "Nill",
-                            //         style: TextStyle(
-                            //           fontSize: 20,
-                            //           fontWeight: FontWeight.bold,
-                            //         ),
-                            //       )
-                            //     : Text(
-                            //         qualification!,
-                            //         style: TextStyle(
-                            //           fontSize: 20,
-                            //           fontWeight: FontWeight.bold,
-                            //         ),
-                            //       ),
-                            // SizedBox(
-                            //   height: 8,
-                            // ),
-                            // lecture == null
-                            //     ? Text(
-                            //         "Nill",
-                            //         style: TextStyle(
-                            //           fontSize: 20,
-                            //           fontWeight: FontWeight.bold,
-                            //         ),
-                            //       )
-                            //     : Text(
-                            //         email,
-                            //         style: TextStyle(
-                            //           fontSize: 20,
-                            //           fontWeight: FontWeight.bold,
-                            //         ),
-                            //       ),
-                            // SizedBox(
-                            //   height: 8,
-                            // ),
-                            // lecture == null
-                            //     ? Text(
-                            //         "Nill",
-                            //         style: TextStyle(
-                            //           fontSize: 20,
-                            //           fontWeight: FontWeight.bold,
-                            //         ),
-                            //       )
-                            //     : Text(
-                            //         mobile,
-                            //         style: TextStyle(
-                            //           fontSize: 20,
-                            //           fontWeight: FontWeight.bold,
-                            //         ),
-                            //       ),
-                            // SizedBox(
-                            //   height: 8,
-                            // ),
+                            Text(
+                              "Email:" +
+                                  (lecture?["lec_details"]?[0]?["email"] ??
+                                      "Nill"),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              "Contact:" +
+                                  (lecture?["lec_details"]?[0]?["mobile"] ??
+                                      "Nill"),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              "Qualification:" +
+                                  (lecture?["lec_details"]?[0]
+                                          ?["qualification"] ??
+                                      "Nill"),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             TextButton(
                                 onPressed: () {},
                                 child: Text(

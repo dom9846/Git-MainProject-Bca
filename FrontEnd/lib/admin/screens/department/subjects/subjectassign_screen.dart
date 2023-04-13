@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, avoid_print, prefer_const_constructors, unnecessary_this
+// ignore_for_file: camel_case_types, avoid_print, prefer_const_constructors, unnecessary_this, implementation_imports, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/src/dropdown_button2.dart';
@@ -16,28 +16,45 @@ class Subject_Assign extends StatefulWidget {
 
 class _Subject_AssignState extends State<Subject_Assign> {
   final _formkey = GlobalKey<FormState>();
-  String? subjectname, teachername, semester;
-  List<String> items1 = [];
-  List<String> items2 = [];
+  String? semester;
+  dynamic subjectname, teachername;
+  List<dynamic> items1 = [];
+  List<dynamic> items2 = [];
   // List? items1;
   // List? items2;
   final List<String> items3 = ['1', '2', '3', '4', '5', '6'];
   subjectservice subjectassign = subjectservice();
-  Future<void> getsubjects() async {
-    print("object");
+
+  Future<void> getsubjects(String semester1) async {
     try {
       var subject = jsonEncode({
-        "semester": 1,
+        "semester": semester,
       });
-      print(subject);
       final Response? res = await subjectassign.subjectretrieve(subject);
-      List? data = json.deccode(res!.data);
-      print(res);
       if (res!.statusCode == 201) {
         setState(() {
           items1 = res.data;
         });
         print(items1);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
+  Future<void> getlectures() async {
+    try {
+      // var user = jsonEncode({
+      //   "user_type": "Teacher",
+      // });
+      // print("hello");
+      final Response? res = await subjectassign.lectureretrieve("");
+      print(res);
+      if (res!.statusCode == 201) {
+        setState(() {
+          items2 = res.data;
+        });
+        print(items2);
       }
     } on DioError catch (err) {
       if (err.response != null) {}
@@ -68,20 +85,23 @@ class _Subject_AssignState extends State<Subject_Assign> {
 
   Future<void> assignsub() async {
     if (_formkey.currentState!.validate()) {
-      var subject = jsonEncode({
-        "subid": subjectname,
-        "subteacher": teachername,
+      var subassign = jsonEncode({
+        "subid": subjectname['_id'],
+        "subteacher": teachername['_id'],
+        "subteacherfname": teachername['firstname'],
+        "subteachersname": teachername['secondname'],
       });
+      print(subassign);
       try {
-        final Response? res = await subjectassign.subjectassign(subject);
-        // if (res!.statusCode == 401) {}
-        showError("Successfully Assigned Subject", "Subject Assigned");
+        final Response? res = await subjectassign.subjectassign(subassign);
+        if (res!.statusCode == 201) {
+          showError("Successfully Assigned Subject", "Subject Assigned");
+        }
       } on DioError catch (err) {
         if (err.response != null) {
-          showError("This Subject Is Allready Assigned", "Oops");
-        } else {
-          // Something happened in setting up or sending the request that triggered an Error
-          showError("Something Went Wrong!", "Cannot Be Done");
+          if (err.response!.statusCode == 401) {
+            showError("Remove it for another Assign", "Allready Assigned");
+          }
         }
       }
     }
@@ -89,7 +109,7 @@ class _Subject_AssignState extends State<Subject_Assign> {
 
   void initState() {
     super.initState();
-    this.getsubjects();
+    this.getlectures();
   }
 
   @override
@@ -213,7 +233,7 @@ class _Subject_AssignState extends State<Subject_Assign> {
                                   setState(() {
                                     semester = value as String;
                                   });
-                                  // getsubjects(semester);
+                                  getsubjects(semester!);
                                 },
                                 buttonStyleData: ButtonStyleData(
                                   height: 60,
@@ -290,10 +310,10 @@ class _Subject_AssignState extends State<Subject_Assign> {
                                   ],
                                 ),
                                 items: items1
-                                    .map((item) => DropdownMenuItem<String>(
+                                    .map((item) => DropdownMenuItem<dynamic>(
                                           value: item,
                                           child: Text(
-                                            item,
+                                            item['subjectname'],
                                             style: const TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -306,7 +326,8 @@ class _Subject_AssignState extends State<Subject_Assign> {
                                 value: subjectname,
                                 onChanged: (value) {
                                   setState(() {
-                                    subjectname = value as String;
+                                    subjectname = value;
+                                    print(subjectname);
                                   });
                                 },
                                 buttonStyleData: ButtonStyleData(
@@ -384,10 +405,12 @@ class _Subject_AssignState extends State<Subject_Assign> {
                                   ],
                                 ),
                                 items: items2
-                                    .map((item) => DropdownMenuItem<String>(
+                                    .map((item) => DropdownMenuItem<dynamic>(
                                           value: item,
                                           child: Text(
-                                            item,
+                                            item['firstname'] +
+                                                " " +
+                                                item['secondname'],
                                             style: const TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -400,7 +423,8 @@ class _Subject_AssignState extends State<Subject_Assign> {
                                 value: teachername,
                                 onChanged: (value) {
                                   setState(() {
-                                    teachername = value as String;
+                                    teachername = value;
+                                    print(teachername);
                                   });
                                 },
                                 buttonStyleData: ButtonStyleData(
@@ -457,7 +481,7 @@ class _Subject_AssignState extends State<Subject_Assign> {
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(80, 40)),
                                 onPressed: assignsub,
-                                child: Text("Add"))
+                                child: Text("Assign"))
                           ],
                         ),
                       ),

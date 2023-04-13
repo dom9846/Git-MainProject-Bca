@@ -102,7 +102,8 @@ exports.getlectures = (req, res) => {
                 },
                 {
                     $match:{
-                        "user_type":"Teacher"
+                        "user_type":"Teacher",
+                        "lec_details.age":{"$exists":true}
                     }
                 }
             ]).exec(

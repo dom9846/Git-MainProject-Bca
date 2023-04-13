@@ -17,13 +17,13 @@ exports.subjectadd = (req, res) => {
                 console.log("err")
                 return res.status(400).json({ 'msg': err });
             }
-            req.body.subid = ObjectId(subject._id);
-            let newSubjadd = subjectAssign(req.body)
-            newSubjadd.save((err, ns) => {
-                if (err) {
-                    return res.status(400).json({ 'msg': "error occured" });
-                }
-            })
+            // req.body.subid = ObjectId(subject._id);
+            // let newSubjadd = subjectAssign(req.body)
+            // newSubjadd.save((err, ns) => {
+            //     if (err) {
+            //         return res.status(400).json({ 'msg': "error occured" });
+            //     }
+            // })
             return res.status(201).json(subject);
         });
 

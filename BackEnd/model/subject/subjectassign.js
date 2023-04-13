@@ -6,6 +6,12 @@ var subjectAssignSchema = new mongoose.Schema({
     },
     subteacher: {
         type: ObjectId
+    },
+    subteacherfname: {
+        type: String
+    },
+    subteachersname: {
+        type: String
     }
 })
 module.exports = mongoose.model("subjectAssign", subjectAssignSchema);

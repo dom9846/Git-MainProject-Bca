@@ -1,6 +1,11 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors
+// ignore_for_file: camel_case_types, prefer_const_constructors, unused_import
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:mainproject/services/subject_service.dart';
 import '../../../assets/drawer.dart';
 
 class Subject_details extends StatefulWidget {
@@ -11,6 +16,39 @@ class Subject_details extends StatefulWidget {
 }
 
 class _Subject_detailsState extends State<Subject_details> {
+  String? userId = "", firstname = "", secondname = "", usertype = "";
+  // List? lectures;
+  // int? lecid;
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+    });
+    // getlectures();
+  }
+
+  subjectservice subjectassign = subjectservice();
+  Future<void> getlectures() async {
+    try {
+      // var user = jsonEncode({
+      //   "user_type": "Teacher",
+      // });
+      final Response? res = await subjectassign.showsubdetails("");
+      if (res!.statusCode == 201) {
+        // setState(() {
+        //   lectures = res.data;
+        // });
+        // print(lectures);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

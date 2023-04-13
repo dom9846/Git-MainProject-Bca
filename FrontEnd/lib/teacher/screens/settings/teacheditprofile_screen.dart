@@ -80,25 +80,28 @@ class _TeachEdit_ProfileState extends State<TeachEdit_Profile> {
 
   Future<void> update() async {
     if (_formkey.currentState!.validate()) {
-      var user = jsonEncode({
-        "id": userId,
-        "propic": image,
-        "email": email,
-        "mobile": mobile,
-        "age": age,
-        "qualification": qualification,
-      });
-      print(user);
-      try {
-        final Response? res = await teacherupdate.updateteacher(user);
-        // if (res!.statusCode == 401) {}
-        showError("Successfully Updated Your Profile", "Profile Updated");
-      } on DioError catch (err) {
-        if (err.response != null) {
-          showError("Some Error Occured!", "Oops");
-        } else {
-          // Something happened in setting up or sending the request that triggered an Error
-          showError("Something Went Wrong!", "Cannot Be Done");
+      if (image.length == 0) {
+        showError("Select a profile picture", "Cannot Update");
+      } else {
+        var user = jsonEncode({
+          "id": userId,
+          "propic": image,
+          "email": email,
+          "mobile": mobile,
+          "age": age,
+          "qualification": qualification,
+        });
+        try {
+          final Response? res = await teacherupdate.updateteacher(user);
+          // if (res!.statusCode == 401) {}
+          showError("Successfully Updated Your Profile", "Profile Updated");
+        } on DioError catch (err) {
+          if (err.response != null) {
+            showError("Some Error Occured!", "Oops");
+          } else {
+            // Something happened in setting up or sending the request that triggered an Error
+            showError("Something Went Wrong!", "Cannot Be Done");
+          }
         }
       }
     }
