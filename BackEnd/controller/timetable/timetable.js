@@ -38,7 +38,7 @@ exports.timetableadd = (req, res) => {
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            return res.status(400).json({ 'msg': 'The user already exists' });
+            return res.status(400).json({ 'msg': 'Try later' });
         }
         let newUser = timetable(req.body);
         newUser.save((err, user) => {
@@ -47,9 +47,21 @@ exports.timetableadd = (req, res) => {
             }
             else if(user){
                 return res.status(201).json({'msg': "Successfully Added"});
-            }           
-            //return res.status(201).json(user);
+            }
         });
 
+    });
+};
+
+exports.timetableretrieve = (req, res) => {
+    console.log(req.body)
+    timetable.find((err, timetable) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (timetable) {
+            return res.status(201).json(timetable);
+        }
+        return res.status(404).json({ 'msg': 'Couldnt Fetch details' });
     });
 };

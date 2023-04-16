@@ -7,16 +7,16 @@ exports.attendanceMark = (req, res) => {
             return res.status(400).json({ 'msg': err });
         }
         if (mark) {
-            return res.status(400).json({ 'msg': 'Allready Entered' });
+            return res.status(401).json({ 'msg': 'Allready Entered' });
+        }else{
+            let newAttendance = attendance(req.body);
+            newAttendance.save((err, attend) => {
+                if (err) {
+                    console.log("err")
+                    return res.status(402).json({ 'msg': err });
+                }
+                return res.status(201).json(attend);
+            });
         }
-        let newAttendance = attendance(req.body);
-        newAttendance.save((err, mark) => {
-            if (err) {
-                console.log("err")
-                return res.status(400).json({ 'msg': err });
-            }
-            return res.status(201).json(mark);
-        });
-
     });
 };

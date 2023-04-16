@@ -4,6 +4,9 @@ var marksSchema = new mongoose.Schema({
     subjid: {
         type: ObjectId
     },
+    semester: {
+        type: String
+    },
     teachid: {
         type: ObjectId
     },

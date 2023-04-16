@@ -103,13 +103,13 @@ class _lec_screenState extends State<lec_screen> {
             itemCount: lectures?.length,
             itemBuilder: (BuildContext context, int index) {
               final lecture = lectures?[index];
-              Uint8List encodeedimg;
+              Uint8List encodedimage;
               String? propic = lecture?['lec_details']?[0]?['propic'];
               if (propic != null) {
                 final decodestring = base64Decode(propic.split(',').last);
-                encodeedimg = decodestring;
+                encodedimage = decodestring;
               } else {
-                encodeedimg = Uint8List(0);
+                encodedimage = Uint8List(0);
               }
               return Card(
                 elevation: 5,
@@ -118,14 +118,14 @@ class _lec_screenState extends State<lec_screen> {
                   leading: CircleAvatar(
                     child: ClipOval(
                       child: Image.memory(
-                        encodeedimg,
+                        encodedimage,
                         fit: BoxFit.cover,
                         width: 100,
                         height: 100,
                         errorBuilder: (BuildContext context, Object exception,
                             StackTrace? stackTrace) {
                           return Container(
-                            color: Colors.grey,
+                            color: Color.fromARGB(255, 61, 29, 29),
                             child: Icon(
                               Icons.person,
                               color: Colors.white,

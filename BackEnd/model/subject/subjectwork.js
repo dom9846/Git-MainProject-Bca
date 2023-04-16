@@ -13,11 +13,14 @@ var subworkSchema = new mongoose.Schema({
     subjectid: {
         type:ObjectId
     },
+    semester:{
+        type:String
+    },
     teacherid: {
         type:ObjectId
     },
-    studentid: {
-        type:ObjectId
-    }
+    date: {
+        type:Date
+    },
 })
 module.exports = mongoose.model("Subjectwork", subworkSchema);

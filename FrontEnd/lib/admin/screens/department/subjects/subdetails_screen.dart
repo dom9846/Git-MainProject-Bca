@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, unused_import
+// ignore_for_file: camel_case_types, prefer_const_constructors, unused_import, sort_child_properties_last, prefer_interpolation_to_compose_strings
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -17,8 +17,9 @@ class Subject_details extends StatefulWidget {
 
 class _Subject_detailsState extends State<Subject_details> {
   String? userId = "", firstname = "", secondname = "", usertype = "";
-  // List? lectures;
+  List? subjectdetails;
   // int? lecid;
+  String? semester;
   final storage = new FlutterSecureStorage();
   Future<void> getToken() async {
     Map<String, String> allValues = await storage.readAll();
@@ -28,29 +29,39 @@ class _Subject_detailsState extends State<Subject_details> {
       secondname = allValues["sname"];
       usertype = allValues["utype"];
     });
-    // getlectures();
+    getsubdetails();
   }
 
   subjectservice subjectassign = subjectservice();
-  Future<void> getlectures() async {
+  Future<void> getsubdetails() async {
     try {
-      // var user = jsonEncode({
-      //   "user_type": "Teacher",
-      // });
-      final Response? res = await subjectassign.showsubdetails("");
+      var subject = jsonEncode({
+        "semester": semester,
+      });
+      final Response? res = await subjectassign.showsubdetails(subject);
+      // print(res);
       if (res!.statusCode == 201) {
-        // setState(() {
-        //   lectures = res.data;
-        // });
-        // print(lectures);
+        setState(() {
+          subjectdetails = res.data;
+        });
+        print(subjectdetails);
       }
     } on DioError catch (err) {
       if (err.response != null) {}
     }
   }
 
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Object? subjectsemester =
+        ModalRoute.of(context as BuildContext)?.settings.arguments;
+    semester = subjectsemester.toString();
+    // print(semester);
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -90,79 +101,73 @@ class _Subject_detailsState extends State<Subject_details> {
                     icon: Icon(Icons.message_sharp)))
           ],
         ),
-        body: ListView(children: [
-          Container(
-            margin: EdgeInsets.all(10),
-            child: Center(
-                child: Column(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                SizedBox(
-                  height: 30,
-                ),
-                Text(
-                  'Subjects',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    color: Color.fromARGB(255, 228, 230, 233),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(10),
-                  child: ExpansionTile(
-                    title: Text(
-                      'Subject Name',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+        body: Container(
+          margin: EdgeInsets.all(10),
+          child: ListView.builder(
+            itemCount: subjectdetails?.length,
+            itemBuilder: (context, index) {
+              final subjectdetail = subjectdetails?[index];
+              return Card(
+                elevation: 5,
+                margin: EdgeInsets.all(10),
+                child: ExpansionTile(
+                  title: Text(
+                    subjectdetail != null &&
+                            subjectdetail['subjectname'] != null
+                        ? subjectdetail['subjectname']
+                        : 'Unknown Subject',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              Text("Subject Type"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("Assigned To:Lecture name"),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    "Remove Subject",
-                                    style: TextStyle(color: Colors.red),
-                                  )),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    "Remove Subject Assign",
-                                    style: TextStyle(color: Colors.red),
-                                  )),
-                            ],
-                          )),
-                    ],
                   ),
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Text("Subject Type:" +
+                                (subjectdetail != null &&
+                                        subjectdetail['subjecttype'] != null
+                                    ? subjectdetail['subjecttype']
+                                    : 'Unknown Subject Type')),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              "Assigned To:" +
+                                  (subjectdetail?["sub_details"]?[0]
+                                          ?["subteacherfname"] ??
+                                      "Nill") +
+                                  (subjectdetail?["sub_details"]?[0]
+                                          ?["subteachersname"] ??
+                                      "Nill"),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "Remove Subject",
+                                  style: TextStyle(color: Colors.red),
+                                )),
+                            TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "Remove Subject Assign",
+                                  style: TextStyle(color: Colors.red),
+                                )),
+                          ],
+                        )),
+                  ],
                 ),
-              ],
-            )),
+              );
+            },
           ),
-        ]),
+        ),
         drawer: cldrawer(),
       ),
     );

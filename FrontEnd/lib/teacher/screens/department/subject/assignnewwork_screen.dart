@@ -1,8 +1,15 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, camel_case_types, implementation_imports
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
+import 'package:mainproject/services/subject_service.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 import 'package:dropdown_button2/src/dropdown_button2.dart';
+// import 'package:mongo_dart/mongo_dart.dart';
 
 class AssignNew_Work extends StatefulWidget {
   const AssignNew_Work({super.key});
@@ -11,13 +18,100 @@ class AssignNew_Work extends StatefulWidget {
   State<AssignNew_Work> createState() => _AssignNew_WorkState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String? worktype, duedate = "", objective = "";
-final List<String> items1 = ['Assignment', 'Exam', 'Seminar'];
-
 class _AssignNew_WorkState extends State<AssignNew_Work> {
+  final _formkey = GlobalKey<FormState>();
+  String? worktype, duedate = "", objective = "";
+  final List<String> items1 = ['Assignment', 'Exam', 'Seminar'];
+  DateTime? _selectedDate, _todaydate;
+  String? jwt, userId, subjectid, semester;
+  List<dynamic>? students;
+  List<dynamic> selectedOptions = [];
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+    });
+  }
+
+  void _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+        _todaydate = DateTime.now();
+      });
+    }
+  }
+
+  subjectservice subassignworkservice = new subjectservice();
+  Future<void> assignsubwork(String sid, String sem) async {
+    print(sem);
+    print(sid);
+    if (_formkey.currentState!.validate()) {
+      var subwork = jsonEncode({
+        "worktype": worktype,
+        "duedate": _selectedDate!.toIso8601String(),
+        "activity": objective,
+        "subjectid": sid,
+        "semester": sem,
+        "teacherid": userId,
+        "date": _todaydate!.toIso8601String()
+      });
+      print(subwork);
+      try {
+        final Response? res = await subassignworkservice.assignsubwork(subwork);
+        if (res!.statusCode == 201) {
+          showError("Successfully Assigned", "New Work");
+        }
+      } on DioError catch (err) {
+        if (err.response != null) {
+          if (err.response!.statusCode == 401) {
+            showError("Something Went Wrong", "Cannot Done");
+          }
+        }
+      }
+    }
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final arguments =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final subjectid = arguments?['subjectid'];
+    final semester = arguments?['semester'];
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -187,40 +281,26 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
                             SizedBox(
                               height: 30,
                             ),
-                            TextFormField(
-                              keyboardType: TextInputType.datetime,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextFormField(
+                                    enabled: false,
+                                    decoration: InputDecoration(
+                                      labelText: _selectedDate == null
+                                          ? 'Select a date'
+                                          : DateFormat('yyyy-MM-dd')
+                                              .format(_selectedDate!),
+                                      border: OutlineInputBorder(),
                                     ),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 22, 47, 230),
-                                    ),
-                                  ),
-                                  labelText: "Due Date",
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter The Last Date",
-                                  hintStyle: TextStyle(
-                                      color: Color.fromARGB(255, 7, 7, 7)),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "This Field Cannot Be Empty";
-                                } else {
-                                  setState(() {
-                                    duedate = value;
-                                  });
-                                }
-                                return null;
-                              },
+                                ),
+                                SizedBox(width: 10.0),
+                                ElevatedButton(
+                                  onPressed: () => _selectDate(context),
+                                  child: Text('Select'),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: 30,
@@ -268,11 +348,7 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(80, 40)),
                                 onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    print(worktype);
-                                    print(duedate);
-                                    print(objective);
-                                  }
+                                  assignsubwork(subjectid, semester.toString());
                                 },
                                 child: Text("Assign"))
                           ],

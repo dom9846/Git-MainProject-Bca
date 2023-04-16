@@ -91,29 +91,32 @@ class _StudentEdit_ProfileState extends State<StudentEdit_Profile> {
 
   Future<void> update() async {
     if (_formkey.currentState!.validate()) {
-      var user = jsonEncode({
-        "id": userId,
-        "propic": image,
-        "rollno": rollno,
-        "email": email,
-        "mobile": mobile,
-        "age": age,
-        "parent": parent,
-        "parentcontact": parentcontact,
-        "year": year,
-        "semester": semester,
-      });
-      print(user);
-      try {
-        final Response? res = await studupdate.updatestudent(user);
-        // if (res!.statusCode == 401) {}
-        showError("Successfully Updated Your Profile", "Profile Updated");
-      } on DioError catch (err) {
-        if (err.response != null) {
-          showError("Some Error Occured!", "Oops");
-        } else {
-          // Something happened in setting up or sending the request that triggered an Error
-          showError("Something Went Wrong!", "Cannot Be Done");
+      if (image.length == 0) {
+        showError("Select a profile picture", "Cannot Update");
+      } else {
+        var user = jsonEncode({
+          "id": userId,
+          "propic": image,
+          "rollno": rollno,
+          "email": email,
+          "mobile": mobile,
+          "age": age,
+          "parent": parent,
+          "parentcontact": parentcontact,
+          "year": year,
+          "semester": semester,
+        });
+        try {
+          final Response? res = await studupdate.updatestudent(user);
+          // if (res!.statusCode == 401) {}
+          showError("Successfully Updated Your Profile", "Profile Updated");
+        } on DioError catch (err) {
+          if (err.response != null) {
+            showError("Some Error Occured!", "Oops");
+          } else {
+            // Something happened in setting up or sending the request that triggered an Error
+            showError("Something Went Wrong!", "Cannot Be Done");
+          }
         }
       }
     }
@@ -176,57 +179,6 @@ class _StudentEdit_ProfileState extends State<StudentEdit_Profile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Container(
-                    //   height: 150,
-                    //   decoration: BoxDecoration(
-                    //     shape: BoxShape.circle,
-                    //   ),
-                    //   child: Center(
-                    //     child: _imageFile == null
-                    //         ? Text('No image selected.')
-                    //         : Image.file(File(_imageFile!.path),
-                    //             fit: BoxFit.contain),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     showModalBottomSheet(
-                    //       context: context,
-                    //       builder: (BuildContext context) {
-                    //         return SafeArea(
-                    //           child: Column(
-                    //             mainAxisSize: MainAxisSize.min,
-                    //             children: <Widget>[
-                    //               ListTile(
-                    //                 leading: Icon(Icons.camera_alt),
-                    //                 title: Text('Take a photo'),
-                    //                 onTap: () {
-                    //                   _pickImage(ImageSource.camera);
-                    //                   Navigator.of(context).pop();
-                    //                 },
-                    //               ),
-                    //               ListTile(
-                    //                 leading: Icon(Icons.image),
-                    //                 title: Text('Choose from gallery'),
-                    //                 onTap: () {
-                    //                   _pickImage(ImageSource.gallery);
-                    //                   Navigator.of(context).pop();
-                    //                 },
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         );
-                    //       },
-                    //     );
-                    //   },
-                    //   child: Container(child: Icon(Icons.camera)),
-                    // ),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
                     Container(
                       padding: EdgeInsets.only(
                           top: 50, bottom: 50, left: 20, right: 20),

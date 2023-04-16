@@ -1,8 +1,9 @@
 var subjectAssign = require('../../model/subject/subjectassign');
 var subjects = require('../../model/subject/subject');
 const {ObjectId}=require('mongodb');
+const mongoose = require('mongoose');
 exports.subassign = (req, res) => {
-    subjectAssign.findOne({ subid: req.body.subid, subteacher: req.body.subteacher },(err,subassign)=>{
+    subjectAssign.findOne({ subid: req.body.subid },(err,subassign)=>{
         if (err) {
             // console.log("err")
             return res.status(400).json({ 'msg': err });
@@ -55,4 +56,34 @@ exports.subretrieve = (req, res) => {
         }
         return res.status(404).json({ 'msg': 'Invalid username and Password' });
     });
+};
+exports.retrieveassignedsubjects = (req, res) => {
+    console.log(req.body)
+    const teacherid = mongoose.Types.ObjectId(req.body.subteacher);
+    console.log(teacherid);
+    subjects.aggregate([
+        {
+            $lookup: {
+              from: "subjectassigns",
+              localField: "_id",
+              foreignField: "subid",
+              as: "sub_details"
+            }
+        },
+        {
+            $match:{
+                // "user_type":"Student",
+                "sub_details.subteacher":teacherid,
+                "sub_details.subteacherfname":{"$exists":true}
+            }
+        }
+    ]).exec(
+        function(err,data){
+            if(err){throw err}
+            if(data){
+                console.log(data);
+                return res.status(201).json(data);
+            }
+        }
+    )
 };

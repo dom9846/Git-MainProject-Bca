@@ -78,8 +78,10 @@ class _Subject_screenState extends State<Subject_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admndepsubdetails")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepsubdetails",
+                          arguments: '1')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -95,8 +97,10 @@ class _Subject_screenState extends State<Subject_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admndepsubdetails")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepsubdetails",
+                          arguments: '2')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -112,8 +116,10 @@ class _Subject_screenState extends State<Subject_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admndepsubdetails")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepsubdetails",
+                          arguments: '3')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -129,8 +135,10 @@ class _Subject_screenState extends State<Subject_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admndepsubdetails")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepsubdetails",
+                          arguments: '4')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -146,8 +154,10 @@ class _Subject_screenState extends State<Subject_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admndepsubdetails")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepsubdetails",
+                          arguments: '5')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -163,8 +173,10 @@ class _Subject_screenState extends State<Subject_screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admndepsubdetails")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepsubdetails",
+                          arguments: '6')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(

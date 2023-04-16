@@ -30,7 +30,7 @@ class getuserservice {
   }
 
   getstudentssall(String user) async {
-    print(user);
+    // print(user);
     final response = await dio.post(url + "getstudents", data: user);
     return response;
   }

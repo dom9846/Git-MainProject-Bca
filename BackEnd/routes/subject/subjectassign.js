@@ -5,4 +5,5 @@ var lecturerecieveControl = require('../../controller/loginregisterupdate/regist
 routes.post('/subjectassign', subjectAssignControl.subassign);
 routes.post('/subjectretrieve', subjectAssignControl.subretrieve);
 routes.post('/lectureretrieve', lecturerecieveControl.getlectures);
+routes.post('/retrieveassignedsubjects', subjectAssignControl.retrieveassignedsubjects);
 module.exports = routes;

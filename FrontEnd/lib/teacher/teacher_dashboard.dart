@@ -46,8 +46,8 @@ class _teach_HomeState extends State<teach_Home> {
     setState(() {
       userId = userid;
       firstname = allValues["fname"];
-      firstname = allValues["sname"];
-      firstname = allValues["utype"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
     });
     await storage.write(key: "userid", value: userId);
     getadmin();

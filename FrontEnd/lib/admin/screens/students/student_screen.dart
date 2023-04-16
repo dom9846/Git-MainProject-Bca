@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, camel_case_types, unused_import, implementation_imports, unnecessary_new, unnecessary_this, annotate_overrides
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, camel_case_types, unused_import, implementation_imports, unnecessary_new, unnecessary_this, annotate_overrides, prefer_interpolation_to_compose_strings, sort_child_properties_last
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/services/getuser_service.dart';
@@ -31,17 +32,17 @@ class _Stud_screenState extends State<Stud_screen> {
       secondname = allValues["sname"];
       usertype = allValues["utype"];
     });
-    getlectures();
+    getstudents();
   }
 
-  getuserservice getlecservice = new getuserservice();
-  Future<void> getlectures() async {
+  getuserservice getstudservice = new getuserservice();
+  Future<void> getstudents() async {
     try {
       var user = jsonEncode({
         "year": year,
       });
       print(user);
-      final Response? res = await getlecservice.getstudentssall(user);
+      final Response? res = await getstudservice.getstudentssall(user);
       if (res!.statusCode == 201) {
         setState(() {
           students = res.data;
@@ -108,15 +109,38 @@ class _Stud_screenState extends State<Stud_screen> {
               itemCount: students?.length,
               itemBuilder: (BuildContext context, int index) {
                 final student = students?[index];
-                final stud_det = students?[index]['lec_details'];
-                // String? roll = stud_det[0]['age'];
+                Uint8List encodedimage;
+                String? propic = student?['stud_details']?[0]?['propic'];
+                if (propic != null) {
+                  final decodestring = base64Decode(propic.split(',').last);
+                  encodedimage = decodestring;
+                } else {
+                  encodedimage = Uint8List(0);
+                }
                 return Card(
                   elevation: 5,
                   margin: EdgeInsets.all(10),
                   child: ExpansionTile(
                     leading: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage('https://picsum.photos/200'),
+                      child: ClipOval(
+                        child: Image.memory(
+                          encodedimage,
+                          fit: BoxFit.cover,
+                          width: 100,
+                          height: 100,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            return Container(
+                              color: Colors.grey,
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 48.0,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                       radius: 30,
                     ),
                     title: student == null
@@ -135,8 +159,12 @@ class _Stud_screenState extends State<Stud_screen> {
                             ),
                           ),
                     subtitle: Text(
-                      'Roll No',
-                      style: TextStyle(fontSize: 16),
+                      "Roll No:" +
+                          (student?["stud_details"]?[0]?["rollno"] ?? "Nill"),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     trailing: IconButton(
                         onPressed: () {
@@ -149,27 +177,93 @@ class _Stud_screenState extends State<Stud_screen> {
                           padding: EdgeInsets.all(16),
                           child: Column(
                             children: [
-                              Text("Semester"),
+                              Text(
+                                "Age:" +
+                                    (student?["stud_details"]?[0]?["age"]
+                                            ?.toString() ??
+                                        "Nill"),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               SizedBox(
                                 height: 8,
                               ),
-                              Text("age"),
+                              Text(
+                                "Email:" +
+                                    (student?["stud_details"]?[0]?["email"] ??
+                                        "Nill"),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               SizedBox(
                                 height: 8,
                               ),
-                              Text("email"),
+                              Text(
+                                "Mobile:" +
+                                    (student?["stud_details"]?[0]?["mobile"]
+                                            ?.toString() ??
+                                        "Nill"),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               SizedBox(
                                 height: 8,
                               ),
-                              Text("Mobile"),
+                              Text(
+                                "Parent Name:" +
+                                    (student?["stud_details"]?[0]?["parent"] ??
+                                        "Nill"),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               SizedBox(
                                 height: 8,
                               ),
-                              Text("Parent Name"),
+                              Text(
+                                "Parent Contact:" +
+                                    (student?["stud_details"]?[0]
+                                                ?["parentcontact"]
+                                            ?.toString() ??
+                                        "Nill"),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               SizedBox(
                                 height: 8,
                               ),
-                              Text("Parent Contact"),
+                              Text(
+                                "Year" +
+                                    (student?["stud_details"]?[0]?["year"]
+                                            ?.toString() ??
+                                        "Nill"),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                "Semester" +
+                                    (student?["stud_details"]?[0]?["semester"]
+                                            ?.toString() ??
+                                        "Nill"),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               SizedBox(
                                 height: 8,
                               ),

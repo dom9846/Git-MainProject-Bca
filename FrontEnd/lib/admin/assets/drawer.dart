@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, unnecessary_this, annotate_overrides
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -24,6 +26,7 @@ class _cldrawerState extends State<cldrawer> {
       age = "",
       qualification = "",
       designation = "";
+  Uint8List? profilepic;
   Future<void> getToken() async {
     Map<String, String> allValues = await storage.readAll();
     setState(() {
@@ -53,18 +56,15 @@ class _cldrawerState extends State<cldrawer> {
           age = res.data["age"].toString();
           qualification = res.data["qualification"];
         });
-        // // Read the Base64 string
-        // String base64String = '...'; // Replace with your Base64 string
-        // List imageBytes = base64Decode(base64String);
+        if (propic != null) {
+          final decodestring = base64Decode(propic!.split(',').last);
+          profilepic = decodestring;
+        } else {
+          profilepic = Uint8List(0);
+        }
       }
     } on DioError catch (err) {
-      if (err.response != null) {
-        // propic = "Nill";
-        // email = "Nill";
-        // mobile = "Nill";
-        // age = "Nill";
-        // qualification = "Nill";
-      }
+      if (err.response != null) {}
     }
   }
 
@@ -100,10 +100,32 @@ class _cldrawerState extends State<cldrawer> {
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
                   height: 150,
+                  width: 150,
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: AssetImage('images/propic1.jpg'))),
+                    shape: BoxShape.circle,
+                  ),
+                  child: CircleAvatar(
+                    radius: 50,
+                    child: ClipOval(
+                      child: Image.memory(
+                        profilepic ?? Uint8List(0),
+                        fit: BoxFit.cover,
+                        width: 150,
+                        height: 150,
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return Container(
+                            color: Colors.grey,
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 48.0,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -124,11 +146,11 @@ class _cldrawerState extends State<cldrawer> {
                 SizedBox(
                   height: 10,
                 ),
-                qualification == null
+                designation == null
                     ? Text("Nill",
                         style: TextStyle(color: Colors.white, fontSize: 15))
                     : Text(
-                        qualification!,
+                        designation!,
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       )
               ],

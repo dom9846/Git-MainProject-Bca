@@ -33,8 +33,24 @@ class subjectservice {
 
   showsubdetails(String subject) async {
     // print(subject);
-    final response = await dio.post(url + "showsubdetails", data: subject);
+    final response = await dio.post(url + "showsubjectdetails", data: subject);
     // print(response);
+    return response;
+  }
+
+  retrieveassignedsubjects(String subject) async {
+    final response =
+        await dio.post(url + "retrieveassignedsubjects", data: subject);
+    return response;
+  }
+
+  assignsubwork(String subwork) async {
+    final response = await dio.post(url + "assignsubjectwork", data: subwork);
+    return response;
+  }
+
+  retrievesubwork(String subwork) async {
+    final response = await dio.post(url + "retrievesubjectwork", data: subwork);
     return response;
   }
 }

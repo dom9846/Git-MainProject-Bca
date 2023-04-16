@@ -10,8 +10,8 @@ var attendanceSchema = new mongoose.Schema({
     period: {
         type: String
     },
-    studentlist: {
-        type: ObjectId
+    absentstudentlist: {
+        type: Array
     },
 })
 module.exports = mongoose.model("Attendance", attendanceSchema);

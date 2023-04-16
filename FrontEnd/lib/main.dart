@@ -78,7 +78,7 @@ void main() {
       brightness: Brightness.light,
     ),
     debugShowCheckedModeBanner: false,
-    home: const lec_screen(),
+    home: const MyLogin(),
     routes: {
       '/register': (context) => const MyRegister(),
       '/reg_check': (context) => const Reg_Check(),

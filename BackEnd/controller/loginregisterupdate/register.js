@@ -74,15 +74,15 @@ exports.loginUser = (req, res) => {
 
 // exports.getlectures = (req, res) => {
 //     console.log(req.body)
-//     User.find({ user_type: req.body.user_type}, (err, user) => {
-//         if (err) {
-//             return res.status(400).json({ 'msg': err });
-//         }
-//         if (user) {
-//             return res.status(201).json(user);
-//         }
-//         return res.status(404).json({ 'msg': 'Invalid username and Password' });
-//     });
+    // User.find({ user_type: req.body.user_type}, (err, user) => {
+    //     if (err) {
+    //         return res.status(400).json({ 'msg': err });
+    //     }
+    //     if (user) {
+    //         return res.status(201).json(user);
+    //     }
+    //     return res.status(404).json({ 'msg': 'Invalid username and Password' });
+    // });
 // };
 exports.getlectures = (req, res) => {
     // console.log(req.body)
@@ -122,11 +122,6 @@ exports.getstudents = (req, res) => {
     console.log(req.body)
     var year1 = req.body.year;
     var year2=parseInt(year1);
-    // User.find({ user_type: req.body.user_type}, (err, user) => {
-    //     if (err) {
-    //         return res.status(400).json({ 'msg': err });
-    //     }
-    //     if (user) {
             User.aggregate([
                 {
                     $lookup: {
@@ -139,13 +134,15 @@ exports.getstudents = (req, res) => {
                 {
                     $match:{
                         "user_type":"Student",
-                        "stud_details.year":year2
+                        "stud_details.year":year2,
+                        "stud_details.rollno":{"$exists":true}
                     }
                 }
             ]).exec(
                 function(err,data){
                     if(err){throw err}
                     if(data){
+                        console.log(data);
                         return res.status(201).json(data);
                     }
                 }

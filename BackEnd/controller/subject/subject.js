@@ -29,3 +29,34 @@ exports.subjectadd = (req, res) => {
 
     });
 };
+exports.showsubdetails = (req, res) => {
+    console.log(req.body)
+    var semester = req.body.semester;
+    // var semester1=parseInt(semester);
+    // console.log(semester1);
+    Subject.aggregate([
+        {
+            $lookup: {
+              from: "subjectassigns",
+              localField: "_id",
+              foreignField: "subid",
+              as: "sub_details"
+            }
+        },
+        {
+            $match:{
+                // "user_type":"Student",
+                "semester":semester,
+                "sub_details.subteacherfname":{"$exists":true}
+            }
+        }
+    ]).exec(
+        function(err,data){
+            if(err){throw err}
+            if(data){
+                console.log(data);
+                return res.status(201).json(data);
+            }
+        }
+    )
+};

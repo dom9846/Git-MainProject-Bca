@@ -76,8 +76,10 @@ class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachdepattdncemark")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachdepattdncemark",
+                          arguments: '1')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -93,8 +95,10 @@ class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachdepattdncemark")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachdepattdncemark",
+                          arguments: '2')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -110,8 +114,10 @@ class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachdepattdncemark")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachdepattdncemark",
+                          arguments: '3')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -127,8 +133,10 @@ class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachdepattdncemark")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachdepattdncemark",
+                          arguments: '4')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -144,8 +152,10 @@ class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachdepattdncemark")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachdepattdncemark",
+                          arguments: '5')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -161,8 +171,10 @@ class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachdepattdncemark")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachdepattdncemark",
+                          arguments: '6')
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(

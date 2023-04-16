@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
+import 'package:mainproject/teacher/screens/department/subject/existingwork_screen.dart';
 
 class SubjectWork_Screen extends StatefulWidget {
   const SubjectWork_Screen({super.key});
@@ -13,6 +14,10 @@ class SubjectWork_Screen extends StatefulWidget {
 class _SubjectWork_ScreenState extends State<SubjectWork_Screen> {
   @override
   Widget build(BuildContext context) {
+    final arguments =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final subjectid = arguments?['subjectid'];
+    final semester = arguments?['semester'];
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -77,8 +82,13 @@ class _SubjectWork_ScreenState extends State<SubjectWork_Screen> {
                 ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachdepexistwork")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachdepexistwork",
+                          arguments: {
+                            'subjectid': subjectid,
+                            'semester': semester,
+                          })
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Row(
@@ -97,8 +107,13 @@ class _SubjectWork_ScreenState extends State<SubjectWork_Screen> {
                 // ),
                 Card(
                   child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachdepnewwork")},
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachdepnewwork",
+                          arguments: {
+                            'subjectid': subjectid,
+                            'semester': semester,
+                          })
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Row(

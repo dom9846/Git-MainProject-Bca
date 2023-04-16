@@ -1,8 +1,15 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_interpolation_to_compose_strings
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mainproject/services/getuser_service.dart';
+import 'package:mainproject/services/timeattendint_service.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 import 'package:dropdown_button2/src/dropdown_button2.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 
 class MarkAttendance_Teacher extends StatefulWidget {
   const MarkAttendance_Teacher({super.key});
@@ -11,14 +18,131 @@ class MarkAttendance_Teacher extends StatefulWidget {
   State<MarkAttendance_Teacher> createState() => _MarkAttendance_TeacherState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String? semester, date = "", period;
-final List<String> items1 = ['1', '2', '3', '4', '5', '6'];
-final List<String> items2 = ['1', '2', '3', '4', '5', '6', '7'];
-
 class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
+  final _formkey = GlobalKey<FormState>();
+
+  String? jwt, userId;
+  String? semester, period, year = "";
+  final List<String> items2 = ['1', '2', '3', '4', '5', '6', '7'];
+  List<dynamic>? students;
+  List<dynamic> selectedOptions = [];
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+    });
+    getstudents();
+  }
+
+  getuserservice getstudservice = new getuserservice();
+  Future<void> getstudents() async {
+    print(semester);
+    if (semester == '1' || semester == '2') {
+      print("hello");
+      setState(() {
+        year = '1';
+      });
+    } else if (semester == '3' || semester == '4') {
+      setState(() {
+        year = '2';
+      });
+    } else if (semester == '5' || semester == '6') {
+      setState(() {
+        year = '3';
+      });
+    } else {}
+    // print(year);
+    try {
+      var user = jsonEncode({
+        "year": year,
+      });
+      final Response? res = await getstudservice.getstudentssall(user);
+      if (res!.statusCode == 201) {
+        setState(() {
+          students = res.data;
+        });
+        print(students);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
+  DateTime? _selectedDate;
+
+  void _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  timeattendintservice attendanceservice = new timeattendintservice();
+  Future<void> submit() async {
+    print(selectedOptions);
+    if (_formkey.currentState!.validate()) {
+      var attendance = jsonEncode({
+        "semester": semester,
+        "date": _selectedDate!.toIso8601String(),
+        "period": period,
+        "absentstudentlist": selectedOptions
+      });
+      print(attendance);
+      try {
+        final Response? res = await attendanceservice.putattendance(attendance);
+        // if (res!.statusCode == 401) {}
+        showError("Successfully Recorded", "Attendance");
+      } on DioError catch (err) {
+        if (err.response != null) {
+          if (err.response!.statusCode == 401) {
+            showError("Attendance Allready Marked", "Period Was Finished");
+          }
+        }
+      }
+    }
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Object? semesterofstudent =
+        ModalRoute.of(context as BuildContext)?.settings.arguments;
+    semester = semesterofstudent.toString();
+    // print(semester);
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -94,40 +218,26 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                         key: _formkey,
                         child: Column(
                           children: [
-                            TextFormField(
-                              keyboardType: TextInputType.datetime,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextFormField(
+                                    enabled: false,
+                                    decoration: InputDecoration(
+                                      labelText: _selectedDate == null
+                                          ? 'Select a date'
+                                          : DateFormat('yyyy-MM-dd')
+                                              .format(_selectedDate!),
+                                      border: OutlineInputBorder(),
                                     ),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 22, 47, 230),
-                                    ),
-                                  ),
-                                  labelText: "Date",
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter The Date",
-                                  hintStyle: TextStyle(
-                                      color: Color.fromARGB(255, 7, 7, 7)),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "This Field Cannot Be Empty";
-                                } else {
-                                  setState(() {
-                                    date = value;
-                                  });
-                                }
-                                return null;
-                              },
+                                ),
+                                SizedBox(width: 10.0),
+                                ElevatedButton(
+                                  onPressed: () => _selectDate(context),
+                                  child: Text('Select'),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: 30,
@@ -171,10 +281,10 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                                           ),
                                         ))
                                     .toList(),
-                                value: semester,
+                                value: period,
                                 onChanged: (value) {
                                   setState(() {
-                                    semester = value as String;
+                                    period = value as String;
                                   });
                                 },
                                 buttonStyleData: ButtonStyleData(
@@ -226,15 +336,50 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                             SizedBox(
                               height: 30,
                             ),
-                            Card(
-                              child: ListTile(
-                                title: Text('Student Name'),
-                                subtitle: Text('Roll No'),
-                                trailing: Checkbox(
-                                  value: true,
-                                  onChanged: (value) {},
+                            Column(
+                              children: [
+                                // Add other widgets here
+                                SizedBox(
+                                  height: 300,
+                                  child: ListView.builder(
+                                    itemCount: students?.length,
+                                    itemBuilder: (context, index) {
+                                      final student = students?[index];
+                                      // final studDetails =
+                                      //     student?['stud_details']?[0];
+                                      return CheckboxListTile(
+                                        title: Text(
+                                          (students?[index]?['firstname'] ??
+                                                  "Nill") +
+                                              " " +
+                                              (students?[index]
+                                                      ?['secondname'] ??
+                                                  "Nill"),
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        value: selectedOptions
+                                            .contains(students?[index]),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value != null) {
+                                              selectedOptions.add(student);
+                                            } else {
+                                              selectedOptions.remove(student);
+                                            }
+                                          });
+                                        },
+                                        subtitle: Text("Roll No:" +
+                                            (students?[index]?['stud_details']
+                                                    ?[0]?['rollno'] ??
+                                                "Nill")),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
                             SizedBox(
                               height: 40,
@@ -243,11 +388,7 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(80, 40)),
                                 onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    print(semester);
-                                    print(date);
-                                    print(period);
-                                  }
+                                  submit();
                                 },
                                 child: Text("Submit"))
                           ],
