@@ -129,6 +129,7 @@ class _TeachSubject_ListState extends State<TeachSubject_List> {
                                 arguments: {
                                   'subjectid': subdetail?['_id'],
                                   'semester': subdetail?['semester'],
+                                  'subname': subdetail?['subjectname'],
                                 })
                           },
                           child: Padding(

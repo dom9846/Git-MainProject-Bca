@@ -1,7 +1,7 @@
 var rateStudent = require('../../model/rating/ratestudent');
 const {ObjectId}=require('mongodb');
 exports.ratestudent = (req, res) => {
-    rateStudent.findOne({ teacherid: req.body.teacherid,studentid: req.body.studentid}, (err, rate) => {
+    rateStudent.findOne({ teacherid: req.body.teacherid,studentid: req.body.studentid,subjectid: req.body.subjectid}, (err, rate) => {
         if (err) {
             return res.status(400).json({ 'msg': err });
         }
@@ -11,8 +11,7 @@ exports.ratestudent = (req, res) => {
                 {
                   $set: 
                     {
-                        rating:req.body.rating,
-                        date:req.body.date
+                        rating:req.body.rating
                     }
                 },(err,u)=>{
                     if(err){
@@ -23,7 +22,8 @@ exports.ratestudent = (req, res) => {
                     }
                 } 
             )
-        }else{
+        }
+        else{
             let newstudentrate = rateStudent(req.body);
             newstudentrate.save((err, rate) => {
                 if (err) {
@@ -36,4 +36,15 @@ exports.ratestudent = (req, res) => {
         }     
     });
 
+};
+exports.retrieveratesofstud = (req, res) => {
+    console.log(req.body)
+    rateStudent.find({ semester: req.body.semester,studentid:req.body.studentid }, (err, rate) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (rate) {
+            return res.status(201).json(rate);
+        }
+    });
 };

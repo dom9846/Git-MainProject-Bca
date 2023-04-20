@@ -1,25 +1,24 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mainproject/services/rating_service.dart';
 import 'package:mainproject/student/assets/drawer.dart';
 
-import '../../../../services/timeattendint_service.dart';
-
-class StudentInternal_status extends StatefulWidget {
-  const StudentInternal_status({super.key});
+class Myrating_ScreenStud extends StatefulWidget {
+  const Myrating_ScreenStud({super.key});
 
   @override
-  State<StudentInternal_status> createState() => _StudentInternal_statusState();
+  State<Myrating_ScreenStud> createState() => _Myrating_ScreenStudState();
 }
 
-class _StudentInternal_statusState extends State<StudentInternal_status> {
+class _Myrating_ScreenStudState extends State<Myrating_ScreenStud> {
   // final _formkey = GlobalKey<FormState>();
   String? jwt, userId;
-  List? internals;
+  List? ratings;
   String? semester = "", studentfname = "", studentsname = "";
   final storage = new FlutterSecureStorage();
   Future<void> getToken() async {
@@ -30,20 +29,20 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
     getinternals();
   }
 
-  timeattendintservice internalservice = new timeattendintservice();
+  ratingService ratingservice = new ratingService();
   Future<void> getinternals() async {
-    var internalmark = jsonEncode({
+    var user = jsonEncode({
       "semester": semester,
       "studentid": userId,
     });
-    // print(internalmark);
+    print(user);
     try {
-      final Response? res = await internalservice.getinternal(internalmark);
+      final Response? res = await ratingservice.retrieveratesstud(user);
       if (res!.statusCode == 201) {
         setState(() {
-          internals = res.data;
+          ratings = res.data;
         });
-        print(internals);
+        print(ratings);
       }
     } on DioError catch (err) {
       if (err.response != null) {
@@ -62,6 +61,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
     final dynamic sub =
         ModalRoute.of(context as BuildContext)?.settings.arguments;
     semester = sub['semester'].toString();
+    print(semester);
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -112,7 +112,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                   height: 30,
                 ),
                 Text(
-                  'Internal For Subjects',
+                  'My Ratings',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -135,30 +135,30 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                           DataColumn(label: Text('SL No')),
                           DataColumn(label: Text('Subject Name')),
                           DataColumn(label: Text('Name Of Lecture')),
-                          DataColumn(label: Text('Internal Mark')),
+                          DataColumn(label: Text('Rating')),
                         ],
                         rows: List.generate(
-                          internals?.length ?? 0,
+                          ratings?.length ?? 0,
                           (index) {
-                            final internal = internals?[index];
+                            final rate = ratings?[index];
                             return DataRow(cells: [
                               DataCell(Text('${index + 1}')),
                               DataCell(
                                 Text(
-                                  (internal?['subname'] ?? "Nill"),
+                                  (rate?['subname'] ?? "Nill"),
                                 ),
                               ),
                               DataCell(
                                 Text(
-                                  (internal?['teachfname'] ?? "Nill") +
+                                  (rate?['teachfname'] ?? "Nill") +
                                       " " +
-                                      (internal?['teachsname'] ?? "Nill"),
+                                      (rate?['teachsname'] ?? "Nill"),
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ),
                               DataCell(
                                 Text(
-                                  (internal?['internalmark'] ?? "Nill"),
+                                  (rate?['rating'] ?? "Nill"),
                                 ),
                               )
                             ]);

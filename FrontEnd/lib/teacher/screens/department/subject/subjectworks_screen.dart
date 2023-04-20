@@ -18,6 +18,7 @@ class _SubjectWork_ScreenState extends State<SubjectWork_Screen> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final subjectid = arguments?['subjectid'];
     final semester = arguments?['semester'];
+    final subname = arguments?['subname'];
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -112,6 +113,7 @@ class _SubjectWork_ScreenState extends State<SubjectWork_Screen> {
                           arguments: {
                             'subjectid': subjectid,
                             'semester': semester,
+                            'subname': subname,
                           })
                     },
                     child: Padding(

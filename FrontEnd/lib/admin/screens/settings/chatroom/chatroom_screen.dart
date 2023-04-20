@@ -37,19 +37,12 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
           actions: [
             Container(
                 margin: EdgeInsets.only(right: 10),
-                child: IconButton(
+                child: TextButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/admnaddpost");
+                      Navigator.pushNamed(context, "/admnsettaddchatroom");
                     },
-                    // ignore: prefer_const_constructors
-                    icon: Icon(Icons.add_card_sharp))),
-            Container(
-                margin: EdgeInsets.only(right: 10),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/admnmessage");
-                    },
-                    icon: Icon(Icons.message_sharp)))
+                    icon: Icon(Icons.clear_all),
+                    label: Text("Create")))
           ],
         ),
         body: ListView(children: [
@@ -74,19 +67,6 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
                 SizedBox(
                   height: 30,
                 ),
-                TextButton(
-                    onPressed: () {
-                      {
-                        Navigator.pushNamed(context, "/admnsettaddchatroom");
-                      }
-                    },
-                    child: Text(
-                      "Add New Chat",
-                      style: TextStyle(color: Colors.blue),
-                    )),
-                SizedBox(
-                  height: 30,
-                ),
                 Card(
                   child: InkWell(
                     onTap: () =>
@@ -100,7 +80,7 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
                           SizedBox(width: 16),
                           Text("First Year"),
                           SizedBox(
-                            width: 200,
+                            width: 180,
                           ),
                           IconButton(
                               onPressed: () {},

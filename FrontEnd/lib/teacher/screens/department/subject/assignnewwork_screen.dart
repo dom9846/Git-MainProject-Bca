@@ -50,7 +50,7 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
   }
 
   subjectservice subassignworkservice = new subjectservice();
-  Future<void> assignsubwork(String sid, String sem) async {
+  Future<void> assignsubwork(String sid, String sem, String sname) async {
     print(sem);
     print(sid);
     if (_formkey.currentState!.validate()) {
@@ -59,6 +59,7 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
         "duedate": _selectedDate!.toIso8601String(),
         "activity": objective,
         "subjectid": sid,
+        "subjectname": sname,
         "semester": sem,
         "teacherid": userId,
         "date": _todaydate!.toIso8601String()
@@ -112,6 +113,7 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final subjectid = arguments?['subjectid'];
     final semester = arguments?['semester'];
+    final subname = arguments?['subname'];
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -348,7 +350,8 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
                                 style: ElevatedButton.styleFrom(
                                     fixedSize: Size(80, 40)),
                                 onPressed: () {
-                                  assignsubwork(subjectid, semester.toString());
+                                  assignsubwork(subjectid, semester.toString(),
+                                      subname.toString());
                                 },
                                 child: Text("Assign"))
                           ],

@@ -36,11 +36,11 @@ class _teach_DrawerState extends State<teach_Drawer> {
         designation = "Lecturer";
       }
     });
-    getadmin();
+    getteacher();
   }
 
   getuserservice getteacherservice = new getuserservice();
-  Future<void> getadmin() async {
+  Future<void> getteacher() async {
     try {
       var user = jsonEncode({
         "id": userId,
@@ -134,7 +134,7 @@ class _teach_DrawerState extends State<teach_Drawer> {
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                     SizedBox(
-                      height: 10,
+                      width: 10,
                     ),
                     Text(
                       secondname!,

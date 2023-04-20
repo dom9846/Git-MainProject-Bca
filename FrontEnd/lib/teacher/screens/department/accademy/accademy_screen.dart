@@ -92,37 +92,38 @@ class _Accademy_ScreenTeachState extends State<Accademy_ScreenTeach> {
                   ),
                 ),
                 Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(5),
-                  child: ExpansionTile(
-                    title: Text(
-                      'Assign Rating Task',
+                  child: InkWell(
+                    onTap: () =>
+                        {Navigator.pushNamed(context, "/teachdepassignrate")},
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Assign Rating Task"),
+                        ],
+                      ),
                     ),
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.all(15),
-                          child: Row(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    "Yes",
-                                    style: TextStyle(color: Colors.blue),
-                                  )),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    "No",
-                                    style: TextStyle(color: Colors.blue),
-                                  ))
-                            ],
-                          )),
-                    ],
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/teachviewassignedrates")
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("View Rating Tasks"),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 Card(

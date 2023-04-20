@@ -24,3 +24,15 @@ exports.subworksretrieve = (req, res) => {
         return res.status(404).json({ 'msg': 'Something Went Wrong' });
     });
 };
+exports.showsubdetailssemways = (req, res) => {
+    console.log(req.body)
+    subjectWork.find({semester: req.body.semester}, (err, subwork) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (subwork) {
+            return res.status(201).json(subwork);
+        }
+        return res.status(404).json({ 'msg': 'Something Went Wrong' });
+    });
+};

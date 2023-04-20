@@ -4,6 +4,12 @@ var assignrateTeacherSchema = new mongoose.Schema({
     teacherid: {
         type:ObjectId,
     },
+    teachfname: {
+        type:String,
+    },
+    teachsname: {
+        type:String,
+    },
     year: {
         type:String
     },

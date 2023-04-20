@@ -1,13 +1,22 @@
 var mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 var newpostSchema = new mongoose.Schema({
-    id: {
-        type:ObjectId,
+    post: {
+        type:String,
     },
     comment: {
         type:String,
     },
-    file: {
+    userid: {
+        type:ObjectId,
+    },
+    userpic:{
+        type:String
+    },
+    userfname:{
+        type:String
+    },
+    usersname:{
         type:String
     },
     datetime: {

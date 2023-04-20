@@ -1,11 +1,17 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, avoid_unnecessary_containers, duplicate_ignore, unused_local_variable
+// ignore_for_file: camel_case_types, prefer_const_constructors, avoid_unnecessary_containers, duplicate_ignore, unused_local_variable, curly_braces_in_flow_control_structures
 // import 'dart:io';
 
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/admin/assets/drawer.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mainproject/services/getuser_service.dart';
+import 'package:mainproject/services/post_service.dart';
 
 class Admin_Add_Post extends StatefulWidget {
   const Admin_Add_Post({super.key});
@@ -14,18 +20,119 @@ class Admin_Add_Post extends StatefulWidget {
   State<Admin_Add_Post> createState() => _Admin_Add_PostState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String content = "";
-
 class _Admin_Add_PostState extends State<Admin_Add_Post> {
-  File? _imageFile;
+  final _formkey = GlobalKey<FormState>();
+  String content = "";
+  String email = "", mobile = "", age = "", qualification = "", image = "";
+  String? propic = "", fname, sname;
+  XFile? _imageFile;
+  Uint8List? profilepic;
+  DateTime currentDateTime = DateTime.now();
+  final storage = new FlutterSecureStorage();
+  String? jwt, userId;
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      fname = allValues["fname"];
+      sname = allValues["sname"];
+    });
+    print(userId);
+    getadmin();
+  }
+
+  getuserservice getadminservice = new getuserservice();
+  Future<void> getadmin() async {
+    try {
+      var user = jsonEncode({
+        "id": userId,
+      });
+      final Response? res = await getadminservice.getadmin(user);
+      if (res!.statusCode == 201) {
+        setState(() {
+          propic = res.data["propic"];
+        });
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
+    List<String>? s = pickedFile?.path.toString().split("/");
+    final bytes = await File(pickedFile!.path).readAsBytes();
+    final base64 = base64Encode(bytes);
+
+    var pic =
+        "data:image/" + s![s.length - 1].split(".")[1] + ";base64," + base64;
+    print(pic);
     if (pickedFile != null) {
       setState(() {
-        _imageFile = File(pickedFile.path);
+        image = pic;
+        _imageFile = pickedFile;
       });
     }
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  if (title == "Click Ok") {
+                    Navigator.pushNamed(context, '/admndashboard');
+                  } else
+                    Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  PostService postservice = new PostService();
+  Future<void> postupload() async {
+    if (_formkey.currentState!.validate()) {
+      if (image.length == 0) {
+        showError("Select a profile picture", "Cannot Update");
+      } else {
+        var user = jsonEncode({
+          "post": image,
+          "comment": content,
+          "userid": userId,
+          "userpic": propic,
+          "userfname": fname,
+          "usersname": sname,
+          "datetime": currentDateTime.toIso8601String()
+        });
+        print(user);
+        try {
+          final Response? res = await postservice.newpost(user);
+          if (res!.statusCode == 201) {
+            showError("Successfully Added New Post", "Click Ok");
+          }
+        } on DioError catch (err) {
+          if (err.response != null) {
+            showError("Some Error Occured!", "Oops");
+          } else {
+            // Something happened in setting up or sending the request that triggered an Error
+            showError("Something Went Wrong!", "Cannot Be Done");
+          }
+        }
+      }
+    }
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
   }
 
   @override
@@ -105,7 +212,8 @@ class _Admin_Add_PostState extends State<Admin_Add_Post> {
                       child: Center(
                         child: _imageFile == null
                             ? Text('No image selected.')
-                            : Image.file(_imageFile!, fit: BoxFit.contain),
+                            : Image.file(File(_imageFile!.path),
+                                fit: BoxFit.contain),
                       ),
                     ),
                     SizedBox(
@@ -152,9 +260,6 @@ class _Admin_Add_PostState extends State<Admin_Add_Post> {
                             color: Colors.black,
                           ),
                         )),
-                    SizedBox(
-                      height: 20,
-                    ),
                     Form(
                         key: _formkey,
                         child: Column(
@@ -205,14 +310,13 @@ class _Admin_Add_PostState extends State<Admin_Add_Post> {
                                     fixedSize: Size(80, 40)),
                                 onPressed: () {
                                   if (_formkey.currentState!.validate()) {
-                                    // print(identity);
-                                    // print(firstname);
-                                    // print(secondname);
-                                    Navigator.pushNamed(
-                                        context, "/admndashboard");
+                                    postupload();
                                   }
                                 },
-                                child: Text("Post"))
+                                child: Text("Post")),
+                            SizedBox(
+                              height: 70,
+                            )
                           ],
                         )),
                   ],

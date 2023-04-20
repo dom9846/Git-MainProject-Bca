@@ -79,7 +79,7 @@ class _MyWidgetState extends State<attendance_screen> {
                   child: InkWell(
                     onTap: () => {
                       Navigator.pushNamed(context, "/admndepattdncedate",
-                          arguments: '1')
+                          arguments: {'sem': '1'})
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -88,7 +88,7 @@ class _MyWidgetState extends State<attendance_screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("First Year"),
+                          Text("Semester 1"),
                         ],
                       ),
                     ),
@@ -98,7 +98,7 @@ class _MyWidgetState extends State<attendance_screen> {
                   child: InkWell(
                     onTap: () => {
                       Navigator.pushNamed(context, "/admndepattdncedate",
-                          arguments: '2')
+                          arguments: {'sem': '2'})
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -107,7 +107,7 @@ class _MyWidgetState extends State<attendance_screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Second Year"),
+                          Text("Semester 2"),
                         ],
                       ),
                     ),
@@ -117,7 +117,7 @@ class _MyWidgetState extends State<attendance_screen> {
                   child: InkWell(
                     onTap: () => {
                       Navigator.pushNamed(context, "/admndepattdncedate",
-                          arguments: '3')
+                          arguments: {'sem': '3'})
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -126,7 +126,64 @@ class _MyWidgetState extends State<attendance_screen> {
                         children: [
                           Icon(Icons.onetwothree_outlined),
                           SizedBox(width: 16),
-                          Text("Third Year"),
+                          Text("Semester 3"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepattdncedate",
+                          arguments: {'sem': '4'})
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 4"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepattdncedate",
+                          arguments: {'sem': '5'})
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 5"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "/admndepattdncedate",
+                          arguments: {'sem': '6'})
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Icon(Icons.onetwothree_outlined),
+                          SizedBox(width: 16),
+                          Text("Semester 6"),
                         ],
                       ),
                     ),

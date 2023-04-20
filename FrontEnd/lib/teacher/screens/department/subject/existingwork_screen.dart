@@ -186,7 +186,13 @@ class _ExistingSubjectWork_ScreenState
                                             MainAxisAlignment.center,
                                         children: [
                                           TextButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.pushNamed(context,
+                                                    "/teachdepsubmittedworks",
+                                                    arguments: {
+                                                      'workid': subwork?['_id']
+                                                    });
+                                              },
                                               child:
                                                   Text("List Of Submissions"))
                                         ],

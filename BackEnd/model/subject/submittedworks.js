@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
-var rateTeacherSchema = new mongoose.Schema({
+var submittedworkSchema = new mongoose.Schema({
     id: {
         type:ObjectId,
     },
@@ -13,20 +13,14 @@ var rateTeacherSchema = new mongoose.Schema({
     studentsname: {
         type:String
     },
-    rating1: {
+    semester: {
         type:String
     },
-    rating2: {
-        type:String
-    },
-    rating3: {
-        type:String
-    },
-    overall: {
+    workfile: {
         type:String
     },
     date: {
         type:Date
     }
 })
-module.exports = mongoose.model("rateteacher", rateTeacherSchema);
+module.exports = mongoose.model("submittedworks", submittedworkSchema);

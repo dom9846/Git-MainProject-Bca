@@ -27,31 +27,41 @@ exports.timetableupdate = (req, res) => {
                     }
                 } 
             )
+        }else{
+            let newUser = timetable(req.body);
+            newUser.save((err, user) => {
+                if (err) {
+                    return res.status(400).json({ 'msg': err });
+                }
+                else if(user){
+                    return res.status(201).json({'msg': "Successfully Added"});
+                }
+            });      
         }
     });
 };
-exports.timetableadd = (req, res) => {
-    console.log(req.body)
-    timetable.findOne({ identity: req.body.identity }, (err, user) => {
-        if (err) {
-            // console.log("err")
-            return res.status(400).json({ 'msg': err });
-        }
-        if (user) {
-            return res.status(400).json({ 'msg': 'Try later' });
-        }
-        let newUser = timetable(req.body);
-        newUser.save((err, user) => {
-            if (err) {
-                return res.status(400).json({ 'msg': err });
-            }
-            else if(user){
-                return res.status(201).json({'msg': "Successfully Added"});
-            }
-        });
+// exports.timetableadd = (req, res) => {
+//     console.log(req.body)
+//     timetable.findOne({ identity: req.body.identity }, (err, user) => {
+//         if (err) {
+//             // console.log("err")
+//             return res.status(400).json({ 'msg': err });
+//         }
+//         if (user) {
+//             return res.status(400).json({ 'msg': 'Try later' });
+//         }
+//         let newUser = timetable(req.body);
+//         newUser.save((err, user) => {
+//             if (err) {
+//                 return res.status(400).json({ 'msg': err });
+//             }
+//             else if(user){
+//                 return res.status(201).json({'msg': "Successfully Added"});
+//             }
+//         });
 
-    });
-};
+//     });
+// };
 
 exports.timetableretrieve = (req, res) => {
     console.log(req.body)

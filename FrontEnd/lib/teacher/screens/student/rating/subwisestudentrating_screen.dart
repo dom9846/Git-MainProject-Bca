@@ -1,6 +1,11 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mainproject/services/subject_service.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 
 class Subjectwisestudent_raing extends StatefulWidget {
@@ -12,6 +17,42 @@ class Subjectwisestudent_raing extends StatefulWidget {
 }
 
 class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
+  String? jwt, userId;
+  List? subdetails;
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+    });
+    getsubjectsassigned();
+  }
+
+  subjectservice subjectretrieve = new subjectservice();
+  Future<void> getsubjectsassigned() async {
+    var subject = jsonEncode({'subteacher': userId});
+    print(subject);
+    try {
+      final Response? res =
+          await subjectretrieve.retrieveassignedsubjects(subject);
+      if (res!.statusCode == 201) {
+        setState(() {
+          subdetails = res.data;
+        });
+        print(subdetails);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        if (err.response!.statusCode == 401) {}
+      }
+    }
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -76,38 +117,45 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
                 SizedBox(
                   height: 30,
                 ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudsrating")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Subject Name 1"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/teachstudsrating")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Subject Name 2"),
-                        ],
-                      ),
-                    ),
+                SizedBox(
+                  height: 500,
+                  child: ListView.builder(
+                    itemCount: subdetails?.length,
+                    itemBuilder: (context, index) {
+                      final subdetail = subdetails?[index];
+                      return Card(
+                        child: InkWell(
+                          onTap: () => {
+                            Navigator.pushNamed(context, "/teachstudsrating",
+                                arguments: {
+                                  'subjectid': subdetail?['_id'],
+                                  'subjectname': subdetail?['subjectname'],
+                                  'semester': subdetail?['semester'],
+                                })
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              // ignore: prefer_const_literals_to_create_immutables
+                              children: [
+                                Title(
+                                    color: Colors.black,
+                                    child: Text(
+                                      (subdetail?['subjectname'] ?? "Nill"),
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    )),
+                                SizedBox(height: 10),
+                                Text("Semester:" +
+                                    (subdetail?['semester'] ?? "Nill"))
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],

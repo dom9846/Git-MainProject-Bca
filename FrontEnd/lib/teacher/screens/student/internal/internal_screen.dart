@@ -22,6 +22,13 @@ String mark = "";
 class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
   String? jwt, userId, subjectid1 = "", semester = "", year = "";
   List? students;
+  String? propic = "",
+      fname = "",
+      sname = "",
+      age = "",
+      qualification = "",
+      designation = "",
+      subname;
   final storage = new FlutterSecureStorage();
   Future<void> getToken() async {
     Map<String, String> allValues = await storage.readAll();
@@ -29,6 +36,25 @@ class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
       userId = allValues["userid"];
     });
     getstudents();
+    getteacher();
+  }
+
+  getuserservice getteacherservice = new getuserservice();
+  Future<void> getteacher() async {
+    try {
+      var user = jsonEncode({
+        "id": userId,
+      });
+      final Response? res = await getteacherservice.getteacher(user);
+      if (res!.statusCode == 201) {
+        setState(() {
+          fname = res.data["fname"];
+          sname = res.data["sname"];
+        });
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
   }
 
   getuserservice getstudservice = new getuserservice();
@@ -66,23 +92,28 @@ class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
   }
 
   timeattendintservice internalservice = new timeattendintservice();
-  Future<void> submit() async {
+  Future<void> submit(String student, String internal) async {
     if (_formkey.currentState!.validate()) {
-      // var attendance = jsonEncode({
-      //   "semester": semester,
-      //   "date": _selectedDate!.toIso8601String(),
-      //   "period": period,
-      //   "absentstudentlist": selectedOptions
-      // });
-      // print(attendance);
+      var internalmark = jsonEncode({
+        "subjid": subjectid1,
+        "subname": subname,
+        "semester": semester,
+        "teachid": userId,
+        "teachfname": fname,
+        "teachsname": sname,
+        "studentid": student,
+        "internalmark": internal
+      });
+      print(internalmark);
       try {
-        // final Response? res = await internalservice.putattendance(attendance);
-        // if (res!.statusCode == 401) {}
-        showError("Successfully Recorded", "Attendance");
+        final Response? res = await internalservice.putinternal(internalmark);
+        if (res!.statusCode == 201) {
+          showError("Successfully Recorded", "Internal");
+        }
       } on DioError catch (err) {
         if (err.response != null) {
           if (err.response!.statusCode == 401) {
-            showError("Attendance Allready Marked", "Period Was Finished");
+            showError("Mark Allready Entered", "Cannot Done");
           }
         }
       }
@@ -100,9 +131,6 @@ class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
               TextButton(
                 child: Text("Ok"),
                 onPressed: () {
-                  // if (title == "Registration Successful") {
-                  //   // Navigator.pushNamed(context, '/login');
-                  // } else
                   Navigator.of(context).pop();
                 },
               )
@@ -121,6 +149,7 @@ class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
     final dynamic sub =
         ModalRoute.of(context as BuildContext)?.settings.arguments;
     subjectid1 = sub['subjectid'].toString();
+    subname = sub['subjectname'].toString();
     semester = sub['semester'].toString();
     print(semester);
     print(subjectid1);
@@ -233,8 +262,7 @@ class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
                                                   style: TextStyle(
                                                       color: Colors.black),
                                                   keyboardType:
-                                                      TextInputType.name,
-                                                  obscureText: true,
+                                                      TextInputType.number,
                                                   decoration: InputDecoration(
                                                       enabledBorder:
                                                           OutlineInputBorder(
@@ -274,6 +302,7 @@ class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
                                                     if (value == null ||
                                                         value.isEmpty) {
                                                       return "This Field Cannot Be Empty";
+                                                      // } else if (value > 0) {
                                                     } else {
                                                       setState(() {
                                                         mark = value;
@@ -291,7 +320,13 @@ class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
                                                             fixedSize:
                                                                 Size(80, 40)),
                                                     onPressed: () {
-                                                      submit();
+                                                      if (_formkey.currentState!
+                                                          .validate()) {
+                                                        submit(
+                                                            studentid
+                                                                .toString(),
+                                                            mark.toString());
+                                                      }
                                                     },
                                                     child: Text("Submit"))
                                               ],
@@ -305,7 +340,7 @@ class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
                       ),
                     ),
                   ],
-                ),
+                )
               ],
             )),
           ),

@@ -16,58 +16,65 @@ exports.assignrateteacher = (req, res) => {
                 return res.status(400).json({ 'msg': err });
             }
             if(assign){
-                req.body.id = ObjectId(assign._id)
-                let newteachrate = rateteacher(req.body);
-                newteachrate.save((err,rate) =>{
-                    if(err){
-                        return res.status(402).json({ 'msg': err });
-                    }
-                    if(rate){
-                        return res.status(201).json({ 'msg': 'Successfully Assigned!' });
-                    }
-                });
+                return res.status(201).json({ 'msg': 'Successfully Assigned!' });
             }
         });
     })
 
 };
 exports.rateTeacher = (req, res) => {
-    rateteacher.findOne({ id: req.body.id }, (err, user) => {
+    console.log(req);
+    rateteacher.findOne({ id: req.body.id,studentid:req.body.studentid }, (err, user) => {
         if (err) {
             // console.log("err")
             return res.status(400).json({ 'msg': err });
         }
         if (user) {
-            rateteacher.findOne({ id: req.body.id, studentid: req.body.studentid}, (err, u) => {
-                if(err){
-                    return res.status(401).json({ 'msg': 'error occured'});
+            return res.status(402).json({ 'msg': 'you have allready rated!'});
+        }else{
+            let newrate = rateteacher(req.body);
+            newrate.save((err, rate) => {
+                if (err) {
+                    return res.status(400).json({ 'msg': err });
                 }
-                if(u){
-                    return res.status(402).json({ 'msg': 'you have allready rated!'});
-                }else{
-                    rateteacher.updateOne( 
-                        { _id: ObjectId(user._id) }, 
-                        {
-                            $set: 
-                            {
-                                studentid:req.body.studentid,
-                                rating1:req.body.rating1,
-                                rating2:req.body.rating2,
-                                rating3:req.body.rating3,
-                                overall:req.body.overall,
-                                date:req.body.date,
-                            }
-                        },(err,u)=>{
-                            if(err){
-                                return res.status(400).json({ 'msg': "Error occured"});
-                            }
-                            if(u){
-                                return res.status(201).json({ 'msg': "Successfully Rated"});
-                            }
-                        } 
-                    )
+                if(rate){
+                    return res.status(201).json({ 'msg': 'Successfully rated!' });
                 }
-            })
+            });
         }
     });  
+};
+exports.ratetaskretrieve = (req, res) => {
+    console.log(req.body)
+    assignrateTeacher.find({ teacherid: req.body.teacherid}, (err, subj) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (subj) {
+            return res.status(201).json(subj);
+        }
+        // return res.status(404).json({ 'msg': 'Invalid username and Password' });
+    });
+};
+exports.ratetaskretrievebyyear = (req, res) => {
+    console.log(req.body)
+    assignrateTeacher.find({ year: req.body.year}, (err, task) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (task) {
+            return res.status(201).json(task);
+        }
+    });
+};
+exports.retrieverates = (req, res) => {
+    console.log(req.body)
+    rateteacher.find({ id: req.body.id }, (err, rate) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (rate) {
+            return res.status(201).json(rate);
+        }
+    });
 };

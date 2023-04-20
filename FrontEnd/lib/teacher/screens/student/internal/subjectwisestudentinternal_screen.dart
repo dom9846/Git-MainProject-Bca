@@ -129,6 +129,7 @@ class _SubjectWise_StudentState extends State<SubjectWise_StudentInternal> {
                             Navigator.pushNamed(context, "/teachstudsinternal",
                                 arguments: {
                                   'subjectid': subdetail?['_id'],
+                                  'subjectname': subdetail?['subjectname'],
                                   'semester': subdetail?['semester'],
                                 })
                           },

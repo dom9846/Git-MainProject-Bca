@@ -13,6 +13,9 @@ var subworkSchema = new mongoose.Schema({
     subjectid: {
         type:ObjectId
     },
+    subjectname: {
+        type:String
+    },
     semester:{
         type:String
     },

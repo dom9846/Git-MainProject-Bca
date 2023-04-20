@@ -20,3 +20,28 @@ exports.attendanceMark = (req, res) => {
         }
     });
 };
+exports.getsemattendances = (req, res) => {
+    console.log(req.body)
+    attendance.find({ semester:req.body.semester}, (err, allattend) => {
+        if (err) {
+            // console.log("err")
+            return res.status(400).json({ 'msg': err });
+        }
+        if (allattend) {
+            // console.log(allattend);
+            return res.status(201).json(allattend);
+        }
+    });
+};
+exports.getstudattendances = (req, res) => {
+    // console.log(req.body)
+    attendance.find({ semester:req.body.semester, 'absentstudentlist._id': req.body._id}, (err, studattend) => {
+        if (err) {
+            // console.log("err")
+            return res.status(400).json({ 'msg': err });
+        }
+        if (studattend) {
+            return res.status(201).json(studattend);
+        }
+    });
+};

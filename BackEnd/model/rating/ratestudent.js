@@ -4,14 +4,26 @@ var rateStudentSchema = new mongoose.Schema({
     teacherid: {
         type:ObjectId,
     },
+    teachfname: {
+        type:String,
+    },
+    teachsname: {
+        type:String,
+    },
+    subjectid: {
+        type:ObjectId,
+    },
+    subname: {
+        type:String,
+    },
+    semester: {
+        type:String,
+    },
     studentid: {
         type:ObjectId,
     },
     rating: {
         type:String
-    },
-    date: {
-        type:Date
     }
 })
 module.exports = mongoose.model("ratestudent", rateStudentSchema);

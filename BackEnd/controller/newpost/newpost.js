@@ -11,3 +11,14 @@ exports.addpost = (req, res) => {
         }
     });
 };
+exports.retrieveallposts = (req, res) => {
+    console.log(req.body)
+    newPost.find({}, (err, post) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (post) {
+            return res.status(201).json(post);
+        }
+    });
+};

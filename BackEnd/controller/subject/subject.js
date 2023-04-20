@@ -60,3 +60,16 @@ exports.showsubdetails = (req, res) => {
         }
     )
 };
+exports.subjectretrieve = (req, res) => {
+    console.log(req.body)
+    Subject.findOne({ _id: req.body._id }, (err, user) => {
+        if (err) {
+            // console.log("err")
+            return res.status(400).json({ 'msg': err });
+        }
+        if (user) {
+            return res.status(201).json({token,user});
+        }
+        return res.status(404).json({ 'msg': 'Invalid username and Password' });
+    });
+};

@@ -1,6 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_nullable_for_final_variable_declarations
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mainproject/services/getuser_service.dart';
+import 'package:mainproject/services/rating_service.dart';
 import 'package:mainproject/student/assets/drawer.dart';
 
 class StudentRateTeach_Form extends StatefulWidget {
@@ -10,12 +16,116 @@ class StudentRateTeach_Form extends StatefulWidget {
   State<StudentRateTeach_Form> createState() => _StudentRateTeach_FormState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String teaching = "", notes = "", behaviour = "";
-
 class _StudentRateTeach_FormState extends State<StudentRateTeach_Form> {
+  final _formkey = GlobalKey<FormState>();
+  String? teaching = "", notes = "", behaviour = "", taskid;
+  int? num1, num2, num3, sum;
+  double? overall;
+  String? jwt, userId;
+  List? ratetasks;
+  String? year = "", studentfname = "", studentsname = "";
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+    });
+    getstudent();
+  }
+
+  getuserservice getstudentservice = new getuserservice();
+  Future<void> getstudent() async {
+    try {
+      var user = jsonEncode({
+        "id": userId,
+      });
+      final Response? res = await getstudentservice.getstudent(user);
+      print(res);
+      if (res!.statusCode == 201) {
+        setState(() {
+          studentfname = res.data["fname"].toString();
+          studentsname = res.data["sname"].toString();
+          // year = res.data["year"].toString();
+        });
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+    // retrieveassignedrating();
+  }
+
+  ratingService rateteacherservice = new ratingService();
+  DateTime currentDateTime = DateTime.now();
+  Future<void> rateteacherbystud() async {
+    if (_formkey.currentState!.validate()) {
+      if (teaching != null && notes != null && behaviour != null) {
+        num1 = int.parse(teaching.toString());
+        num2 = int.parse(notes.toString());
+        num3 = int.parse(behaviour.toString());
+        sum = (num1 ?? 0) + (num2 ?? 0) + (num3 ?? 0);
+        overall = sum! / 3;
+      }
+      print(taskid);
+      print(overall);
+      var rate = jsonEncode({
+        "id": taskid,
+        "studentid": userId,
+        "studentfname": studentfname,
+        "studentsname": studentsname,
+        "rating1": teaching,
+        "rating2": notes,
+        "rating3": behaviour,
+        "overall": overall,
+        "date": currentDateTime.toIso8601String()
+      });
+      print(rate);
+      try {
+        final Response? res = await rateteacherservice.rateteacher(rate);
+        if (res!.statusCode == 201) {
+          showError("Successfully rated!", "Committed");
+        }
+      } on DioError catch (err) {
+        if (err.response != null) {
+          if (err.response!.statusCode == 402) {
+            showError("You Have Allready Rated!", "Cannot Done");
+          }
+        }
+      }
+    }
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final dynamic id =
+        ModalRoute.of(context as BuildContext)?.settings.arguments;
+    taskid = id['taskid'].toString();
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -170,7 +280,6 @@ class _StudentRateTeach_FormState extends State<StudentRateTeach_Form> {
                             TextFormField(
                               keyboardType: TextInputType.number,
                               style: TextStyle(color: Colors.black),
-                              obscureText: true,
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -211,9 +320,7 @@ class _StudentRateTeach_FormState extends State<StudentRateTeach_Form> {
                                     fixedSize: Size(80, 40)),
                                 onPressed: () {
                                   if (_formkey.currentState!.validate()) {
-                                    print(teaching);
-                                    print(notes);
-                                    print(behaviour);
+                                    rateteacherbystud();
                                   }
                                 },
                                 child: Text("Submit"))

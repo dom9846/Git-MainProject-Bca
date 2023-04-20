@@ -1,9 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mainproject/services/getuser_service.dart';
+import 'package:mainproject/services/post_service.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 
 class TeachAddNew_Post extends StatefulWidget {
@@ -13,18 +19,119 @@ class TeachAddNew_Post extends StatefulWidget {
   State<TeachAddNew_Post> createState() => _TeachAddNew_PostState();
 }
 
-final _formkey = GlobalKey<FormState>();
-String content = "";
-
 class _TeachAddNew_PostState extends State<TeachAddNew_Post> {
-  File? _imageFile;
+  final _formkey = GlobalKey<FormState>();
+  String content = "";
+  String email = "", mobile = "", age = "", qualification = "", image = "";
+  String? propic = "", fname, sname;
+  XFile? _imageFile;
+  Uint8List? profilepic;
+  DateTime currentDateTime = DateTime.now();
+  final storage = new FlutterSecureStorage();
+  String? jwt, userId;
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+    });
+    print(userId);
+    getteacher();
+  }
+
+  getuserservice getteacherservice = new getuserservice();
+  Future<void> getteacher() async {
+    try {
+      var user = jsonEncode({
+        "id": userId,
+      });
+      final Response? res = await getteacherservice.getteacher(user);
+      if (res!.statusCode == 201) {
+        setState(() {
+          propic = res.data["propic"];
+          fname = res.data["fname"];
+          sname = res.data["sname"];
+        });
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
+    List<String>? s = pickedFile?.path.toString().split("/");
+    final bytes = await File(pickedFile!.path).readAsBytes();
+    final base64 = base64Encode(bytes);
+
+    var pic =
+        "data:image/" + s![s.length - 1].split(".")[1] + ";base64," + base64;
+    print(pic);
     if (pickedFile != null) {
       setState(() {
-        _imageFile = File(pickedFile.path);
+        image = pic;
+        _imageFile = pickedFile;
       });
     }
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  if (title == "Click Ok") {
+                    Navigator.pushNamed(context, '/teachdashboard');
+                  } else
+                    Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  PostService postservice = new PostService();
+  Future<void> postupload() async {
+    if (_formkey.currentState!.validate()) {
+      if (image.length == 0) {
+        showError("Select a profile picture", "Cannot Update");
+      } else {
+        var user = jsonEncode({
+          "post": image,
+          "comment": content,
+          "userid": userId,
+          "userpic": propic,
+          "userfname": fname,
+          "usersname": sname,
+          "datetime": currentDateTime.toIso8601String()
+        });
+        print(user);
+        try {
+          final Response? res = await postservice.newpost(user);
+          if (res!.statusCode == 201) {
+            showError("Successfully Added New Post", "Click Ok");
+          }
+        } on DioError catch (err) {
+          if (err.response != null) {
+            showError("Some Error Occured!", "Oops");
+          } else {
+            // Something happened in setting up or sending the request that triggered an Error
+            showError("Something Went Wrong!", "Cannot Be Done");
+          }
+        }
+      }
+    }
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
   }
 
   @override
@@ -104,7 +211,8 @@ class _TeachAddNew_PostState extends State<TeachAddNew_Post> {
                       child: Center(
                         child: _imageFile == null
                             ? Text('No image selected.')
-                            : Image.file(_imageFile!, fit: BoxFit.contain),
+                            : Image.file(File(_imageFile!.path),
+                                fit: BoxFit.contain),
                       ),
                     ),
                     SizedBox(
@@ -204,10 +312,7 @@ class _TeachAddNew_PostState extends State<TeachAddNew_Post> {
                                     fixedSize: Size(80, 40)),
                                 onPressed: () {
                                   if (_formkey.currentState!.validate()) {
-                                    // print(identity);
-                                    // print(firstname);
-                                    // print(secondname);
-                                    Navigator.pushNamed(context, "/");
+                                    postupload();
                                   }
                                 },
                                 child: Text("Post"))

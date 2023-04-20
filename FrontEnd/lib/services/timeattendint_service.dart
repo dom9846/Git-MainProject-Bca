@@ -22,6 +22,32 @@ class timeattendintservice {
     return response;
   }
 
+  getstudattendances(String user) async {
+    // print(user);
+    final response = await dio.post(url + "getstudattendances", data: user);
+    // print(response);
+    return response;
+  }
+
+  getallattendances(String sem) async {
+    // print(sem);
+    final response = await dio.post(url + "getallattendances", data: sem);
+    // print(response);
+    return response;
+  }
+
+  putinternal(String internalmark) async {
+    final response =
+        await dio.post(url + "putinternalmark", data: internalmark);
+    return response;
+  }
+
+  getinternal(String internalmark) async {
+    final response =
+        await dio.post(url + "getinternalmark", data: internalmark);
+    return response;
+  }
+
   // subjectassign(String subject) async {
   //   final response = await dio.post(url + "subjectadd", data: subject);
   //   return response;

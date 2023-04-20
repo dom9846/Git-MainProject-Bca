@@ -1,49 +1,46 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: unnecessary_cast, prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mainproject/student/assets/drawer.dart';
+import 'package:intl/intl.dart';
+import 'package:mainproject/services/rating_service.dart';
+import 'package:mainproject/teacher/assets/drawer.dart';
 
-import '../../../../services/timeattendint_service.dart';
-
-class StudentInternal_status extends StatefulWidget {
-  const StudentInternal_status({super.key});
+class RateTask_Status extends StatefulWidget {
+  const RateTask_Status({super.key});
 
   @override
-  State<StudentInternal_status> createState() => _StudentInternal_statusState();
+  State<RateTask_Status> createState() => _RateTask_StatusState();
 }
 
-class _StudentInternal_statusState extends State<StudentInternal_status> {
-  // final _formkey = GlobalKey<FormState>();
-  String? jwt, userId;
-  List? internals;
-  String? semester = "", studentfname = "", studentsname = "";
+class _RateTask_StatusState extends State<RateTask_Status> {
+  String? jwt, userId, workid = "", semester = "";
+  List? rates;
   final storage = new FlutterSecureStorage();
   Future<void> getToken() async {
     Map<String, String> allValues = await storage.readAll();
     setState(() {
       userId = allValues["userid"];
     });
-    getinternals();
+    retrieverates();
   }
 
-  timeattendintservice internalservice = new timeattendintservice();
-  Future<void> getinternals() async {
-    var internalmark = jsonEncode({
-      "semester": semester,
-      "studentid": userId,
+  ratingService rateservice = new ratingService();
+  Future<void> retrieverates() async {
+    var rate = jsonEncode({
+      "id": workid,
     });
-    // print(internalmark);
+    print(rate);
     try {
-      final Response? res = await internalservice.getinternal(internalmark);
+      final Response? res = await rateservice.retrieverates(rate);
       if (res!.statusCode == 201) {
         setState(() {
-          internals = res.data;
+          rates = res.data;
         });
-        print(internals);
+        print(rates);
       }
     } on DioError catch (err) {
       if (err.response != null) {
@@ -61,7 +58,10 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
   Widget build(BuildContext context) {
     final dynamic sub =
         ModalRoute.of(context as BuildContext)?.settings.arguments;
-    semester = sub['semester'].toString();
+    workid = sub['workid'].toString();
+    print("object");
+    print(workid);
+    print("object");
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -88,7 +88,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/studaddnewpost");
+                      Navigator.pushNamed(context, "/teachaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -96,7 +96,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/studmessage");
+                      Navigator.pushNamed(context, "/teachmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
@@ -112,7 +112,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                   height: 30,
                 ),
                 Text(
-                  'Internal For Subjects',
+                  'List Of Ratings',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -133,34 +133,65 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                       child: DataTable(
                         columns: [
                           DataColumn(label: Text('SL No')),
-                          DataColumn(label: Text('Subject Name')),
-                          DataColumn(label: Text('Name Of Lecture')),
-                          DataColumn(label: Text('Internal Mark')),
+                          DataColumn(label: Text('Student Name')),
+                          DataColumn(label: Text('Teaching')),
+                          DataColumn(label: Text('Notes')),
+                          DataColumn(label: Text('Behaviour')),
+                          DataColumn(label: Text('Overall')),
+                          DataColumn(label: Text('Date')),
                         ],
                         rows: List.generate(
-                          internals?.length ?? 0,
+                          rates?.length ?? 0,
                           (index) {
-                            final internal = internals?[index];
+                            String file;
+                            final rate = rates?[index];
+                            final dateTimeString1 = rate?['date'];
+                            final dateTime1 = dateTimeString1 != null
+                                ? DateTime.parse(dateTimeString1)
+                                : null;
+                            final dateString1 = dateTime1 != null
+                                ? DateFormat("dd-MM-yyyy").format(dateTime1)
+                                : null;
+                            String doubleString = rate?['overall'];
+                            double doubleValue = double.parse(doubleString);
+                            String formattedStringoverall =
+                                doubleValue.toStringAsFixed(1);
                             return DataRow(cells: [
                               DataCell(Text('${index + 1}')),
                               DataCell(
                                 Text(
-                                  (internal?['subname'] ?? "Nill"),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  (internal?['teachfname'] ?? "Nill") +
+                                  (rate?['studentfname'] ?? "Nill") +
                                       " " +
-                                      (internal?['teachsname'] ?? "Nill"),
+                                      (rate?['studentsname'] ?? "Nill"),
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ),
                               DataCell(
                                 Text(
-                                  (internal?['internalmark'] ?? "Nill"),
+                                  (rate?['rating1'] ?? "Nill"),
                                 ),
-                              )
+                              ),
+                              DataCell(
+                                Text(
+                                  (rate?['rating2'] ?? "Nill"),
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  (rate?['rating3'] ?? "Nill"),
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  (formattedStringoverall),
+                                ),
+                              ),
+                              DataCell(
+                                dateString1 != null
+                                    ? Text(dateString1,
+                                        style: TextStyle(fontSize: 18))
+                                    : Text("Null"),
+                              ),
                             ]);
                           },
                         ),
@@ -172,7 +203,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
             )),
           ),
         ]),
-        drawer: studDrawer(),
+        drawer: teach_Drawer(),
       ),
     );
   }

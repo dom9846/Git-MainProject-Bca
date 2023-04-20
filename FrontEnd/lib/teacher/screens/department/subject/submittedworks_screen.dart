@@ -5,45 +5,45 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mainproject/student/assets/drawer.dart';
+import 'package:intl/intl.dart';
+import 'package:mainproject/services/subject_service.dart';
+import 'package:mainproject/teacher/assets/drawer.dart';
+// import 'package:pdf/pdf.dart';
+// import 'package:pdf/widgets.dart' as pw;
+// import 'package:pdf_flutter/pdf_flutter.dart';
 
-import '../../../../services/timeattendint_service.dart';
-
-class StudentInternal_status extends StatefulWidget {
-  const StudentInternal_status({super.key});
+class submittedWork_screen extends StatefulWidget {
+  const submittedWork_screen({super.key});
 
   @override
-  State<StudentInternal_status> createState() => _StudentInternal_statusState();
+  State<submittedWork_screen> createState() => _submittedWork_screenState();
 }
 
-class _StudentInternal_statusState extends State<StudentInternal_status> {
-  // final _formkey = GlobalKey<FormState>();
-  String? jwt, userId;
-  List? internals;
-  String? semester = "", studentfname = "", studentsname = "";
+class _submittedWork_screenState extends State<submittedWork_screen> {
+  String? jwt, userId, workid = "", semester = "";
+  List? submittedworks;
   final storage = new FlutterSecureStorage();
   Future<void> getToken() async {
     Map<String, String> allValues = await storage.readAll();
     setState(() {
       userId = allValues["userid"];
     });
-    getinternals();
+    retrievework();
   }
 
-  timeattendintservice internalservice = new timeattendintservice();
-  Future<void> getinternals() async {
-    var internalmark = jsonEncode({
-      "semester": semester,
-      "studentid": userId,
+  subjectservice submittedworkservice = new subjectservice();
+  Future<void> retrievework() async {
+    var work = jsonEncode({
+      "id": workid,
     });
-    // print(internalmark);
     try {
-      final Response? res = await internalservice.getinternal(internalmark);
+      final Response? res =
+          await submittedworkservice.retrievesubmittedwork(work);
       if (res!.statusCode == 201) {
         setState(() {
-          internals = res.data;
+          submittedworks = res.data;
         });
-        print(internals);
+        print(submittedworks);
       }
     } on DioError catch (err) {
       if (err.response != null) {
@@ -61,7 +61,9 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
   Widget build(BuildContext context) {
     final dynamic sub =
         ModalRoute.of(context as BuildContext)?.settings.arguments;
-    semester = sub['semester'].toString();
+    workid = sub['workid'].toString();
+    print(workid);
+    // semester = sub['semester'].toString();
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -88,7 +90,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/studaddnewpost");
+                      Navigator.pushNamed(context, "/teachaddnewpost");
                     },
                     // ignore: prefer_const_constructors
                     icon: Icon(Icons.add_card_sharp))),
@@ -96,7 +98,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/studmessage");
+                      Navigator.pushNamed(context, "/teachmessage");
                     },
                     icon: Icon(Icons.message_sharp)))
           ],
@@ -112,7 +114,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                   height: 30,
                 ),
                 Text(
-                  'Internal For Subjects',
+                  'List Of Submissions',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 24,
@@ -133,34 +135,50 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
                       child: DataTable(
                         columns: [
                           DataColumn(label: Text('SL No')),
-                          DataColumn(label: Text('Subject Name')),
-                          DataColumn(label: Text('Name Of Lecture')),
-                          DataColumn(label: Text('Internal Mark')),
+                          DataColumn(label: Text('Student Name')),
+                          DataColumn(label: Text('Assigned Work')),
+                          DataColumn(label: Text('Date')),
                         ],
                         rows: List.generate(
-                          internals?.length ?? 0,
+                          submittedworks?.length ?? 0,
                           (index) {
-                            final internal = internals?[index];
+                            String file;
+                            final submittedwork = submittedworks?[index];
+                            final dateTimeString1 = submittedwork?['date'];
+                            final dateTime1 = dateTimeString1 != null
+                                ? DateTime.parse(dateTimeString1)
+                                : null;
+                            final dateString1 = dateTime1 != null
+                                ? DateFormat("dd-MM-yyyy").format(dateTime1)
+                                : null;
+                            // if (submittedwork != null) {
+                            //   final pdfBase64 = submittedwork?['workfile'];
+                            //   final pdfBytes = base64Decode(pdfBase64);
+                            //   final pdfDoc = await PDFDocument.fromBytes(pdfBytes);
+                            //   file = PDF.network(
+                            //     pdfBase64,
+                            //     height: 40,
+                            //     width: 40,
+                            //   );
+                            // }
                             return DataRow(cells: [
                               DataCell(Text('${index + 1}')),
                               DataCell(
                                 Text(
-                                  (internal?['subname'] ?? "Nill"),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  (internal?['teachfname'] ?? "Nill") +
+                                  (submittedwork?['studentfname'] ?? "Nill") +
                                       " " +
-                                      (internal?['teachsname'] ?? "Nill"),
+                                      (submittedwork?['studentsname'] ??
+                                          "Nill"),
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ),
+                              DataCell(Icon(Icons.picture_as_pdf)),
                               DataCell(
-                                Text(
-                                  (internal?['internalmark'] ?? "Nill"),
-                                ),
-                              )
+                                dateString1 != null
+                                    ? Text(dateString1,
+                                        style: TextStyle(fontSize: 18))
+                                    : Text("Null"),
+                              ),
                             ]);
                           },
                         ),
@@ -172,7 +190,7 @@ class _StudentInternal_statusState extends State<StudentInternal_status> {
             )),
           ),
         ]),
-        drawer: studDrawer(),
+        drawer: teach_Drawer(),
       ),
     );
   }

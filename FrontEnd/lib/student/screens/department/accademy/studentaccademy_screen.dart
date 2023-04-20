@@ -77,7 +77,7 @@ class _StudentAccademy_ScreenState extends State<StudentAccademy_Screen> {
                 Card(
                   child: InkWell(
                     onTap: () => {
-                      Navigator.pushNamed(context, "/studdepaccdemytaskall")
+                      Navigator.pushNamed(context, "/studdepaccdemytaskview")
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),

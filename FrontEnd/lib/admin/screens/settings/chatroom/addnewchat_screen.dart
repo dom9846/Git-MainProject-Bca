@@ -1,8 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/admin/assets/drawer.dart';
 import 'package:dropdown_button2/src/dropdown_button2.dart';
+import 'package:mainproject/services/chat_service.dart';
 
 class addNew_chat extends StatefulWidget {
   const addNew_chat({super.key});
@@ -15,10 +19,72 @@ class _addNew_chatState extends State<addNew_chat> {
   final _formkey = GlobalKey<FormState>();
   String? selectedYear, header = "";
   final List<String> items = [
-    'Year 1',
-    'Year 2',
-    'Year 3',
+    '1',
+    '2',
+    '3',
   ];
+  chatService chatservice = chatService();
+  Future<void> addingteacher() async {
+    if (_formkey.currentState!.validate()) {
+      var user = jsonEncode({
+        "identity": identity,
+        "firstname": firstname,
+        "secondname": secondname,
+        "user_type": user_type,
+      });
+      try {
+        final Response? res = await regchecker.addteacher(user);
+        // if (res!.statusCode == 401) {}
+        showError("Successfully Added New Teacher", "Teacher");
+      } on DioError catch (err) {
+        if (err.response != null) {
+          // print(err.response!.data);
+          showError("User Allready Exist", "Cannot Be Done");
+        } else {
+          // Something happened in setting up or sending the request that triggered an Error
+          showError("Error occured,please try againlater", "Oops");
+        }
+      }
+    }
+  }
+
+  String? userId = "", firstname = "", secondname = "", usertype = "";
+  List? lectures;
+  // int? lecid;
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+    });
+    // getlectures();
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -96,6 +162,44 @@ class _addNew_chatState extends State<addNew_chat> {
                         key: _formkey,
                         child: Column(
                           children: [
+                            TextFormField(
+                              keyboardType: TextInputType.name,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Color.fromARGB(255, 22, 47, 230),
+                                    ),
+                                  ),
+                                  labelText: "Name",
+                                  labelStyle: TextStyle(color: Colors.black),
+                                  hintText: "Enter The Name Of Chat Room",
+                                  hintStyle: TextStyle(
+                                      color: Color.fromARGB(255, 7, 7, 7)),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  )),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "This Field Cannot Be Empty";
+                                } else {
+                                  setState(() {
+                                    header = value;
+                                  });
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
                             DropdownButtonHideUnderline(
                               child: DropdownButton2(
                                 isExpanded: true,
@@ -187,44 +291,6 @@ class _addNew_chatState extends State<addNew_chat> {
                                   padding: EdgeInsets.only(left: 14, right: 14),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            TextFormField(
-                              keyboardType: TextInputType.name,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 22, 47, 230),
-                                    ),
-                                  ),
-                                  labelText: "Name",
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  hintText: "Enter The Name Of Chat Room",
-                                  hintStyle: TextStyle(
-                                      color: Color.fromARGB(255, 7, 7, 7)),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "This Field Cannot Be Empty";
-                                } else {
-                                  setState(() {
-                                    header = value;
-                                  });
-                                }
-                                return null;
-                              },
                             ),
                             SizedBox(
                               height: 40,
