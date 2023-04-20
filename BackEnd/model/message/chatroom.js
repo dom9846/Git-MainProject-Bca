@@ -1,17 +1,11 @@
 var mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 var chatroomSchema = new mongoose.Schema({
-    year: {
+    roomname: {
         type:String,
     },
-    header: {
+    year: {
         type:String
-    },
-    owner: {
-        type:ObjectId
-    },
-    participant: {
-        type:ObjectId
     }
 })
 module.exports = mongoose.model("chatroom", chatroomSchema);

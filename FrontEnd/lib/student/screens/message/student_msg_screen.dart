@@ -1,6 +1,12 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, duplicate_ignore
+// ignore_for_file: camel_case_types, prefer_const_constructors, duplicate_ignore, avoid_print, prefer_const_literals_to_create_immutables
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mainproject/services/chat_service.dart';
+import 'package:mainproject/services/getuser_service.dart';
 import 'package:mainproject/student/assets/drawer.dart';
 
 class Student_Message extends StatefulWidget {
@@ -11,6 +17,64 @@ class Student_Message extends StatefulWidget {
 }
 
 class _Student_MessageState extends State<Student_Message> {
+  String? userId = "", firstname = "", secondname = "", usertype = "", year;
+  List? rooms;
+  // int? lecid;
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+    });
+    getstudent();
+  }
+
+  getuserservice getstudentservice = new getuserservice();
+  Future<void> getstudent() async {
+    try {
+      var user = jsonEncode({
+        "id": userId,
+      });
+      final Response? res = await getstudentservice.getstudent(user);
+      // print(res);
+      if (res!.statusCode == 201) {
+        setState(() {
+          year = res.data["year"].toString();
+        });
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+    getrooms();
+  }
+
+  chatService chatservice = new chatService();
+  Future<void> getrooms() async {
+    try {
+      var sem = jsonEncode({
+        "year": year,
+      });
+      print(sem);
+      final Response? res = await chatservice.getstudchatroom(sem);
+      if (res!.statusCode == 201) {
+        setState(() {
+          rooms = res.data;
+        });
+        print(rooms);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,52 +138,35 @@ class _Student_MessageState extends State<Student_Message> {
                 SizedBox(
                   height: 30,
                 ),
-                Card(
-                  child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/studchats")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Class Group"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/studchats")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Lecture-name"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/studchats")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          // ignore: prefer_const_constructors
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Admin"),
-                        ],
-                      ),
+                SizedBox(
+                  height: 500,
+                  child: Expanded(
+                    child: ListView.builder(
+                      itemCount: rooms?.length,
+                      itemBuilder: (context, index) {
+                        final room = rooms?[index];
+                        return Card(
+                          child: InkWell(
+                            onTap: () => {
+                              Navigator.pushNamed(context, "/studchats",
+                                  arguments: {'chatid': room?['_id']})
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                // ignore: prefer_const_literals_to_create_immutables
+                                children: [
+                                  Icon(Icons.onetwothree_outlined),
+                                  SizedBox(width: 16),
+                                  Expanded(
+                                    child: Text((room?['roomname'] ?? "Nill")),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),

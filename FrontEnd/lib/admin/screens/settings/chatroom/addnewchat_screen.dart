@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/admin/assets/drawer.dart';
@@ -24,25 +25,18 @@ class _addNew_chatState extends State<addNew_chat> {
     '3',
   ];
   chatService chatservice = chatService();
-  Future<void> addingteacher() async {
+  Future<void> addchat() async {
     if (_formkey.currentState!.validate()) {
-      var user = jsonEncode({
-        "identity": identity,
-        "firstname": firstname,
-        "secondname": secondname,
-        "user_type": user_type,
-      });
+      var info = jsonEncode({"roomname": header, "year": selectedYear});
+      print(info);
       try {
-        final Response? res = await regchecker.addteacher(user);
-        // if (res!.statusCode == 401) {}
-        showError("Successfully Added New Teacher", "Teacher");
+        final Response? res = await chatservice.addchat(info);
+        if (res!.statusCode == 201) {
+          showError("Successfully Added New ChatRoom", "Success");
+        }
       } on DioError catch (err) {
         if (err.response != null) {
-          // print(err.response!.data);
-          showError("User Allready Exist", "Cannot Be Done");
-        } else {
-          // Something happened in setting up or sending the request that triggered an Error
-          showError("Error occured,please try againlater", "Oops");
+          showError("Allready Exist", "Cannot Be Done");
         }
       }
     }
@@ -83,6 +77,11 @@ class _addNew_chatState extends State<addNew_chat> {
             ],
           );
         });
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
   }
 
   @override
@@ -300,8 +299,7 @@ class _addNew_chatState extends State<addNew_chat> {
                                     fixedSize: Size(80, 40)),
                                 onPressed: () {
                                   if (_formkey.currentState!.validate()) {
-                                    print(selectedYear);
-                                    print(header);
+                                    addchat();
                                   }
                                 },
                                 child: Text("Add"))

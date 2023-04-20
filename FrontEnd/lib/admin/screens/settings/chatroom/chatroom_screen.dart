@@ -1,7 +1,10 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, duplicate_ignore
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/admin/assets/drawer.dart';
+import 'package:mainproject/services/chat_service.dart';
 
 class Chat_Room_admn extends StatefulWidget {
   const Chat_Room_admn({super.key});
@@ -11,6 +14,41 @@ class Chat_Room_admn extends StatefulWidget {
 }
 
 class _Chat_Room_admnState extends State<Chat_Room_admn> {
+  String? userId = "", firstname = "", secondname = "", usertype = "";
+  List? rooms;
+  // int? lecid;
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+    });
+    getrooms();
+  }
+
+  chatService chatservice = new chatService();
+  Future<void> getrooms() async {
+    try {
+      final Response? res = await chatservice.getallchatroom("");
+      if (res!.statusCode == 201) {
+        setState(() {
+          rooms = res.data;
+        });
+        print(rooms);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +79,7 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
                     onPressed: () {
                       Navigator.pushNamed(context, "/admnsettaddchatroom");
                     },
-                    icon: Icon(Icons.clear_all),
+                    icon: Icon(Icons.add),
                     label: Text("Create")))
           ],
         ),
@@ -67,26 +105,35 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
                 SizedBox(
                   height: 30,
                 ),
-                Card(
-                  child: InkWell(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/admnsettchatbox")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("First Year"),
-                          SizedBox(
-                            width: 180,
+                SizedBox(
+                  height: 500,
+                  child: Expanded(
+                    child: ListView.builder(
+                      itemCount: rooms?.length,
+                      itemBuilder: (context, index) {
+                        final room = rooms?[index];
+                        return Card(
+                          child: InkWell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                // ignore: prefer_const_literals_to_create_immutables
+                                children: [
+                                  Icon(Icons.onetwothree_outlined),
+                                  SizedBox(width: 16),
+                                  Expanded(
+                                    child: Text((room?['roomname'] ?? "Nill")),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.delete_outlined),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.delete_outlined))
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ),
                 ),

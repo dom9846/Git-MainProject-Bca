@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, duplicate_ignore, camel_case_types
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mainproject/services/chat_service.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 
 class Teach_Message extends StatefulWidget {
@@ -11,6 +14,41 @@ class Teach_Message extends StatefulWidget {
 }
 
 class _Student_MessageState extends State<Teach_Message> {
+  String? userId = "", firstname = "", secondname = "", usertype = "";
+  List? rooms;
+  // int? lecid;
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+    });
+    getrooms();
+  }
+
+  chatService chatservice = new chatService();
+  Future<void> getrooms() async {
+    try {
+      final Response? res = await chatservice.getallchatroom("");
+      if (res!.statusCode == 201) {
+        setState(() {
+          rooms = res.data;
+        });
+        print(rooms);
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,69 +112,33 @@ class _Student_MessageState extends State<Teach_Message> {
                 SizedBox(
                   height: 30,
                 ),
-                Card(
-                  child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/teachchat")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("First Year"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/teachchat")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Second Year"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/teachchat")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          // ignore: prefer_const_constructors
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Third Year"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () => {Navigator.pushNamed(context, "/teachchat")},
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          // ignore: prefer_const_constructors
-                          Icon(Icons.onetwothree_outlined),
-                          SizedBox(width: 16),
-                          Text("Admin"),
-                        ],
-                      ),
+                SizedBox(
+                  height: 500,
+                  child: Expanded(
+                    child: ListView.builder(
+                      itemCount: rooms?.length,
+                      itemBuilder: (context, index) {
+                        final room = rooms?[index];
+                        return Card(
+                          child: InkWell(
+                            onTap: () =>
+                                {Navigator.pushNamed(context, "/teachchat")},
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                // ignore: prefer_const_literals_to_create_immutables
+                                children: [
+                                  Icon(Icons.onetwothree_outlined),
+                                  SizedBox(width: 16),
+                                  Expanded(
+                                    child: Text((room?['roomname'] ?? "Nill")),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),

@@ -7,8 +7,14 @@ var chatSchema = new mongoose.Schema({
     sender: {
         type:ObjectId,
     },
-    reciever: {
-        type:ObjectId
+    senderfname: {
+        type:String,
+    },
+    sendersname: {
+        type:String,
+    },
+    senderutype: {
+        type:String,
     },
     message: {
         type:String

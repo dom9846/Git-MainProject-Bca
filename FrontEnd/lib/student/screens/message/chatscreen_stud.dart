@@ -1,5 +1,10 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mainproject/services/chat_service.dart';
 import 'package:mainproject/student/assets/drawer.dart';
 
 class ChatScreen_Stud extends StatefulWidget {
@@ -13,11 +18,90 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
   final _textController = TextEditingController();
   final _scrollController = ScrollController();
   final _formkey = GlobalKey<FormState>();
-  String? message = "";
+  String? message = "", chatid;
+  String? userId = "", firstname = "", secondname = "", usertype = "", year;
+  List? messagebox;
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+    });
+  }
 
-  // List<String> _messages = [];
+  DateTime currentDateTime = DateTime.now();
+  chatService chatservice = chatService();
+  Future<void> sendstudmessage() async {
+    if (_formkey.currentState!.validate()) {
+      var msg = jsonEncode({
+        "id": chatid,
+        "sender": userId,
+        "senderfname": firstname,
+        "sendersname": secondname,
+        "senderutype": usertype,
+        "message": message,
+        "date": currentDateTime.toIso8601String(),
+      });
+      print(msg);
+      try {
+        final Response? res = await chatservice.sendmessage(msg);
+        if (res!.statusCode == 201) {}
+      } on DioError catch (err) {
+        if (err.response != null) {}
+      }
+    }
+  }
+
+  Future<void> getmessages() async {
+    if (_formkey.currentState!.validate()) {
+      var chid = jsonEncode({"id": chatid});
+      print(chid);
+      try {
+        final Response? res = await chatservice.getmessage(chid);
+        if (res!.statusCode == 201) {
+          setState(() {
+            messagebox = res.data;
+          });
+        }
+        print(messagebox);
+      } on DioError catch (err) {
+        if (err.response != null) {}
+      }
+    }
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {},
+              )
+            ],
+          );
+        });
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+    this.getmessages();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final dynamic sub =
+        ModalRoute.of(context as BuildContext)?.settings.arguments;
+    chatid = sub['chatid'].toString();
+    print(chatid);
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -57,6 +141,7 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
                     icon: Icon(Icons.message_sharp)))
           ],
         ),
+        // body: _MyBody(key: _bodyKey),
         body: Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.all(10),
@@ -130,41 +215,32 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 280,
+                      width: 270,
                       child: TextFormField(
                         controller: _textController,
                         decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Colors.black,
-                              ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.black,
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(255, 22, 47, 230),
-                              ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Color.fromARGB(255, 22, 47, 230),
                             ),
-                            hintText: "Type Your Message",
-                            hintStyle: TextStyle(
-                                color: Color.fromARGB(255, 12, 12, 12)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            )),
-                        onFieldSubmitted: (String value) {
-                          // setState(() {
-                          //   _messages.add(value);
-                          // });
-                          _textController.clear();
-                          _scrollController.animateTo(
-                            _scrollController.position.maxScrollExtent,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeOut,
-                          );
-                        },
+                          ),
+                          hintText: "Type Your Message",
+                          hintStyle: TextStyle(
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "This Field Cannot Be Empty";
@@ -178,18 +254,18 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
                       ),
                     ),
                     SizedBox(
-                      width: 20,
+                      width: 10,
                     ),
                     ElevatedButton(
-                        style:
-                            ElevatedButton.styleFrom(fixedSize: Size(50, 40)),
-                        onPressed: () {
-                          if (_formkey.currentState!.validate()) {
-                            print(message);
-                            // print(usertype);
-                          }
-                        },
-                        child: Text("Send"))
+                      style: ElevatedButton.styleFrom(fixedSize: Size(50, 40)),
+                      onPressed: () {
+                        if (_formkey.currentState!.validate()) {
+                          sendstudmessage();
+                          _textController.clear(); // clear the TextFormField
+                        }
+                      },
+                      child: Text("Send"),
+                    )
                   ],
                 ),
               ),
