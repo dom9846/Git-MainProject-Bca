@@ -1,11 +1,14 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors
+// ignore_for_file: camel_case_types, unnecessary_new, prefer_const_constructors, prefer_interpolation_to_compose_strings
+
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:mainproject/services/chat_service.dart';
 import 'package:mainproject/student/assets/drawer.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChatScreen_Stud extends StatefulWidget {
   const ChatScreen_Stud({super.key});
@@ -30,6 +33,7 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
       secondname = allValues["sname"];
       usertype = allValues["utype"];
     });
+    getmessages();
   }
 
   DateTime currentDateTime = DateTime.now();
@@ -45,7 +49,6 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
         "message": message,
         "date": currentDateTime.toIso8601String(),
       });
-      print(msg);
       try {
         final Response? res = await chatservice.sendmessage(msg);
         if (res!.statusCode == 201) {}
@@ -56,20 +59,17 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
   }
 
   Future<void> getmessages() async {
-    if (_formkey.currentState!.validate()) {
+    try {
       var chid = jsonEncode({"id": chatid});
-      print(chid);
-      try {
-        final Response? res = await chatservice.getmessage(chid);
-        if (res!.statusCode == 201) {
-          setState(() {
-            messagebox = res.data;
-          });
-        }
-        print(messagebox);
-      } on DioError catch (err) {
-        if (err.response != null) {}
+      final Response? res = await chatservice.getmessage(chid);
+      if (res!.statusCode == 201) {
+        setState(() {
+          messagebox = res.data;
+        });
       }
+      // print(messagebox);
+    } on DioError catch (err) {
+      if (err.response != null) {}
     }
   }
 
@@ -93,7 +93,6 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
   void initState() {
     super.initState();
     this.getToken();
-    this.getmessages();
   }
 
   @override
@@ -101,7 +100,6 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
     final dynamic sub =
         ModalRoute.of(context as BuildContext)?.settings.arguments;
     chatid = sub['chatid'].toString();
-    print(chatid);
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -149,62 +147,86 @@ class _ChatScreen_StudState extends State<ChatScreen_Stud> {
             children: [
               Expanded(
                 child: ListView(
-                  // controller: _scrollController,
-                  // itemCount: _messages.length,
-                  // itemBuilder: (BuildContext context, int index) {
-                  //   return Text(_messages[index]);
-                  // },
                   children: [
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            constraints: BoxConstraints(
-                              minWidth: 100,
-                              maxWidth: 350,
-                              minHeight: 30,
-                              maxHeight: 800,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              "Hello,How Are You?",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
                     SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            constraints: BoxConstraints(
-                              minWidth: 100,
-                              maxWidth: 350,
-                              minHeight: 30,
-                              maxHeight: 800,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              "Hai,I am Fine",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          )
-                        ],
+                      height: 500,
+                      child: ListView.builder(
+                        // controller: _scrollController,
+                        itemCount: messagebox?.length,
+                        itemBuilder: (context, index) {
+                          final msg = messagebox?[index];
+                          final dateTimeString1 = msg?['date'];
+                          final dateTime1 = dateTimeString1 != null
+                              ? DateTime.parse(dateTimeString1)
+                              : null;
+                          final dateString1 = dateTime1 != null
+                              ? DateFormat("dd-MM-yyyy").format(dateTime1)
+                              : null;
+                          final elapsed = dateTime1 != null
+                              ? timeago.format(dateTime1)
+                              : null;
+                          print('msg?["sender"]: ${msg?["sender"]}');
+                          print('userId: $userId');
+                          final isCurrentUser = msg?['sender'] == userId;
+                          return Row(
+                            mainAxisAlignment: isCurrentUser
+                                ? MainAxisAlignment.end
+                                : MainAxisAlignment.start,
+                            children: [
+                              Card(
+                                elevation: 3,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: BorderSide(
+                                      color: isCurrentUser
+                                          ? Colors.green
+                                          : Colors.grey),
+                                ),
+                                color:
+                                    isCurrentUser ? Colors.green : Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        (msg?['senderfname'] ?? '') +
+                                            "" +
+                                            (msg?['sendersname'] ?? ''),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: isCurrentUser
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        msg?['message'] ?? '',
+                                        style: TextStyle(
+                                          color: isCurrentUser
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        elapsed ?? 'N/A',
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          color: isCurrentUser
+                                              ? Colors.white
+                                              : Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ],

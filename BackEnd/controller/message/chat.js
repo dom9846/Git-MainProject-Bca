@@ -15,7 +15,7 @@ exports.sendmessage = (req,res) => {
 }
 exports.getmessage = (req,res) => {
     console.log(req.body)
-    chatRoom.find({ id: req.body.id }, (err, msg) => {
+    chat.find({ id: req.body.id }, (err, msg) => {
         if (err) {
             return res.status(400).json({ 'msg': err });
         }

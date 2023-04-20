@@ -1,6 +1,13 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
+import 'package:mainproject/services/chat_service.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class chat_Teach extends StatefulWidget {
   const chat_Teach({super.key});
@@ -13,11 +20,86 @@ class _chat_TeachState extends State<chat_Teach> {
   final _textController = TextEditingController();
   final _scrollController = ScrollController();
   final _formkey = GlobalKey<FormState>();
-  String? message = "";
+  String? message = "", chatid;
+  String? userId = "", firstname = "", secondname = "", usertype = "", year;
+  List? messagebox;
+  final storage = new FlutterSecureStorage();
+  Future<void> getToken() async {
+    Map<String, String> allValues = await storage.readAll();
+    setState(() {
+      userId = allValues["userid"];
+      firstname = allValues["fname"];
+      secondname = allValues["sname"];
+      usertype = allValues["utype"];
+    });
+    getmessages();
+  }
+
+  DateTime currentDateTime = DateTime.now();
+  chatService chatservice = chatService();
+  Future<void> sendstudmessage() async {
+    if (_formkey.currentState!.validate()) {
+      var msg = jsonEncode({
+        "id": chatid,
+        "sender": userId,
+        "senderfname": firstname,
+        "sendersname": secondname,
+        "senderutype": usertype,
+        "message": message,
+        "date": currentDateTime.toIso8601String(),
+      });
+      try {
+        final Response? res = await chatservice.sendmessage(msg);
+        if (res!.statusCode == 201) {}
+      } on DioError catch (err) {
+        if (err.response != null) {}
+      }
+    }
+  }
+
+  Future<void> getmessages() async {
+    try {
+      var chid = jsonEncode({"id": chatid});
+      final Response? res = await chatservice.getmessage(chid);
+      if (res!.statusCode == 201) {
+        setState(() {
+          messagebox = res.data;
+        });
+      }
+      // print(messagebox);
+    } on DioError catch (err) {
+      if (err.response != null) {}
+    }
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {},
+              )
+            ],
+          );
+        });
+  }
+
+  void initState() {
+    super.initState();
+    this.getToken();
+  }
 
   // List<String> _messages = [];
   @override
   Widget build(BuildContext context) {
+    final dynamic sub =
+        ModalRoute.of(context as BuildContext)?.settings.arguments;
+    chatid = sub['chatid'].toString();
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -64,62 +146,86 @@ class _chat_TeachState extends State<chat_Teach> {
             children: [
               Expanded(
                 child: ListView(
-                  // controller: _scrollController,
-                  // itemCount: _messages.length,
-                  // itemBuilder: (BuildContext context, int index) {
-                  //   return Text(_messages[index]);
-                  // },
                   children: [
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            constraints: BoxConstraints(
-                              minWidth: 100,
-                              maxWidth: 350,
-                              minHeight: 30,
-                              maxHeight: 800,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              "Hello,How Are You?",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
                     SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            constraints: BoxConstraints(
-                              minWidth: 100,
-                              maxWidth: 350,
-                              minHeight: 30,
-                              maxHeight: 800,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              "Hai,I am Fine",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          )
-                        ],
+                      height: 500,
+                      child: ListView.builder(
+                        // controller: _scrollController,
+                        itemCount: messagebox?.length,
+                        itemBuilder: (context, index) {
+                          final msg = messagebox?[index];
+                          final dateTimeString1 = msg?['date'];
+                          final dateTime1 = dateTimeString1 != null
+                              ? DateTime.parse(dateTimeString1)
+                              : null;
+                          final dateString1 = dateTime1 != null
+                              ? DateFormat("dd-MM-yyyy").format(dateTime1)
+                              : null;
+                          final elapsed = dateTime1 != null
+                              ? timeago.format(dateTime1)
+                              : null;
+                          print('msg?["sender"]: ${msg?["sender"]}');
+                          print('userId: $userId');
+                          final isCurrentUser = msg?['sender'] == userId;
+                          return Row(
+                            mainAxisAlignment: isCurrentUser
+                                ? MainAxisAlignment.end
+                                : MainAxisAlignment.start,
+                            children: [
+                              Card(
+                                elevation: 3,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: BorderSide(
+                                      color: isCurrentUser
+                                          ? Colors.green
+                                          : Colors.grey),
+                                ),
+                                color:
+                                    isCurrentUser ? Colors.green : Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        (msg?['senderfname'] ?? '') +
+                                            "" +
+                                            (msg?['sendersname'] ?? ''),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: isCurrentUser
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        msg?['message'] ?? '',
+                                        style: TextStyle(
+                                          color: isCurrentUser
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        elapsed ?? 'N/A',
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          color: isCurrentUser
+                                              ? Colors.white
+                                              : Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -130,41 +236,32 @@ class _chat_TeachState extends State<chat_Teach> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 280,
+                      width: 270,
                       child: TextFormField(
                         controller: _textController,
                         decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Colors.black,
-                              ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.black,
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(255, 22, 47, 230),
-                              ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Color.fromARGB(255, 22, 47, 230),
                             ),
-                            hintText: "Type Your Message",
-                            hintStyle: TextStyle(
-                                color: Color.fromARGB(255, 12, 12, 12)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            )),
-                        onFieldSubmitted: (String value) {
-                          // setState(() {
-                          //   _messages.add(value);
-                          // });
-                          _textController.clear();
-                          _scrollController.animateTo(
-                            _scrollController.position.maxScrollExtent,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeOut,
-                          );
-                        },
+                          ),
+                          hintText: "Type Your Message",
+                          hintStyle: TextStyle(
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "This Field Cannot Be Empty";
@@ -178,18 +275,18 @@ class _chat_TeachState extends State<chat_Teach> {
                       ),
                     ),
                     SizedBox(
-                      width: 20,
+                      width: 10,
                     ),
                     ElevatedButton(
-                        style:
-                            ElevatedButton.styleFrom(fixedSize: Size(50, 40)),
-                        onPressed: () {
-                          if (_formkey.currentState!.validate()) {
-                            print(message);
-                            // print(usertype);
-                          }
-                        },
-                        child: Text("Send"))
+                      style: ElevatedButton.styleFrom(fixedSize: Size(50, 40)),
+                      onPressed: () {
+                        if (_formkey.currentState!.validate()) {
+                          sendstudmessage();
+                          _textController.clear(); // clear the TextFormField
+                        }
+                      },
+                      child: Text("Send"),
+                    )
                   ],
                 ),
               ),

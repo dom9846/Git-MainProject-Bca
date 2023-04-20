@@ -121,8 +121,10 @@ class _Student_MessageState extends State<Teach_Message> {
                         final room = rooms?[index];
                         return Card(
                           child: InkWell(
-                            onTap: () =>
-                                {Navigator.pushNamed(context, "/teachchat")},
+                            onTap: () => {
+                              Navigator.pushNamed(context, "/teachchat",
+                                  arguments: {'chatid': room?['_id']})
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Row(

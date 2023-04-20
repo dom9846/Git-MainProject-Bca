@@ -122,8 +122,10 @@ class _Admin_messageState extends State<Admin_message> {
                         final room = rooms?[index];
                         return Card(
                           child: InkWell(
-                            onTap: () =>
-                                {Navigator.pushNamed(context, "/admnchatbox")},
+                            onTap: () => {
+                              Navigator.pushNamed(context, "/admnchatbox",
+                                  arguments: {'chatid': room?['_id']})
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
