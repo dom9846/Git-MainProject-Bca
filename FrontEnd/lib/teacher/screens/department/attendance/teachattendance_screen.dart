@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
 
 class Attendance_yearScreen extends StatefulWidget {
@@ -11,6 +12,20 @@ class Attendance_yearScreen extends StatefulWidget {
 }
 
 class _Attendance_yearScreenState extends State<Attendance_yearScreen> {
+  final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

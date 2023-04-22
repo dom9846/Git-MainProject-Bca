@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, non_constant_identifier_names, duplicate_ignore, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/services/register_service.dart';
 // import 'package:dropdown_button2/src/dropdown_button2.dart';
 import '../../assets/drawer.dart';
@@ -18,6 +19,20 @@ class _StudentAddState extends State<StudentAdd> {
   Registercheckservice regchecker = Registercheckservice();
   final _formkey = GlobalKey<FormState>();
   String identity = "", firstname = "", secondname = "", user_type = "Student";
+  final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
 
   showError(String content, String title) {
     showDialog(

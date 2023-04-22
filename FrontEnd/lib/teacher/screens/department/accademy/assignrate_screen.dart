@@ -38,6 +38,20 @@ class _AssignRate_teacherScreenState extends State<AssignRate_teacherScreen> {
     getteacherprof();
   }
 
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   getuserservice getteacherservice = new getuserservice();
   Future<void> getteacherprof() async {
     try {

@@ -36,6 +36,21 @@ class _Chat_Screen_admnState extends State<Chat_Screen_admn> {
     getmessages();
   }
 
+  // final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   DateTime currentDateTime = DateTime.now();
   chatService chatservice = chatService();
   Future<void> sendstudmessage() async {
@@ -47,11 +62,16 @@ class _Chat_Screen_admnState extends State<Chat_Screen_admn> {
         "sendersname": secondname,
         "senderutype": usertype,
         "message": message,
-        "date": currentDateTime.toIso8601String(),
+        "date": currentDateTime.toIso8601String().toString(),
       });
       try {
         final Response? res = await chatservice.sendmessage(msg);
-        if (res!.statusCode == 201) {}
+        if (res!.statusCode == 201) {
+          // setState(() {
+          //   messagebox!.add(msg);
+          // });
+        }
+        getmessages();
       } on DioError catch (err) {
         if (err.response != null) {}
       }
@@ -90,6 +110,14 @@ class _Chat_Screen_admnState extends State<Chat_Screen_admn> {
         });
   }
 
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+  }
+
   void initState() {
     super.initState();
     this.getToken();
@@ -97,9 +125,11 @@ class _Chat_Screen_admnState extends State<Chat_Screen_admn> {
 
   @override
   Widget build(BuildContext context) {
+    final _scrollController = ScrollController();
     final dynamic sub =
         ModalRoute.of(context as BuildContext)?.settings.arguments;
     chatid = sub['chatid'].toString();
+
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -152,6 +182,7 @@ class _Chat_Screen_admnState extends State<Chat_Screen_admn> {
                       child: ListView.builder(
                         // controller: _scrollController,
                         itemCount: messagebox?.length,
+                        controller: _scrollController,
                         itemBuilder: (context, index) {
                           final msg = messagebox?[index];
                           final dateTimeString1 = msg?['date'];
@@ -173,55 +204,57 @@ class _Chat_Screen_admnState extends State<Chat_Screen_admn> {
                                   ? MainAxisAlignment.end
                                   : MainAxisAlignment.start,
                               children: [
-                                Card(
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                    side: BorderSide(
-                                        color: isCurrentUser
-                                            ? Colors.green
-                                            : Colors.grey),
-                                  ),
-                                  color: isCurrentUser
-                                      ? Colors.green
-                                      : Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          (msg?['senderfname'] ?? '') +
-                                              "" +
-                                              (msg?['sendersname'] ?? ''),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: isCurrentUser
-                                                ? Colors.white
-                                                : Colors.black,
+                                Expanded(
+                                  child: Card(
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      side: BorderSide(
+                                          color: isCurrentUser
+                                              ? Colors.green
+                                              : Colors.grey),
+                                    ),
+                                    color: isCurrentUser
+                                        ? Colors.green
+                                        : Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            (msg?['senderfname'] ?? '') +
+                                                "" +
+                                                (msg?['sendersname'] ?? ''),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: isCurrentUser
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          msg?['message'] ?? '',
-                                          style: TextStyle(
-                                            color: isCurrentUser
-                                                ? Colors.white
-                                                : Colors.black,
+                                          SizedBox(height: 10),
+                                          Text(
+                                            msg?['message'] ?? '',
+                                            style: TextStyle(
+                                              color: isCurrentUser
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          elapsed ?? 'N/A',
-                                          style: TextStyle(
-                                            fontSize: 8,
-                                            color: isCurrentUser
-                                                ? Colors.white
-                                                : Colors.grey,
+                                          SizedBox(height: 10),
+                                          Text(
+                                            elapsed ?? 'N/A',
+                                            style: TextStyle(
+                                              fontSize: 8,
+                                              color: isCurrentUser
+                                                  ? Colors.white
+                                                  : Colors.grey,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -285,7 +318,8 @@ class _Chat_Screen_admnState extends State<Chat_Screen_admn> {
                       onPressed: () {
                         if (_formkey.currentState!.validate()) {
                           sendstudmessage();
-                          _textController.clear(); // clear the TextFormField
+                          _textController.clear();
+                          _scrollToBottom(); // clear the TextFormField
                         }
                       },
                       child: Text("Send"),
@@ -299,5 +333,10 @@ class _Chat_Screen_admnState extends State<Chat_Screen_admn> {
         drawer: cldrawer(),
       ),
     );
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (_scrollController.hasClients) {
+    //     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    //   }
+    // });
   }
 }

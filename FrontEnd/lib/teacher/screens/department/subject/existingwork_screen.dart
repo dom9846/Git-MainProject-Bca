@@ -30,6 +30,20 @@ class _ExistingSubjectWork_ScreenState
     retrievesubwork();
   }
 
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   subjectservice subretrieveworkservice = new subjectservice();
   Future<void> retrievesubwork() async {
     var subwork = jsonEncode({

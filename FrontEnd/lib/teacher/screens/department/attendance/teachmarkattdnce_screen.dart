@@ -35,6 +35,20 @@ class _MarkAttendance_TeacherState extends State<MarkAttendance_Teacher> {
     getstudents();
   }
 
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   getuserservice getstudservice = new getuserservice();
   Future<void> getstudents() async {
     print(semester);

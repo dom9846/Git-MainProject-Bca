@@ -39,6 +39,21 @@ class _Studaddnew_PostState extends State<Studaddnew_Post> {
     getstudent();
   }
 
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues.isEmpty) {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+        // getposts();
+      }
+    } catch (e) {}
+  }
+
   getuserservice getstudentservice = new getuserservice();
   Future<void> getstudent() async {
     try {

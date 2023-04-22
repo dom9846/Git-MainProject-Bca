@@ -31,6 +31,21 @@ class _StudentTimeTable_ScreenState extends State<StudentTimeTable_Screen> {
     gettimetable();
   }
 
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues.isEmpty) {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+        // getposts();
+      }
+    } catch (e) {}
+  }
+
   timeattendintservice timetableretrieve = timeattendintservice();
   Future<void> gettimetable() async {
     try {

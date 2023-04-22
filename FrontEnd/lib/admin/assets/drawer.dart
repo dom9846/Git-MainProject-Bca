@@ -75,7 +75,8 @@ class _cldrawerState extends State<cldrawer> {
 
   logout() async {
     await storage.delete(key: "token");
-    Navigator.pushNamed(context, "/login");
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil("/login", (Route<dynamic> route) => false);
   }
 
   @override

@@ -32,6 +32,21 @@ class _Subject_detailsState extends State<Subject_details> {
     getsubdetails();
   }
 
+  // final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   subjectservice subjectassign = subjectservice();
   Future<void> getsubdetails() async {
     try {

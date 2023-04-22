@@ -32,6 +32,22 @@ class _Student_MessageState extends State<Student_Message> {
     getstudent();
   }
 
+  bool isLoggedin = true;
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues.isEmpty) {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+        // getposts();
+      }
+    } catch (e) {}
+  }
+
   getuserservice getstudentservice = new getuserservice();
   Future<void> getstudent() async {
     try {

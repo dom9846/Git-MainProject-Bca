@@ -35,6 +35,21 @@ class _Stud_screenState extends State<Stud_screen> {
     getstudents();
   }
 
+  // final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   getuserservice getstudservice = new getuserservice();
   Future<void> getstudents() async {
     try {

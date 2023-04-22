@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/admin/assets/drawer.dart';
 
 class Achievment_Screen extends StatefulWidget {
@@ -11,6 +12,21 @@ class Achievment_Screen extends StatefulWidget {
 }
 
 class _Achievment_ScreenState extends State<Achievment_Screen> {
+  final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

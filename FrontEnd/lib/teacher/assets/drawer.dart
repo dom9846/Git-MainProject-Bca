@@ -73,8 +73,8 @@ class _teach_DrawerState extends State<teach_Drawer> {
 
   logout() async {
     await storage.delete(key: "token");
-    print("logout");
-    Navigator.pushNamed(context, "/login");
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil("/login", (Route<dynamic> route) => false);
   }
 
   @override

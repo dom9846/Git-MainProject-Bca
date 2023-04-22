@@ -28,6 +28,20 @@ class _RateTask_StatusState extends State<RateTask_Status> {
     retrieverates();
   }
 
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   ratingService rateservice = new ratingService();
   Future<void> retrieverates() async {
     var rate = jsonEncode({

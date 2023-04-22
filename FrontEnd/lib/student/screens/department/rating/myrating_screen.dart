@@ -29,6 +29,22 @@ class _Myrating_ScreenStudState extends State<Myrating_ScreenStud> {
     getinternals();
   }
 
+  bool isLoggedin = true;
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues.isEmpty) {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+        // getposts();
+      }
+    } catch (e) {}
+  }
+
   ratingService ratingservice = new ratingService();
   Future<void> getinternals() async {
     var user = jsonEncode({

@@ -39,6 +39,19 @@ class _Teach_InternalStudentState extends State<Teach_InternalStudent> {
     getteacher();
   }
 
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        this.getToken();
+      }
+    } catch (e) {}
+  }
+
   getuserservice getteacherservice = new getuserservice();
   Future<void> getteacher() async {
     try {

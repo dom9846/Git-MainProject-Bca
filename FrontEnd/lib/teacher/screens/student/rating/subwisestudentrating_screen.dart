@@ -28,6 +28,19 @@ class _Subjectwisestudent_raingState extends State<Subjectwisestudent_raing> {
     getsubjectsassigned();
   }
 
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        this.getToken();
+      }
+    } catch (e) {}
+  }
+
   subjectservice subjectretrieve = new subjectservice();
   Future<void> getsubjectsassigned() async {
     var subject = jsonEncode({'subteacher': userId});

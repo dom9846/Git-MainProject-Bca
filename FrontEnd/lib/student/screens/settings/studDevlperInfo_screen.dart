@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/student/assets/drawer.dart';
 
 class StudentDevoloper_Info extends StatefulWidget {
@@ -11,6 +12,22 @@ class StudentDevoloper_Info extends StatefulWidget {
 }
 
 class _StudentDevoloper_InfoState extends State<StudentDevoloper_Info> {
+  bool isLoggedin = true;
+  final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues.isEmpty) {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+        // getposts();
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

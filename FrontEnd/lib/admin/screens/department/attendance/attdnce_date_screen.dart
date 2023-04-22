@@ -34,6 +34,21 @@ class _Attdnce_dateState extends State<Attdnce_date> {
     getattendances();
   }
 
+  // final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   timeattendintservice attendanceservice = new timeattendintservice();
   Future<void> getattendances() async {
     var sem = jsonEncode({"semester": semester});

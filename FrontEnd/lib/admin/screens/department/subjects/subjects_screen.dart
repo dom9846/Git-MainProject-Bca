@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, duplicate_ignore
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../assets/drawer.dart';
 
@@ -12,6 +13,21 @@ class Subject_screen extends StatefulWidget {
 }
 
 class _Subject_screenState extends State<Subject_screen> {
+  final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

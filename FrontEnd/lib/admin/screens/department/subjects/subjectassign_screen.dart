@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/src/dropdown_button2.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/services/subject_service.dart';
 import '../../../assets/drawer.dart';
 import 'package:dio/dio.dart';
@@ -24,6 +25,20 @@ class _Subject_AssignState extends State<Subject_Assign> {
   // List? items2;
   final List<String> items3 = ['1', '2', '3', '4', '5', '6'];
   subjectservice subjectassign = subjectservice();
+  final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
 
   Future<void> getsubjects(String semester1) async {
     try {

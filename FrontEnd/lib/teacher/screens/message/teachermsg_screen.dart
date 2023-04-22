@@ -29,6 +29,20 @@ class _Student_MessageState extends State<Teach_Message> {
     getrooms();
   }
 
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   chatService chatservice = new chatService();
   Future<void> getrooms() async {
     try {

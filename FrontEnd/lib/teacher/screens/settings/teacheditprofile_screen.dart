@@ -28,6 +28,19 @@ class _TeachEdit_ProfileState extends State<TeachEdit_Profile> {
     print(userId);
   }
 
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        this.getToken();
+      }
+    } catch (e) {}
+  }
+
   void initState() {
     super.initState();
     this.getToken();

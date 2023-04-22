@@ -32,6 +32,22 @@ class _TaskView_semesterwiseState extends State<TaskView_semesterwise> {
     getstudent();
   }
 
+  bool isLoggedin = true;
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues.isEmpty) {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+        // getposts();
+      }
+    } catch (e) {}
+  }
+
   getuserservice getstudentservice = new getuserservice();
   Future<void> getstudent() async {
     try {
@@ -335,10 +351,6 @@ class _TaskView_semesterwiseState extends State<TaskView_semesterwise> {
                                                         _selectedFileBase64 =
                                                             base64String;
                                                       });
-                                                      print("hello");
-                                                      print(
-                                                          _selectedFileBase64);
-                                                      print("hello1");
                                                     }
                                                   }
                                                 },

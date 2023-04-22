@@ -31,6 +31,20 @@ class _TimeTable_TeachState extends State<TimeTable_Teach> {
     gettimetable();
   }
 
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   timeattendintservice timetableretrieve = timeattendintservice();
   Future<void> gettimetable() async {
     try {

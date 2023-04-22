@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/services/register_service.dart';
 import 'dart:convert';
 
@@ -18,6 +19,20 @@ class _LectureAddState extends State<LectureAdd> {
   final _formkey = GlobalKey<FormState>();
   String identity = "", firstname = "", secondname = "", user_type = "Teacher";
   Registercheckservice regchecker = Registercheckservice();
+  final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
 
   showError(String content, String title) {
     showDialog(

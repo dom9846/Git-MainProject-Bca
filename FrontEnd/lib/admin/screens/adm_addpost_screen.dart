@@ -41,6 +41,21 @@ class _Admin_Add_PostState extends State<Admin_Add_Post> {
     getadmin();
   }
 
+  // final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        this.getToken();
+      }
+    } catch (e) {}
+  }
+
   getuserservice getadminservice = new getuserservice();
   Future<void> getadmin() async {
     try {

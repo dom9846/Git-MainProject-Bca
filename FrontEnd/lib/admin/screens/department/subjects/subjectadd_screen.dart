@@ -3,6 +3,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject/services/subject_service.dart';
 import '../../../assets/drawer.dart';
 import 'package:dropdown_button2/src/dropdown_button2.dart';
@@ -23,6 +24,20 @@ class _Subject_AddState extends State<Subject_Add> {
   final List<String> items1 = ['Core', 'External'];
   final List<String> items2 = ['1', '2', '3', '4', '5', '6'];
   subjectservice subjectadd = subjectservice();
+  final storage = new FlutterSecureStorage();
+  bool isLoggedin = true;
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
 
   showError(String content, String title) {
     showDialog(

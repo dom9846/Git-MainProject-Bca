@@ -65,23 +65,29 @@ class _MyLoginState extends State<MyLogin> {
           await storage.write(key: "sname", value: secondname);
           await storage.write(key: "utype", value: user_type);
           if (user_type == "Admin") {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => admnHome(),
-              ),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => admnHome(),
+            //   ),
+            // );
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/admndashboard', (route) => false);
           } else if (user_type == "Teacher") {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => teach_Home(),
-              ),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => teach_Home(),
+            //   ),
+            // );
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/teachdashboard', (route) => false);
           } else if (user_type == "Student") {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => student_Dashboard(),
-              ),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => student_Dashboard(),
+            //   ),
+            // );
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/studdashboard', (route) => false);
           }
         }
       } on DioError catch (err) {

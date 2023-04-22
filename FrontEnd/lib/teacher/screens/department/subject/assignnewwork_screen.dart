@@ -34,6 +34,20 @@ class _AssignNew_WorkState extends State<AssignNew_Work> {
     });
   }
 
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   void _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,

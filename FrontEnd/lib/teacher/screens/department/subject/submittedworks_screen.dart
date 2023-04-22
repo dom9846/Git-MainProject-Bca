@@ -1,16 +1,18 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mainproject/services/subject_service.dart';
 import 'package:mainproject/teacher/assets/drawer.dart';
-// import 'package:pdf/pdf.dart';
-// import 'package:pdf/widgets.dart' as pw;
-// import 'package:pdf_flutter/pdf_flutter.dart';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
+import 'package:open_file/open_file.dart';
 
 class submittedWork_screen extends StatefulWidget {
   const submittedWork_screen({super.key});
@@ -29,6 +31,20 @@ class _submittedWork_screenState extends State<submittedWork_screen> {
       userId = allValues["userid"];
     });
     retrievework();
+  }
+
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
   }
 
   subjectservice submittedworkservice = new subjectservice();
@@ -50,6 +66,18 @@ class _submittedWork_screenState extends State<submittedWork_screen> {
         if (err.response!.statusCode == 401) {}
       }
     }
+  }
+
+  void downloadPDF(String base64String) async {
+    final bytes = base64Decode(base64String);
+    final fileName = 'example.pdf';
+    final dir = await getExternalStorageDirectory();
+
+    final file = File('${dir!.path}/$fileName');
+    await file.writeAsBytes(bytes);
+
+    // Open the file.
+    await OpenFile.open('${dir.path}/$fileName');
   }
 
   void initState() {
@@ -142,7 +170,6 @@ class _submittedWork_screenState extends State<submittedWork_screen> {
                         rows: List.generate(
                           submittedworks?.length ?? 0,
                           (index) {
-                            String file;
                             final submittedwork = submittedworks?[index];
                             final dateTimeString1 = submittedwork?['date'];
                             final dateTime1 = dateTimeString1 != null
@@ -151,16 +178,7 @@ class _submittedWork_screenState extends State<submittedWork_screen> {
                             final dateString1 = dateTime1 != null
                                 ? DateFormat("dd-MM-yyyy").format(dateTime1)
                                 : null;
-                            // if (submittedwork != null) {
-                            //   final pdfBase64 = submittedwork?['workfile'];
-                            //   final pdfBytes = base64Decode(pdfBase64);
-                            //   final pdfDoc = await PDFDocument.fromBytes(pdfBytes);
-                            //   file = PDF.network(
-                            //     pdfBase64,
-                            //     height: 40,
-                            //     width: 40,
-                            //   );
-                            // }
+                            String work = submittedwork?['workfile'] ?? 'n/a';
                             return DataRow(cells: [
                               DataCell(Text('${index + 1}')),
                               DataCell(
@@ -172,7 +190,11 @@ class _submittedWork_screenState extends State<submittedWork_screen> {
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ),
-                              DataCell(Icon(Icons.picture_as_pdf)),
+                              DataCell(IconButton(
+                                  onPressed: () {
+                                    downloadPDF(work);
+                                  },
+                                  icon: Icon(Icons.file_download))),
                               DataCell(
                                 dateString1 != null
                                     ? Text(dateString1,

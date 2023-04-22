@@ -35,6 +35,20 @@ class _chat_TeachState extends State<chat_Teach> {
     getmessages();
   }
 
+  // final storage = new FlutterSecureStorage();
+  Future<void> checkAuthentication() async {
+    try {
+      Map<String, String> allValues = await storage.readAll();
+      if (allValues["token"] == "") {
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        Navigator.pushNamed(context, "/login");
+      } else {
+        // this.getToken();
+      }
+    } catch (e) {}
+  }
+
   DateTime currentDateTime = DateTime.now();
   chatService chatservice = chatService();
   Future<void> sendstudmessage() async {
@@ -50,7 +64,9 @@ class _chat_TeachState extends State<chat_Teach> {
       });
       try {
         final Response? res = await chatservice.sendmessage(msg);
-        if (res!.statusCode == 201) {}
+        if (res!.statusCode == 201) {
+          getmessages();
+        }
       } on DioError catch (err) {
         if (err.response != null) {}
       }
@@ -172,54 +188,57 @@ class _chat_TeachState extends State<chat_Teach> {
                                 ? MainAxisAlignment.end
                                 : MainAxisAlignment.start,
                             children: [
-                              Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: isCurrentUser
-                                          ? Colors.green
-                                          : Colors.grey),
-                                ),
-                                color:
-                                    isCurrentUser ? Colors.green : Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        (msg?['senderfname'] ?? '') +
-                                            "" +
-                                            (msg?['sendersname'] ?? ''),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: isCurrentUser
-                                              ? Colors.white
-                                              : Colors.black,
+                              Expanded(
+                                child: Card(
+                                  elevation: 3,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    side: BorderSide(
+                                        color: isCurrentUser
+                                            ? Colors.green
+                                            : Colors.grey),
+                                  ),
+                                  color: isCurrentUser
+                                      ? Colors.green
+                                      : Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          (msg?['senderfname'] ?? '') +
+                                              "" +
+                                              (msg?['sendersname'] ?? ''),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: isCurrentUser
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        msg?['message'] ?? '',
-                                        style: TextStyle(
-                                          color: isCurrentUser
-                                              ? Colors.white
-                                              : Colors.black,
+                                        SizedBox(height: 10),
+                                        Text(
+                                          msg?['message'] ?? '',
+                                          style: TextStyle(
+                                            color: isCurrentUser
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        elapsed ?? 'N/A',
-                                        style: TextStyle(
-                                          fontSize: 8,
-                                          color: isCurrentUser
-                                              ? Colors.white
-                                              : Colors.grey,
+                                        SizedBox(height: 10),
+                                        Text(
+                                          elapsed ?? 'N/A',
+                                          style: TextStyle(
+                                            fontSize: 8,
+                                            color: isCurrentUser
+                                                ? Colors.white
+                                                : Colors.grey,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
