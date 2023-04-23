@@ -36,13 +36,12 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 100,
+              height: 300,
               width: 300,
               margin: EdgeInsets.only(top: 80, right: 60, left: 60),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('images/deplogo.png'),
-                      fit: BoxFit.cover)),
+                      image: AssetImage('images/logo.png'), fit: BoxFit.cover)),
             )
           ],
         ),

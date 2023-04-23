@@ -54,7 +54,7 @@ exports.subretrieve = (req, res) => {
         if (subj) {
             return res.status(201).json(subj);
         }
-        return res.status(404).json({ 'msg': 'Invalid username and Password' });
+        // return res.status(404).json({ 'msg': 'Invalid username and Password' });
     });
 };
 exports.retrieveassignedsubjects = (req, res) => {

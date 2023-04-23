@@ -14,7 +14,7 @@ class subjectservice {
 
   subjectretrieve(String subject) async {
     // print(subject);
-    final response = await dio.post(url + "subjectretrieve", data: subject);
+    final response = await dio.post(url + "subassretrieve", data: subject);
     // print(response);
     return response;
   }
@@ -22,7 +22,6 @@ class subjectservice {
   lectureretrieve(String lectures) async {
     // print(lectures);
     final response = await dio.post(url + "lectureretrieve", data: lectures);
-    print(response);
     return response;
   }
 

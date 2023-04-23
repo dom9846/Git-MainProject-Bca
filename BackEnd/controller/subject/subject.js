@@ -47,7 +47,7 @@ exports.showsubdetails = (req, res) => {
             $match:{
                 // "user_type":"Student",
                 "semester":semester,
-                "sub_details.subteacherfname":{"$exists":true}
+                // "sub_details.subteacherfname":{"$exists":true}
             }
         }
     ]).exec(
@@ -70,6 +70,6 @@ exports.subjectretrieve = (req, res) => {
         if (user) {
             return res.status(201).json({token,user});
         }
-        return res.status(404).json({ 'msg': 'Invalid username and Password' });
+        // return res.status(404).json({ 'msg': 'Invalid username and Password' });
     });
 };

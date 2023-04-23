@@ -122,6 +122,16 @@ class _Subject_detailsState extends State<Subject_details> {
             itemCount: subjectdetails?.length,
             itemBuilder: (context, index) {
               final subjectdetail = subjectdetails?[index];
+              var subDetails = subjectdetail?["sub_details"];
+              var assignedTo = "Nill";
+
+              if (subDetails != null && subDetails.isNotEmpty) {
+                var firstDetail = subDetails[0];
+                assignedTo = (firstDetail?["subteacherfname"] ?? "Nill") +
+                    (firstDetail?["subteachersname"] ?? "Nill");
+              }
+              var assignedToText = "Assigned To: $assignedTo";
+              print(assignedToText);
               return Card(
                 elevation: 5,
                 margin: EdgeInsets.all(10),
@@ -151,15 +161,7 @@ class _Subject_detailsState extends State<Subject_details> {
                             SizedBox(
                               height: 8,
                             ),
-                            Text(
-                              "Assigned To:" +
-                                  (subjectdetail?["sub_details"]?[0]
-                                          ?["subteacherfname"] ??
-                                      "Nill") +
-                                  (subjectdetail?["sub_details"]?[0]
-                                          ?["subteachersname"] ??
-                                      "Nill"),
-                            ),
+                            Text(assignedToText),
                             SizedBox(
                               height: 8,
                             ),

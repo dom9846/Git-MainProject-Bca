@@ -40,11 +40,12 @@ class _Subject_AssignState extends State<Subject_Assign> {
     } catch (e) {}
   }
 
-  Future<void> getsubjects(String semester1) async {
+  Future<void> getsubjects(String sem) async {
     try {
       var subject = jsonEncode({
-        "semester": semester,
+        "semester": sem,
       });
+      print(subject);
       final Response? res = await subjectassign.subjectretrieve(subject);
       if (res!.statusCode == 201) {
         setState(() {
@@ -64,12 +65,11 @@ class _Subject_AssignState extends State<Subject_Assign> {
       // });
       // print("hello");
       final Response? res = await subjectassign.lectureretrieve("");
-      print(res);
+      // print(res);
       if (res!.statusCode == 201) {
         setState(() {
           items2 = res.data;
         });
-        print(items2);
       }
     } on DioError catch (err) {
       if (err.response != null) {}
