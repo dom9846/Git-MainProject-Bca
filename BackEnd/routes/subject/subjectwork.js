@@ -7,4 +7,5 @@ routes.post('/retrievesubjectwork', subjectworkControl.subworksretrieve);
 routes.post('/retrievesubjectworksemways', subjectworkControl.showsubdetailssemways);
 routes.post('/submitsubjectwork', submitworkControl.submitwork);
 routes.post('/retrievesubmittedwork', submitworkControl.submittedworkretrieve);
+routes.post('/removesubjectwork', subjectworkControl.removesubjectwork);
 module.exports = routes;

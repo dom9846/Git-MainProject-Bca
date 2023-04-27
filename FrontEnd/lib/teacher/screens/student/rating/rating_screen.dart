@@ -298,8 +298,7 @@ class _Studentrating_TeachState extends State<Studentrating_Teach> {
                                                               255, 22, 47, 230),
                                                         ),
                                                       ),
-                                                      labelText:
-                                                          "Internal Mark",
+                                                      labelText: "Rate Student",
                                                       labelStyle: TextStyle(
                                                           color: Colors.black),
                                                       hintText:

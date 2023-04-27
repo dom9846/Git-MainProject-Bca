@@ -45,3 +45,18 @@ exports.getstudattendances = (req, res) => {
         }
     });
 };
+
+exports.deleteattendance=(req,res)=>{
+    console.log(req.body)
+    attendance.deleteMany({ semester:req.body.semester }, (err, del)=>{
+        if(err){
+            return res.status(404).json({error:"error"})
+        }
+        else if(del){
+            return res.status(201).json(del)
+        }
+        else{
+            return res.status(404).json({error:t})
+       }
+    })
+}

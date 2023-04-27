@@ -32,7 +32,6 @@ import 'package:mainproject/student/screens/department/attendance/studattndances
 import 'package:mainproject/student/screens/department/internal/studinternal_screen.dart';
 import 'package:mainproject/student/screens/department/internal/studinternalstatus_screen.dart';
 import 'package:mainproject/student/screens/department/rating/myrating_screen.dart';
-import 'package:mainproject/student/screens/message/chat_stud.dart';
 import 'package:mainproject/student/screens/message/chatscreen_stud.dart';
 import 'package:mainproject/student/screens/message/student_msg_screen.dart';
 import 'package:mainproject/student/screens/settings/studDevlperInfo_screen.dart';
@@ -61,8 +60,6 @@ import 'package:mainproject/teacher/screens/settings/teachsettings_screen.dart';
 import 'package:mainproject/teacher/screens/settings/teachunamepassedit_screen.dart';
 import 'package:mainproject/teacher/screens/student/internal/internal_screen.dart';
 import 'package:mainproject/teacher/screens/student/internal/subjectwisestudentinternal_screen.dart';
-import 'package:mainproject/teacher/screens/student/message_stud/studentmsg_screen.dart';
-import 'package:mainproject/teacher/screens/student/message_stud/students_screen.dart';
 import 'package:mainproject/teacher/screens/student/rating/rating_screen.dart';
 import 'package:mainproject/teacher/screens/student/rating/subwisestudentrating_screen.dart';
 import 'package:mainproject/teacher/screens/student/teacherstudent_screen.dart';
@@ -89,7 +86,7 @@ void main() {
       '/reg_check': (context) => const Reg_Check(),
       '/login': (context) => const MyLogin(),
       '/admndashboard': (context) => const admnHome(),
-      '/admndep': (context) => const Dep_screen(),
+      // '/admndep': (context) => const Dep_screen(),
       '/admndepaccademics': (context) => const accademy_screen(),
       '/admndeptimetable': (context) => const Timetable_Screen(),
       '/admndepattendance': (context) => const attendance_screen(),
@@ -135,8 +132,6 @@ void main() {
       '/teachstudsinternal': (context) => const Teach_InternalStudent(),
       '/teachstudsubwiserating': (context) => const Subjectwisestudent_raing(),
       '/teachstudsrating': (context) => const Studentrating_Teach(),
-      '/teachstudmsgyearlist': (context) => const TeachStudentYearMsg_Screen(),
-      '/teachstudmsglistofstud': (context) => const Teachstudlistyear_message(),
       '/teachsettings': (context) => const Teach_settings(),
       '/teachsetteditprof': (context) => const TeachEdit_Profile(),
       '/teachsetteditunamepass': (context) => const TeachUnamePass_Edit(),

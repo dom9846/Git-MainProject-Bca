@@ -32,4 +32,9 @@ class chatService {
     final response = await dio.post(url + "getmessage", data: chid);
     return response;
   }
+
+  deletechatroom(String chid) async {
+    final response = await dio.post(url + "deletechatroom", data: chid);
+    return response;
+  }
 }

@@ -67,6 +67,74 @@ class _ExistingSubjectWork_ScreenState
     }
   }
 
+  showError(String content, String title, String id) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("No"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text("Yes"),
+                onPressed: () {
+                  deletework(id);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  showError2(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("ok"),
+                onPressed: () {
+                  if (title == "Click Ok") {
+                    Navigator.pushNamed(context, '/teachdashboard');
+                  }
+                  // Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  subjectservice deletesubworkservice = new subjectservice();
+
+  Future<void> deletework(String id) async {
+    try {
+      var sub = jsonEncode({"_id": id});
+      print(sub);
+      final Response? res = await deletesubworkservice.removesubjectwork(sub);
+      if (res!.statusCode == 201) {
+        showError2("Successfully deleted", "Click Ok");
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        showError2("Something Went Wrong", "Try Again Later");
+      }
+    }
+  }
+
   void initState() {
     super.initState();
     this.getToken();
@@ -137,6 +205,7 @@ class _ExistingSubjectWork_ScreenState
                         itemBuilder: (context, index) {
                           final subwork = subworks?[index];
                           final dateTimeString1 = subwork?['duedate'];
+                          String? id = subwork?['_id'];
                           final dateTime1 = dateTimeString1 != null
                               ? DateTime.parse(dateTimeString1)
                               : null;
@@ -217,7 +286,12 @@ class _ExistingSubjectWork_ScreenState
                                             MainAxisAlignment.center,
                                         children: [
                                           TextButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                showError(
+                                                    "Do You Want To Delete This Work?",
+                                                    "Are You Sure?",
+                                                    id.toString());
+                                              },
                                               child: Text("Delete",
                                                   style: TextStyle(
                                                       color: Color.fromARGB(

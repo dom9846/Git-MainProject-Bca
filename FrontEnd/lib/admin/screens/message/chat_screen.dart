@@ -333,10 +333,5 @@ class _Chat_Screen_admnState extends State<Chat_Screen_admn> {
         drawer: cldrawer(),
       ),
     );
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (_scrollController.hasClients) {
-    //     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    //   }
-    // });
   }
 }

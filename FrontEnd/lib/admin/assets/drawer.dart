@@ -136,7 +136,7 @@ class _cldrawerState extends State<cldrawer> {
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                     SizedBox(
-                      height: 10,
+                      width: 10,
                     ),
                     Text(
                       secondname!,

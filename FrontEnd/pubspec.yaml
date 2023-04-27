@@ -89,6 +89,8 @@ flutter:
     - images/propic2.jpg
     - images/propic3.jpg
     - images/dummy_profile.png
+    - images/devinfo.png
+    - images/devinfo2.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -22,6 +22,11 @@ class timeattendintservice {
     return response;
   }
 
+  deleteattendance(String sem) async {
+    final response = await dio.post(url + "deleteattendance", data: sem);
+    return response;
+  }
+
   getstudattendances(String user) async {
     // print(user);
     final response = await dio.post(url + "getstudattendances", data: user);

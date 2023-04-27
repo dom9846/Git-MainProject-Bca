@@ -73,4 +73,19 @@ class subjectservice {
     final response = await dio.post(url + "retrievesubmittedwork", data: work);
     return response;
   }
+
+  removesubject(String sub) async {
+    final response = await dio.post(url + "removesubject", data: sub);
+    return response;
+  }
+
+  removeassignsubject(String sub) async {
+    final response = await dio.post(url + "removeassignsubject", data: sub);
+    return response;
+  }
+
+  removesubjectwork(String sub) async {
+    final response = await dio.post(url + "removesubjectwork", data: sub);
+    return response;
+  }
 }

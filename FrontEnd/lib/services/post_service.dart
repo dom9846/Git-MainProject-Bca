@@ -14,8 +14,18 @@ class PostService {
     return response;
   }
 
+  managepost(String user) async {
+    final response = await dio.post(url + "getposts", data: user);
+    return response;
+  }
+
   getposts(String user) async {
     final response = await dio.post(url + "retrieveposts", data: user);
+    return response;
+  }
+
+  deletepost(String post) async {
+    final response = await dio.post(url + "deleteposts", data: post);
     return response;
   }
 }

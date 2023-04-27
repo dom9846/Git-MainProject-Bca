@@ -46,4 +46,10 @@ class ratingService {
     final response = await dio.post(url + "retrieveratingsofstud", data: user);
     return response;
   }
+
+  deleterate(String rate) async {
+    // print(yearofstud);
+    final response = await dio.post(url + "deleteratetask", data: rate);
+    return response;
+  }
 }

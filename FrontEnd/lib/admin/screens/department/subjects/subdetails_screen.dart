@@ -66,6 +66,111 @@ class _Subject_detailsState extends State<Subject_details> {
     }
   }
 
+  showErrorrs(String content, String title, String id) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text("Yes"),
+                onPressed: () {
+                  removesubject(id);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  showErrorra(String content, String title, String id) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text("Yes"),
+                onPressed: () {
+                  removeassignsub(id);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  showError2(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("ok"),
+                onPressed: () {
+                  if (title == "Click Ok") {
+                    Navigator.pushNamed(context, '/admndashboard');
+                    Navigator.of(context).pop();
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> removesubject(String id) async {
+    try {
+      var sub = jsonEncode({"_id": id});
+      print(sub);
+      final Response? res = await subjectassign.removesubject(sub);
+      if (res!.statusCode == 201) {
+        showError2("Successfully deleted", "Click Ok");
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        showError2("Something Went Wrong", "Try Again Later");
+      }
+    }
+  }
+
+  Future<void> removeassignsub(String id) async {
+    try {
+      var sub = jsonEncode({"_id": id});
+      print(sub);
+      final Response? res = await subjectassign.removeassignsubject(sub);
+      if (res!.statusCode == 201) {
+        showError2("Successfully Removed", "Click Ok");
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        showError2("Something Went Wrong", "Try Again Later");
+      }
+    }
+  }
+
   void initState() {
     super.initState();
     this.getToken();
@@ -116,74 +221,118 @@ class _Subject_detailsState extends State<Subject_details> {
                     icon: Icon(Icons.message_sharp)))
           ],
         ),
-        body: Container(
-          margin: EdgeInsets.all(10),
-          child: ListView.builder(
-            itemCount: subjectdetails?.length,
-            itemBuilder: (context, index) {
-              final subjectdetail = subjectdetails?[index];
-              var subDetails = subjectdetail?["sub_details"];
-              var assignedTo = "Nill";
-
-              if (subDetails != null && subDetails.isNotEmpty) {
-                var firstDetail = subDetails[0];
-                assignedTo = (firstDetail?["subteacherfname"] ?? "Nill") +
-                    (firstDetail?["subteachersname"] ?? "Nill");
-              }
-              var assignedToText = "Assigned To: $assignedTo";
-              print(assignedToText);
-              return Card(
-                elevation: 5,
-                margin: EdgeInsets.all(10),
-                child: ExpansionTile(
-                  title: Text(
-                    subjectdetail != null &&
-                            subjectdetail['subjectname'] != null
-                        ? subjectdetail['subjectname']
-                        : 'Unknown Subject',
+        body: ListView(
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    'List Of Subjects',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontFamily: 'Roboto',
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      color: Color.fromARGB(255, 228, 230, 233),
                     ),
                   ),
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: [
-                            Text("Subject Type:" +
-                                (subjectdetail != null &&
-                                        subjectdetail['subjecttype'] != null
-                                    ? subjectdetail['subjecttype']
-                                    : 'Unknown Subject Type')),
-                            SizedBox(
-                              height: 8,
+                  SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    height: 500,
+                    child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: ListView.builder(
+                        itemCount: subjectdetails?.length,
+                        itemBuilder: (context, index) {
+                          final subjectdetail = subjectdetails?[index];
+                          var subDetails = subjectdetail?["sub_details"];
+                          String? id = subjectdetail?['_id'] ?? "";
+                          var assignedTo = "Nill";
+                          if (subDetails != null && subDetails.isNotEmpty) {
+                            var firstDetail = subDetails[0];
+                            assignedTo =
+                                (firstDetail?["subteacherfname"] ?? "Nill") +
+                                    " " +
+                                    (firstDetail?["subteachersname"] ?? "Nill");
+                          }
+                          var assignedToText = "Assigned To: $assignedTo";
+                          return Card(
+                            elevation: 5,
+                            margin: EdgeInsets.all(10),
+                            child: ExpansionTile(
+                              title: Text(
+                                subjectdetail != null &&
+                                        subjectdetail['subjectname'] != null
+                                    ? subjectdetail['subjectname']
+                                    : 'Unknown Subject',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              // ignore: prefer_const_literals_to_create_immutables
+                              children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      children: [
+                                        Text("Subject Type:" +
+                                            (subjectdetail != null &&
+                                                    subjectdetail[
+                                                            'subjecttype'] !=
+                                                        null
+                                                ? subjectdetail['subjecttype']
+                                                : 'Unknown Subject Type')),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Text(assignedToText),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        TextButton(
+                                            onPressed: () {
+                                              showErrorrs(
+                                                  "Do You Want To Delete This Post?",
+                                                  "Are You Sure?",
+                                                  id.toString());
+                                            },
+                                            child: Text(
+                                              "Remove Subject",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            )),
+                                        TextButton(
+                                            onPressed: () {
+                                              showErrorra(
+                                                  "Do You Want To Delete This Post?",
+                                                  "Are You Sure?",
+                                                  id.toString());
+                                            },
+                                            child: Text(
+                                              "Remove Subject Assign",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            )),
+                                      ],
+                                    )),
+                              ],
                             ),
-                            Text(assignedToText),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Remove Subject",
-                                  style: TextStyle(color: Colors.red),
-                                )),
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Remove Subject Assign",
-                                  style: TextStyle(color: Colors.red),
-                                )),
-                          ],
-                        )),
-                  ],
-                ),
-              );
-            },
-          ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         drawer: cldrawer(),
       ),

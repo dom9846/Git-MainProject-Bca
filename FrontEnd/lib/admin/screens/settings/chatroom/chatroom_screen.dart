@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, duplicate_ignore
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -56,6 +58,72 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
       }
     } on DioError catch (err) {
       if (err.response != null) {}
+    }
+  }
+
+  showError(String content, String title, String id) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("No"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text("Yes"),
+                onPressed: () {
+                  deletechatroom(id);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  showError2(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("ok"),
+                onPressed: () {
+                  if (title == "Click Ok") {
+                    Navigator.pushNamed(context, '/admnsettchatroom');
+                  }
+                  // Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> deletechatroom(String id) async {
+    try {
+      var chid = jsonEncode({"_id": id});
+      // print(post);
+      final Response? res = await chatservice.deletechatroom(chid);
+      if (res!.statusCode == 201) {
+        showError2("Successfully deleted", "Click Ok");
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        showError2("Something Went Wrong", "Try Again Later");
+      }
     }
   }
 
@@ -127,6 +195,7 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
                       itemCount: rooms?.length,
                       itemBuilder: (context, index) {
                         final room = rooms?[index];
+                        String? id = room?['_id'];
                         return Card(
                           child: InkWell(
                             child: Padding(
@@ -140,7 +209,12 @@ class _Chat_Room_admnState extends State<Chat_Room_admn> {
                                     child: Text((room?['roomname'] ?? "Nill")),
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showError(
+                                          "Do You Want To Delete?\nThe Messages In This Chat Also deleted!",
+                                          "Are You Sure?",
+                                          id.toString());
+                                    },
                                     icon: Icon(Icons.delete_outlined),
                                   ),
                                 ],

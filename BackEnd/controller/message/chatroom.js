@@ -1,4 +1,5 @@
 var chatRoom = require('../../model/message/chatroom');
+var chat = require('../../model/message/chat');
 // const {ObjectId}=require('mongodb');
 
 exports.addnewchat = (req, res) => {
@@ -41,3 +42,28 @@ exports.getstudchatroom = (req, res) => {
         }
     });
 };
+
+exports.deletechat=(req,res)=>{
+    console.log(req.body)
+    chatRoom.deleteOne({ _id:req.body._id }, (err, del)=>{
+        if(err){
+            return res.status(404).json({error:"error"})
+        }
+        else if(del){
+            chat.deleteMany({ id:req.body._id }, (err, delchat)=>{
+            if(err){
+                return res.status(404).json({error:"error"})
+            }
+            else if(delchat){
+                return res.status(201).json(delchat)
+            }
+            else{
+                return res.status(404).json({error:t})
+            }
+        })
+        }
+        else{
+            return res.status(404).json({error:t})
+        }
+    })
+}

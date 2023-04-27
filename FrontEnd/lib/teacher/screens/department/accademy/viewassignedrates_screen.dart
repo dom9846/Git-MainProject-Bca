@@ -63,6 +63,74 @@ class _ViewassignedRate_screenState extends State<ViewassignedRate_screen> {
     }
   }
 
+  showError(String content, String title, String id) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("No"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text("Yes"),
+                onPressed: () {
+                  deleteratetask(id);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  showError2(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("ok"),
+                onPressed: () {
+                  if (title == "Click Ok") {
+                    Navigator.pushNamed(context, '/teachdashboard');
+                  }
+                  // Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  ratingService deleteratetaskservice = new ratingService();
+
+  Future<void> deleteratetask(String id) async {
+    try {
+      var rate = jsonEncode({"_id": id});
+      print(rate);
+      final Response? res = await deleteratetaskservice.deleterate(rate);
+      if (res!.statusCode == 201) {
+        showError2("Successfully deleted", "Click Ok");
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        showError2("Something Went Wrong", "Try Again Later");
+      }
+    }
+  }
+
   void initState() {
     super.initState();
     this.getToken();
@@ -138,6 +206,7 @@ class _ViewassignedRate_screenState extends State<ViewassignedRate_screen> {
                     itemBuilder: (context, index) {
                       final ratingtask = ratingtasks?[index];
                       final dateTimeString1 = ratingtask?['duedate'];
+                      String? id = ratingtask?['_id'];
                       final dateTime1 = dateTimeString1 != null
                           ? DateTime.parse(dateTimeString1)
                           : null;
@@ -184,6 +253,23 @@ class _ViewassignedRate_screenState extends State<ViewassignedRate_screen> {
                                                 Color.fromARGB(255, 223, 7, 7)),
                                       )
                                     : Text("Null"),
+                                SizedBox(height: 16),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextButton(
+                                        onPressed: () {
+                                          showError(
+                                              "Do You Want To Delete This Work?",
+                                              "Are You Sure?",
+                                              id.toString());
+                                        },
+                                        child: Text("Delete",
+                                            style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 223, 7, 7))))
+                                  ],
+                                )
                               ],
                             ),
                           ),

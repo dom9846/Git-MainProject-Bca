@@ -73,3 +73,27 @@ exports.subjectretrieve = (req, res) => {
         // return res.status(404).json({ 'msg': 'Invalid username and Password' });
     });
 };
+exports.removesubject=(req,res)=>{
+    console.log(req.body)
+    Subject.deleteOne({ _id:req.body._id }, (err, del)=>{
+        if(err){
+            return res.status(404).json({error:"error"})
+        }
+        else if(del){
+            subjectAssign.deleteOne({ subid:req.body._id }, (err, delchat)=>{
+            if(err){
+                return res.status(404).json({error:"error"})
+            }
+            else if(delchat){
+                return res.status(201).json(delchat)
+            }
+            else{
+                return res.status(404).json({error:t})
+            }
+        })
+        }
+        else{
+            return res.status(404).json({error:t})
+        }
+    })
+}

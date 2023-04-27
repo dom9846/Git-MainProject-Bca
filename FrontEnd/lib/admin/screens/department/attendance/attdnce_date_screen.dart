@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, duplicate_ignore, prefer_interpolation_to_compose_strings
+// ignore_for_file: camel_case_types, prefer_const_constructors, duplicate_ignore, prefer_interpolation_to_compose_strings, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -40,8 +40,6 @@ class _Attdnce_dateState extends State<Attdnce_date> {
     try {
       Map<String, String> allValues = await storage.readAll();
       if (allValues["token"] == "") {
-        // Navigator.of(context)
-        //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
         Navigator.pushNamed(context, "/login");
       } else {
         // this.getToken();
@@ -63,6 +61,69 @@ class _Attdnce_dateState extends State<Attdnce_date> {
     } on DioError catch (err) {
       if (err.response != null) {
         if (err.response!.statusCode == 401) {}
+      }
+    }
+  }
+
+  showError(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text("Yes"),
+                onPressed: () {
+                  deleteattendance();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  showError2(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("ok"),
+                onPressed: () {
+                  if (title == "Click Ok") {
+                    Navigator.pushNamed(context, '/admndepattendance');
+                  }
+                  // Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> deleteattendance() async {
+    try {
+      var sem = jsonEncode({"semester": semester});
+      // print(post);
+      final Response? res = await attendanceservice.deleteattendance(sem);
+      if (res!.statusCode == 201) {
+        showError2("Successfully deleted", "Click Ok");
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        showError2("Something Went Wrong", "Try Again Later");
       }
     }
   }
@@ -102,7 +163,9 @@ class _Attdnce_dateState extends State<Attdnce_date> {
             Container(
                 margin: EdgeInsets.only(right: 10),
                 child: TextButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      showError("Do You Want To Delete All?", "Are You Sure?");
+                    },
                     icon: Icon(Icons.clear_all),
                     label: Text("Clear all")))
           ],

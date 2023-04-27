@@ -87,3 +87,17 @@ exports.retrieveassignedsubjects = (req, res) => {
         }
     )
 };
+exports.removeassignsubject=(req,res)=>{
+    console.log(req.body)
+    subjectAssign.deleteOne({ subid:req.body._id }, (err, delchat)=>{
+        if(err){
+            return res.status(404).json({error:"error"})
+        }
+        else if(delchat){
+            return res.status(201).json(delchat)
+        }
+        else{
+            return res.status(404).json({error:t})
+        }
+    })
+}

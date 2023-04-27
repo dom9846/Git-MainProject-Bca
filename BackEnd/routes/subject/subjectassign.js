@@ -6,4 +6,5 @@ routes.post('/subjectassign', subjectAssignControl.subassign);
 routes.post('/subassretrieve', subjectAssignControl.subretrieve);
 routes.post('/lectureretrieve', lecturerecieveControl.getlectures);
 routes.post('/retrieveassignedsubjects', subjectAssignControl.retrieveassignedsubjects);
+routes.post('/removeassignsubject', subjectAssignControl.removeassignsubject);
 module.exports = routes;

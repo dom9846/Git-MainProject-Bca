@@ -86,25 +86,31 @@ class _StudentDevoloper_InfoState extends State<StudentDevoloper_Info> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                        height: 250,
-                        width: 350,
-                        padding: EdgeInsets.only(
-                            top: 50, bottom: 50, left: 20, right: 20),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
+                      height: 450,
+                      width: 350,
+                      padding: EdgeInsets.only(
+                          top: 50, bottom: 50, left: 20, right: 20),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      margin: EdgeInsets.only(left: 35, right: 35),
+                      child: Center(
+                        child: Image.asset(
+                          'images/devinfo.png',
+                          fit: BoxFit
+                              .cover, // set the image fit to cover the entire box
                         ),
-                        margin: EdgeInsets.only(left: 35, right: 35),
-                        child: Center(child: Text("Devoloper Information"))),
+                      ),
+                    ),
                     SizedBox(
                       height: 20,
                     ),

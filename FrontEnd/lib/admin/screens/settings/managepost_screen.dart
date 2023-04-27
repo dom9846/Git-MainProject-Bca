@@ -50,15 +50,81 @@ class _Manage_PostState extends State<Manage_Post> {
   PostService postservice = new PostService();
   Future<void> getposts() async {
     try {
-      final Response? res = await postservice.getposts("");
+      final Response? res = await postservice.managepost("");
       if (res!.statusCode == 201) {
         setState(() {
           posts = res.data;
         });
       }
-      print(posts);
+      // print(posts);
     } on DioError catch (err) {
       if (err.response != null) {}
+    }
+  }
+
+  showError(String content, String title, String id) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("No"),
+                onPressed: () {
+                  // if (title == "Registration Successful") {
+                  //   // Navigator.pushNamed(context, '/login');
+                  // } else
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text("Yes"),
+                onPressed: () {
+                  deletepost(id);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  showError2(String content, String title) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                child: Text("ok"),
+                onPressed: () {
+                  if (title == "Click Ok") {
+                    Navigator.pushNamed(context, '/admnsettpostmanage');
+                  }
+                  // Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> deletepost(String id) async {
+    try {
+      var post = jsonEncode({"_id": id});
+      // print(post);
+      final Response? res = await postservice.deletepost(post);
+      if (res!.statusCode == 201) {
+        showError2("Successfully deleted", "Click Ok");
+      }
+    } on DioError catch (err) {
+      if (err.response != null) {
+        showError2("Something Went Wrong", "Try Again Later");
+      }
     }
   }
 
@@ -122,6 +188,7 @@ class _Manage_PostState extends State<Manage_Post> {
                   itemBuilder: (context, index) {
                     Uint8List? profilepic, postpic;
                     final post = posts?[index];
+                    String? id = post?['_id'];
                     final dateTimeString1 = post?['datetime'];
                     final dateTime1 = dateTimeString1 != null
                         ? DateTime.parse(dateTimeString1)
@@ -250,7 +317,12 @@ class _Manage_PostState extends State<Manage_Post> {
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 10),
                                   child: ElevatedButton.icon(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showError(
+                                          "Do You Want To Delete This Post?",
+                                          "Are You Sure?",
+                                          id.toString());
+                                    },
                                     icon: Icon(Icons.delete),
                                     label: Text('Remove'),
                                   ),

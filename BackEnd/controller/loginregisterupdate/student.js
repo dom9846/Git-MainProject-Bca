@@ -1,5 +1,10 @@
 var User = require('../../model/loginregisterupdate/register');
 var Student=require('../../model/loginregisterupdate/student');
+var Rateteacher=require('../../model/rating/rateteacher');
+var Submittedwork=require('../../model/subject/submittedworks');
+var Chat=require('../../model/message/chat');
+var Post=require('../../model/newpost/newpost');
+var Internal=require('../../model/internalmarks/internal');
 const {ObjectId}=require('mongodb');
 exports.studentregister = (req, res) => {
     // console.log(req.body)
@@ -127,3 +132,89 @@ exports.getstudent = (req, res) => {
         return res.status(404).json({ 'msg': 'Error occured' });
     });
 };
+exports.deletestudent=(req,res)=>{
+    console.log(req.body)
+    User.deleteOne({ _id:req.body._id }, (err, del)=>{
+        if(err){
+            return res.status(404).json({error:"error"})
+        }
+        else if(del){
+            Student.deleteOne({ id:req.body._id }, (err, del2)=>{
+                console.log("1")
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Chat.deleteMany({ sender:req.body._id }, (err, del2)=>{
+                console.log("2")
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Post.deleteMany({ userid:req.body._id }, (err, del2)=>{
+                console.log("3")
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Rateteacher.deleteMany({ studentid:req.body._id }, (err, del2)=>{
+                console.log("4")
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Submittedwork.deleteMany({ studentid:req.body._id }, (err, del2)=>{
+                console.log("5")
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Internal.deleteMany({ studentid:req.body._id }, (err, del2)=>{
+                console.log("6")
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            return res.status(201).json(del)
+        }
+        else{
+            return res.status(404).json({error:t})
+        }
+    })
+}

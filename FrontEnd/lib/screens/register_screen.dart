@@ -124,13 +124,13 @@ class _MyRegisterState extends State<MyRegister> {
                     firstname.toString(),
                     style: TextStyle(color: Colors.white, fontSize: 33),
                   ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    secondname.toString(),
-                    style: TextStyle(color: Colors.white, fontSize: 33),
-                  ),
+                  // SizedBox(
+                  //   width: 10,
+                  // ),
+                  // Text(
+                  //   secondname.toString(),
+                  //   style: TextStyle(color: Colors.white, fontSize: 25),
+                  // ),
                 ],
               ),
             ),

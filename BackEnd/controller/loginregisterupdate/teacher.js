@@ -1,5 +1,11 @@
 var User = require('../../model/loginregisterupdate/register');
 var Teacher=require('../../model/loginregisterupdate/teacher');
+var Chat=require('../../model/message/chat');
+var Post=require('../../model/newpost/newpost');
+var Assignrate=require('../../model/rating/assignrateteacher');
+var Subjectassign=require('../../model/subject/subjectassign');
+var Subwork=require('../../model/subject/subjectwork');
+var RateStudent=require('../../model/rating/ratestudent');
 const {ObjectId}=require('mongodb');
 // const studreg = require('../../model/loginregisterupdate/studreg');
 exports.teacherregister = (req, res) => {
@@ -127,3 +133,94 @@ exports.getteacher = (req, res) => {
         return res.status(404).json({ 'msg': 'Error occured' });
     });
 };
+exports.deletelecture=(req,res)=>{
+    console.log(req.body)
+    User.deleteOne({ _id:req.body._id }, (err, del)=>{
+        if(err){
+            return res.status(404).json({error:"error"})
+        }
+        else if(del){
+            Teacher.deleteOne({ id:req.body._id }, (err, del2)=>{
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Chat.deleteMany({ sender:req.body._id }, (err, del2)=>{
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Post.deleteMany({ userid:req.body._id }, (err, del2)=>{
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Assignrate.deleteMany({ teacherid:req.body._id }, (err, del2)=>{
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            RateStudent.deleteMany({ teacherid:req.body._id }, (err, del2)=>{
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Subjectassign.deleteMany({ subteacher:req.body._id }, (err, del2)=>{
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            Subwork.deleteMany({ teacherid:req.body._id }, (err, del2)=>{
+                if(err){
+                    return res.status(404).json({error:"error"})
+                }
+                // else if(del2){
+                //     return res.status(201).json(del2)
+                // }
+                // else{
+                //     return res.status(404).json({error:t})
+                // }
+            })
+            return res.status(201).json(del)
+        }
+        else{
+            return res.status(404).json({error:t})
+        }
+    })
+}

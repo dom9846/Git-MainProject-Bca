@@ -78,3 +78,27 @@ exports.retrieverates = (req, res) => {
         }
     });
 };
+exports.deleteratetask=(req,res)=>{
+    console.log(req.body)
+    assignrateTeacher.deleteOne({ _id:req.body._id }, (err, del)=>{
+        if(err){
+            return res.status(404).json({error:"error"})
+        }
+        else if(del){
+            rateteacher.deleteMany({ id:req.body._id }, (err, delchat)=>{
+            if(err){
+                return res.status(404).json({error:"error"})
+            }
+            else if(delchat){
+                return res.status(201).json(delchat)
+            }
+            else{
+                return res.status(404).json({error:t})
+            }
+        })
+        }
+        else{
+            return res.status(404).json({error:t})
+        }
+    })
+}

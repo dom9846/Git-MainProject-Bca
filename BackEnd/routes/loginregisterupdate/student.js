@@ -6,5 +6,6 @@ routes.post('/studentregister', studentControl.studentregister);
 routes.post('/studentupdateunamepass', studentControl.studentupdateunamepass);
 routes.post('/studentupdate', studentControl.studentupdate);
 routes.post('/getstudent', studentControl.getstudent);
+routes.post('/deletestudent', studentControl.deletestudent);
 
 module.exports = routes;
